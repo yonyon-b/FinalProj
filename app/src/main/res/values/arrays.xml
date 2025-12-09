@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="LostOrFound">
+        <item name = "Lost">Lost</item>
+        <item name = "Found">Found</item>
+    </string-array>
+</resources>
