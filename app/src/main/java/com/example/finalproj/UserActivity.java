@@ -74,12 +74,9 @@ public class UserActivity extends AppCompatActivity implements View.OnClickListe
             Intent i = new Intent(this, AddItem.class);
             startActivity(i);
         }
-        /*
-        if (view.getId() == btnItemList.getId()){
+        else if (view.getId() == btnItemList.getId()){
             Intent i = new Intent(this, ItemList.class);
             startActivity(i);
         }
-
-         */
     }
 }
