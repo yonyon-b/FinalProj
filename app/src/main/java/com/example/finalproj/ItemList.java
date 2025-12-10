@@ -20,7 +20,7 @@ import com.example.finalproj.services.DatabaseService;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ItemList extends AppCompatActivity {
+public class ItemList extends BaseActivity {
 
     ListView itemList;
     ArrayList<Item> dataList = new ArrayList<>();

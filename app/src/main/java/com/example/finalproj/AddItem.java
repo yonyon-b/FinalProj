@@ -29,7 +29,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import java.io.File;
 
-public class AddItem extends AppCompatActivity implements View.OnClickListener {
+public class AddItem extends BaseActivity implements View.OnClickListener {
 
     private static final String TAG = "AddItem";
     EditText itemName, itemLocation, itemDesc;

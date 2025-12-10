@@ -21,7 +21,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-public class UserActivity extends AppCompatActivity implements View.OnClickListener {
+public class UserActivity extends BaseActivity implements View.OnClickListener {
 
     private FirebaseUser user;
     private String uid;
