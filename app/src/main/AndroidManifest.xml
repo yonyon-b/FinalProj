@@ -12,6 +12,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.FinalProj">
         <activity
+            android:name=".UserProfile"
+            android:exported="false" />
+        <activity
+            android:name=".Settings"
+            android:exported="false" />
+        <activity
             android:name=".BaseActivity"
             android:exported="false" />
         <activity

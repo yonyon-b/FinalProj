@@ -1,9 +1,12 @@
 package com.example.finalproj;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 
@@ -14,9 +17,13 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.google.firebase.Firebase;
+import com.google.firebase.auth.FirebaseAuth;
+
 import java.util.Objects;
 
 public class BaseActivity extends AppCompatActivity{
+    private FirebaseAuth mAuth;
 
     @Override
     public void setContentView(int layoutResID) {
@@ -39,6 +46,30 @@ public class BaseActivity extends AppCompatActivity{
             getSupportActionBar().setHomeAsUpIndicator(R.drawable.back_arrow);
         }
     }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_settings){
+            Intent i = new Intent(this, Settings.class);
+            startActivity(i);
+        }
+        else if (item.getItemId() == R.id.action_profile){
+            Intent i = new Intent(this, UserProfile.class);
+            startActivity(i);
+        }
+        else if (item.getItemId() == R.id.action_sign_out){
+            mAuth = FirebaseAuth.getInstance();
+            mAuth.signOut();
+            Intent i = new Intent(this, Register.class);
+            startActivity(i);
+        }
+        return true;
+    }
     protected boolean shouldShowBackButton() {
         return true;
     }
@@ -53,12 +84,6 @@ public class BaseActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_base);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
     }
 
 }

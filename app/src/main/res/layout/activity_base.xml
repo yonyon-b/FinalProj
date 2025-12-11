@@ -23,6 +23,7 @@
                 android:navigationIcon="@drawable/back_arrow"
                 android:navigationContentDescription="Go Back"
                 app:title="Lost &amp; Found"
+
                 android:id="@+id/toolBarBase"
                 />
         </LinearLayout>
