@@ -3,7 +3,10 @@ package com.example.finalproj;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -13,6 +16,7 @@ import android.widget.FrameLayout;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -40,6 +44,7 @@ public class BaseActivity extends AppCompatActivity{
 
         Toolbar toolBar = findViewById(R.id.toolBarBase);
         setSupportActionBar(toolBar);
+        toolBar.setOverflowIcon(ContextCompat.getDrawable(this, R.drawable.overflow_menu_icon));
 
         if (shouldShowBackButton()) {
             Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
@@ -49,6 +54,10 @@ public class BaseActivity extends AppCompatActivity{
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu, menu);
+        MenuItem item = menu.findItem(R.id.action_sign_out);
+        SpannableString str = new SpannableString(item.getTitle());
+        str.setSpan(new ForegroundColorSpan(Color.RED), 0, str.length(), 0);
+        item.setTitle(str);
         return true;
     }
 
