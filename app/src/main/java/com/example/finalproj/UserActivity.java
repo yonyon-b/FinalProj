@@ -22,11 +22,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 public class UserActivity extends BaseActivity implements View.OnClickListener {
-
-    private FirebaseUser user;
-    private String uid;
-    private TextView userDisplay;
-    private FirebaseAuth mAuth;
     Button btnItemCreate, btnItemList;
 
     @Override
@@ -43,30 +38,7 @@ public class UserActivity extends BaseActivity implements View.OnClickListener {
         btnItemList = findViewById(R.id.btnItemList);
         btnItemCreate.setOnClickListener(this);
         btnItemList.setOnClickListener(this);
-        user = FirebaseAuth.getInstance().getCurrentUser();
-        uid = user.getUid();
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("users").child(uid);
 
-        userDisplay = findViewById(R.id.tvUser);
-        mAuth = FirebaseAuth.getInstance();
-
-
-
-        reference.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot snapshot) {
-                if (snapshot.exists()) {
-                    String name = snapshot.child("fName").getValue(String.class);
-                    userDisplay.setText(name + "שלום ");
-                    Log.d("USER_NAME", "Name: " + name);
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError error) {
-                Log.e("DB_ERROR", error.getMessage());
-            }
-        });
     }
     @Override
     public void onClick(View view) {
