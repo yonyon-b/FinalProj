@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -22,7 +23,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 public class UserActivity extends BaseActivity implements View.OnClickListener {
-    Button btnItemCreate, btnItemList;
+    CardView btnItemCreate, btnItemList;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

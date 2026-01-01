@@ -1,13 +1,18 @@
 package com.example.finalproj;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+
+import com.example.finalproj.services.DatabaseService;
 
 public class Splash extends AppCompatActivity {
 
@@ -31,8 +36,8 @@ public class Splash extends AppCompatActivity {
                 } catch (InterruptedException ex) {
                 }
                 finish();
-                Intent intent = new Intent(Splash.this, Register.class);
-                startActivity(intent);
+                    Intent intent = new Intent(Splash.this, Register.class);
+                    startActivity(intent);
             }
         };
         mSpleashThread.start();
