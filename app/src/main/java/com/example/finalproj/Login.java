@@ -64,6 +64,13 @@ public class Login extends BaseActivity implements View.OnClickListener {
             String email = etEmail.getText().toString();
             String password = etPassword.getText().toString();
 
+            SharedPreferences.Editor editor = sharedpreferences.edit();
+
+            editor.putString("email", email);
+            editor.putString("password", password);
+
+            editor.commit();
+
             /// log the email and password
             Log.d(TAG, "onClick: Email: " + email);
             Log.d(TAG, "onClick: Password: " + password);

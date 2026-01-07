@@ -7,17 +7,19 @@ public class User {
     String email;
     String phone;
     String password;
+    Boolean isAdmin;
     ItemCart cart;
     public User() {
     }
 
-    public User(String id, String fName, String lName, String email, String phone, String password, ItemCart cart) {
+    public User(String id, String fName, String lName, String email, String phone, String password, Boolean isAdmin, ItemCart cart) {
         this.id = id;
         this.fName = fName;
         this.lName = lName;
         this.email = email;
         this.phone = phone;
         this.password = password;
+        this.isAdmin = isAdmin;
         this.cart = cart;
     }
 
@@ -73,6 +75,14 @@ public class User {
     }
     public void setCart(ItemCart cart){
         this.cart = cart;
+    }
+
+    public Boolean getAdmin() {
+        return isAdmin;
+    }
+
+    public void setAdmin(Boolean admin) {
+        isAdmin = admin;
     }
 
     @Override

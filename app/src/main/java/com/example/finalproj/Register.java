@@ -105,7 +105,7 @@ public class Register extends BaseActivity implements View.OnClickListener {
 
                                 String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-                                User user = new User(uid, fname, lname, email, phone, password, null);
+                                User user = new User(uid, fname, lname, email, phone, password, false, null);
 
                                 createUserInDatabase(user);
                             });
