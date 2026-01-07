@@ -99,7 +99,7 @@ public class ItemAdapter extends ArrayAdapter<Item> {
         layoutExpanded.setVisibility(expanded ? View.VISIBLE : View.GONE);
         imgItemEx.setVisibility(expanded ? View.VISIBLE : View.GONE);
         if (expanded) {
-            imgItem.setVisibility(View.GONE);  // removes the image AND frees its space
+            imgItem.setVisibility(View.GONE);
         } else {
             imgItem.setVisibility(View.VISIBLE);
         }
