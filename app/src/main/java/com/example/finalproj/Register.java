@@ -20,7 +20,7 @@ import com.example.finalproj.model.User;
 import com.example.finalproj.services.DatabaseService;
 import com.google.firebase.auth.FirebaseAuth;
 
-public class Register extends BaseActivity implements View.OnClickListener {
+public class Register extends AppCompatActivity implements View.OnClickListener {
 
     private static final String TAG = "Register";
     public static final String MyPREFERENCES = "MyPrefs" ;

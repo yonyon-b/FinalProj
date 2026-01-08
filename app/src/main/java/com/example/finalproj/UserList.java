@@ -23,7 +23,7 @@ import com.example.finalproj.services.DatabaseService;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserList extends AppCompatActivity {
+public class UserList extends BaseActivity {
 
     private static final String TAG = "UserList";
     private UserAdapter userAdapter;

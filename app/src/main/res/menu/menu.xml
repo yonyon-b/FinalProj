@@ -10,6 +10,12 @@
         android:title="Settings"
         app:showAsAction="never" />
     <item
+        android:id="@+id/action_admin"
+        android:title="Admin Page"
+        android:visible="false"
+        app:showAsAction="never"
+        />
+    <item
         android:id="@+id/action_sign_out"
         android:title="Sign Out"
         app:showAsAction="never" />

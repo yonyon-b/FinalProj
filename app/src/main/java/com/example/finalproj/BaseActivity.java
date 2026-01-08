@@ -1,12 +1,12 @@
 package com.example.finalproj;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -17,17 +17,18 @@ import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
-import com.google.firebase.Firebase;
+import com.example.finalproj.model.User;
+import com.example.finalproj.services.DatabaseService;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.Objects;
 
 public class BaseActivity extends AppCompatActivity{
+    private static final String TAG = "BaseActivity";
     private FirebaseAuth mAuth;
+    private DatabaseService databaseService;
+    private User currentUser;
 
     @Override
     public void setContentView(int layoutResID) {
@@ -58,6 +59,26 @@ public class BaseActivity extends AppCompatActivity{
         SpannableString str = new SpannableString(item.getTitle());
         str.setSpan(new ForegroundColorSpan(Color.RED), 0, str.length(), 0);
         item.setTitle(str);
+
+        /// Admin page visibility & color
+        DatabaseService.getInstance().getUser(FirebaseAuth.getInstance().getCurrentUser().getUid(), new DatabaseService.DatabaseCallback<User>() {
+            @Override
+            public void onCompleted(User object) {
+                currentUser = object;
+                if (currentUser.getAdmin()) {
+                    MenuItem item2 = menu.findItem(R.id.action_admin);
+                    item2.setVisible(true);
+                    SpannableString str2 = new SpannableString(item2.getTitle());
+                    str2.setSpan(new ForegroundColorSpan(Color.CYAN), 0, str2.length(), 0);
+                    item2.setTitle(str2);
+                }
+            }
+
+            @Override
+            public void onFailed(Exception e) {
+                Log.d(TAG, "onFailed: failed" + e);
+            }
+        });
         return true;
     }
 
@@ -69,6 +90,10 @@ public class BaseActivity extends AppCompatActivity{
         }
         else if (item.getItemId() == R.id.action_profile){
             Intent i = new Intent(this, UserProfile.class);
+            startActivity(i);
+        }
+        else if (item.getItemId() == R.id.action_admin){
+            Intent i = new Intent(this, MainAdmin.class);
             startActivity(i);
         }
         else if (item.getItemId() == R.id.action_sign_out){

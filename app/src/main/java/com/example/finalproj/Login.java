@@ -20,7 +20,7 @@ import com.example.finalproj.services.DatabaseService;
 import com.google.android.gms.common.util.SharedPreferencesUtils;
 import com.google.firebase.auth.FirebaseAuth;
 
-public class Login extends BaseActivity implements View.OnClickListener {
+public class Login extends AppCompatActivity implements View.OnClickListener {
 
     private static final String TAG = "Login";
     public static final String MyPREFERENCES = "MyPrefs" ;

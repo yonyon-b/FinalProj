@@ -36,23 +36,7 @@ public class UserProfile extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         uid = mAuth.getCurrentUser().getUid();
 
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("users").child(uid);
 
-        reference.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot snapshot) {
-                if (snapshot.exists()) {
-                    String name = snapshot.child("fName").getValue(String.class);
-                    userName.setText(name + "שלום ");
-                    Log.d("USER_NAME", "Name: " + name);
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError error) {
-                Log.e("DB_ERROR", error.getMessage());
-            }
-        });
     }
 
 }
