@@ -18,7 +18,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 public class UserProfile extends AppCompatActivity {
-    private TextView userName;
     private String uid;
     private FirebaseAuth mAuth;
 
@@ -32,7 +31,6 @@ public class UserProfile extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        userName = findViewById(R.id.tvUserName);
         mAuth = FirebaseAuth.getInstance();
         uid = mAuth.getCurrentUser().getUid();
 
