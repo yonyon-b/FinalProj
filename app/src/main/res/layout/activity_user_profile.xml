@@ -16,25 +16,55 @@
             android:layout_margin="15dp"
             app:cardCornerRadius="25dp"
             app:cardBackgroundColor="@color/design_default_color_background">
+
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-            <TextView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:layout_margin="20dp"
-                />
+                android:orientation="vertical"
+                android:layout_gravity="end">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginTop="25dp"
+                    android:textSize="16sp"
+                    android:id="@+id/txtUserNameProfile"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginTop="8dp"
+                    android:textSize="16sp"
+                    android:id="@+id/txtUserPhoneProfile"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginTop="8dp"
+                    android:textSize="16sp"
+                    android:id="@+id/txtUserEmailProfile"
+                    />
+            </LinearLayout>
+
             <androidx.cardview.widget.CardView
                 android:layout_width="90dp"
                 android:layout_height="90dp"
                 android:layout_margin="20dp"
-                app:cardCornerRadius="45dp">
+                app:cardCornerRadius="45dp"
+                app:cardBackgroundColor="@color/white">
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/add_image"
+                    android:src="@drawable/user_pfp"
                     android:layout_gravity="center"/>
 
             </androidx.cardview.widget.CardView>
