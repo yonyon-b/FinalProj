@@ -53,4 +53,7 @@ public class UserActivity extends BaseActivity implements View.OnClickListener {
             startActivity(i);
         }
     }
+    protected boolean shouldShowBackButton() {
+        return false;
+    }
 }

@@ -1,6 +1,7 @@
 package com.example.finalproj;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
@@ -41,10 +42,14 @@ public class UserProfile extends BaseActivity {
         });
         mAuth = FirebaseAuth.getInstance();
         databaseService = DatabaseService.getInstance();
-        uid = mAuth.getCurrentUser().getUid();
         userName = findViewById(R.id.txtUserNameProfile);
         phoneNumber = findViewById(R.id.txtUserPhoneProfile);
         mail = findViewById(R.id.txtUserEmailProfile);
+        Intent i = getIntent();
+        uid = i.getStringExtra("USER_UID");
+        if (uid == null)
+            uid = mAuth.getCurrentUser().getUid();
+
         databaseService.getUser(uid, new DatabaseService.DatabaseCallback<User>() {
             @Override
             public void onCompleted(User object) {

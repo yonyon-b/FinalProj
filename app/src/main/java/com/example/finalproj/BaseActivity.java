@@ -84,6 +84,9 @@ public class BaseActivity extends AppCompatActivity{
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home){
+            return super.onOptionsItemSelected(item);
+        }
         if (item.getItemId() == R.id.action_settings){
             Intent i = new Intent(this, Settings.class);
             startActivity(i);

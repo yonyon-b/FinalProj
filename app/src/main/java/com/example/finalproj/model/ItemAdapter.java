@@ -83,8 +83,13 @@ public class ItemAdapter extends ArrayAdapter<Item> {
         databaseService.getUser(item.getUserId(), new DatabaseService.DatabaseCallback<User>(){
             @Override
             public void onCompleted(User object) {
-                txtUserName.setText(Html.fromHtml("<b>User: </b>" + "<br></br>" + object.getfName() + " " +object.getlName()));
-                txtUserPhone.setText(Html.fromHtml("<b>Phone Number:</b> " + "<br></br>" + object.getPhone()));
+                try {
+                    txtUserName.setText(Html.fromHtml("<b>User: </b>" + "<br></br>" + object.getfName() + " " + object.getlName()));
+                    txtUserPhone.setText(Html.fromHtml("<b>Phone Number:</b> " + "<br></br>" + object.getPhone()));
+                } catch (Exception e) {
+                    txtUserName.setText(Html.fromHtml("<b>User: </b>" + "<br></br>" + "Deleted User"));
+                    txtUserPhone.setText(Html.fromHtml("<b>Phone Number:</b> " + "<br></br>" + "Unknown"));
+                }
             }
 
             @Override
