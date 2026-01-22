@@ -21,7 +21,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
 
     public interface OnUserClickListener {
         void onUserClick(User user);
-        void onLongUserClick(User user);
+        void onLongUserClick(View view, User user);
     }
 
     private final List<User> userList;
@@ -73,7 +73,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
 
         holder.itemView.setOnLongClickListener(v -> {
             if (onUserClickListener != null) {
-                onUserClickListener.onLongUserClick(user);
+                onUserClickListener.onLongUserClick(v, user);
             }
             return true;
         });

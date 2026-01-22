@@ -3,7 +3,9 @@ package com.example.finalproj;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ListView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
@@ -48,15 +50,44 @@ public class UserList extends BaseActivity {
             public void onUserClick(User user) {
                 // Handle user click
                 Log.d(TAG, "User clicked: " + user);
+
                 Intent intent = new Intent(UserList.this, UserProfile.class);
                 intent.putExtra("USER_UID", user.getId());
                 startActivity(intent);
             }
 
             @Override
-            public void onLongUserClick(User user) {
+            public void onLongUserClick(View view, User user) {
                 // Handle long user click
                 Log.d(TAG, "User long clicked: " + user);
+
+                PopupMenu popupMenu = new PopupMenu(UserList.this, view);
+                popupMenu.getMenuInflater().inflate(R.menu.user_popup_menu, popupMenu.getMenu());
+
+                popupMenu.setOnMenuItemClickListener(item -> {
+                    int id = item.getItemId();
+
+                    if (id == R.id.action_view_profile) {
+                        Intent intent = new Intent(UserList.this, UserProfile.class);
+                        intent.putExtra("USER_UID", user.getId());
+                        startActivity(intent);
+                        return true;
+
+                    } else if (id == R.id.action_admin) {
+                        // Handle message action
+                        Log.d(TAG, "Message user: " + user.getId());
+                        return true;
+
+                    } else if (id == R.id.action_delete) {
+                        // Handle delete action
+                        Log.d(TAG, "Delete user: " + user.getId());
+                        return true;
+                    }
+
+                    return false;
+                });
+
+                popupMenu.show();
             }
         });
         usersList.setAdapter(userAdapter);
