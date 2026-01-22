@@ -3,6 +3,7 @@ package com.example.finalproj;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.PopupMenu;
@@ -63,9 +64,17 @@ public class UserList extends BaseActivity {
 
                 PopupMenu popupMenu = new PopupMenu(UserList.this, view);
                 popupMenu.getMenuInflater().inflate(R.menu.user_popup_menu, popupMenu.getMenu());
+                MenuItem adminItem = popupMenu.getMenu().findItem(R.id.action_admin);
+                if (user.getAdmin()){
+                    adminItem.setTitle("Remove Admin");
+                }
+                else{
+                    adminItem.setTitle("Add as Admin");
+                }
 
                 popupMenu.setOnMenuItemClickListener(item -> {
                     int id = item.getItemId();
+
 
                     if (id == R.id.action_view_profile) {
                         Intent intent = new Intent(UserList.this, UserProfile.class);
@@ -75,7 +84,23 @@ public class UserList extends BaseActivity {
 
                     } else if (id == R.id.action_admin) {
                         // Handle message action
-                        Log.d(TAG, "Message user: " + user.getId());
+                        if (user.getAdmin()){
+                            user.setAdmin(false);
+                        }
+                        else{
+                            user.setAdmin(true);
+                        }
+                        databaseService.updateUser(user, new DatabaseService.DatabaseCallback<Void>() {
+                            @Override
+                            public void onCompleted(Void object) {
+                                Log.d(TAG, "User updated.");
+                            }
+
+                            @Override
+                            public void onFailed(Exception e) {
+                                Log.e(TAG, "User failed to update", e);
+                            }
+                        });
                         return true;
 
                     } else if (id == R.id.action_delete) {
