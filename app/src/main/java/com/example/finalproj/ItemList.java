@@ -1,20 +1,18 @@
 package com.example.finalproj;
 
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.util.Log;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.finalproj.model.Item;
-import com.example.finalproj.model.ItemAdapter;
+import com.example.finalproj.model.ItemRecyclerAdapter;
 import com.example.finalproj.services.DatabaseService;
 
 import java.util.ArrayList;
@@ -22,9 +20,9 @@ import java.util.List;
 
 public class ItemList extends BaseActivity {
 
-    ListView itemList;
+    RecyclerView recyclerView;
     ArrayList<Item> dataList = new ArrayList<>();
-    ItemAdapter adapter;
+    ItemRecyclerAdapter adapter;
     private DatabaseService databaseService;
 
     @Override
@@ -37,31 +35,35 @@ public class ItemList extends BaseActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        itemList = findViewById(R.id.lvItems);
-        adapter = new ItemAdapter(this, dataList);
-        itemList.setAdapter(adapter);
+        recyclerView = findViewById(R.id.rvItems);
+
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setHasFixedSize(true);
+
+        adapter = new ItemRecyclerAdapter(this, dataList);
+        recyclerView.setAdapter(adapter);
 
         databaseService = DatabaseService.getInstance();
 
         loadItemsFromFirebase();
     }
     private void loadItemsFromFirebase() {
-
         databaseService.getItemList(new DatabaseService.DatabaseCallback<List<Item>>() {
             @Override
             public void onCompleted(List<Item> items) {
-
                 dataList.clear();
                 dataList.addAll(items);
-
                 adapter.notifyDataSetChanged();
             }
 
             @Override
             public void onFailed(Exception e) {
-                Toast.makeText(ItemList.this, "Failed to load items", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ItemList.this,
+                        "Failed to load items",
+                        Toast.LENGTH_SHORT).show();
                 Log.e("ItemList", "Firebase error", e);
             }
         });
     }
+
 }

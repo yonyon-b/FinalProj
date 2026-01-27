@@ -5,25 +5,20 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.finalproj.model.Item;
-import com.example.finalproj.model.ItemAdapter;
 import com.example.finalproj.model.User;
 import com.example.finalproj.model.UserAdapter;
 import com.example.finalproj.services.DatabaseService;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class UserList extends BaseActivity {
