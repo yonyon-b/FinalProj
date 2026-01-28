@@ -12,6 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.FinalProj">
         <activity
+            android:name=".EditProfile"
+            android:exported="false" />
+        <activity
             android:name=".UserList"
             android:exported="false" />
         <activity

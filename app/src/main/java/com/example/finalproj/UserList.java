@@ -54,7 +54,6 @@ public class UserList extends BaseActivity {
 
             @Override
             public void onLongUserClick(View view, User user) {
-                // Handle long user click
                 Log.d(TAG, "User long clicked: " + user);
 
                 PopupMenu popupMenu = new PopupMenu(UserList.this, view);
