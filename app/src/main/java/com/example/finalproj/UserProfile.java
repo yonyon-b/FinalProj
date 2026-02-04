@@ -2,10 +2,12 @@ package com.example.finalproj;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.media.Image;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
@@ -28,8 +30,8 @@ import org.w3c.dom.Text;
 public class UserProfile extends BaseActivity implements View.OnClickListener {
     private TextView userName, phoneNumber, mail;
     private String uid, fullName, phoneNum, email;
+    ImageView pfp;
     private FirebaseAuth mAuth;
-    private Button btnEditProfile;
     private DatabaseService databaseService;
 
     @SuppressLint("MissingInflatedId")
@@ -48,13 +50,11 @@ public class UserProfile extends BaseActivity implements View.OnClickListener {
         userName = findViewById(R.id.txtUserNameProfile);
         phoneNumber = findViewById(R.id.txtUserPhoneProfile);
         mail = findViewById(R.id.txtUserEmailProfile);
-        btnEditProfile = findViewById(R.id.btnEditProfile);
-        btnEditProfile.setOnClickListener(this);
+        pfp = findViewById(R.id.imgPfp);
         Intent i = getIntent();
         uid = i.getStringExtra("USER_UID");
         if (uid == null)
             uid = mAuth.getCurrentUser().getUid();
-
         databaseService.getUser(uid, new DatabaseService.DatabaseCallback<User>() {
             @Override
             public void onCompleted(User object) {
@@ -76,7 +76,7 @@ public class UserProfile extends BaseActivity implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        if (v.getId() == btnEditProfile.getId()){
+        if (v.getId() == pfp.getId()){
             Intent i = new Intent(this, EditProfile.class);
             startActivity(i);
         }

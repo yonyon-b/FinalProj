@@ -77,7 +77,8 @@
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
-                        android:layout_height="40dp"/>
+                        android:layout_height="40dp"
+                        android:id="@+id/etFnameEdit"/>
 
                 </com.google.android.material.textfield.TextInputLayout>
                 <TextView
@@ -102,7 +103,8 @@
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
-                        android:layout_height="40dp"/>
+                        android:layout_height="40dp"
+                        android:id="@+id/etLnameEdit"/>
 
                 </com.google.android.material.textfield.TextInputLayout>
                 <TextView
@@ -127,9 +129,19 @@
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
-                        android:layout_height="40dp"/>
+                        android:layout_height="40dp"
+                        android:id="@+id/etNumEdit"/>
 
                 </com.google.android.material.textfield.TextInputLayout>
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="20dp"
+                    android:backgroundTint="@color/cardview_light_background"
+                    android:textColor="@color/black"
+                    android:text="Submit"
+                    android:id="@+id/btnSubmitEdit"/>
             </LinearLayout>
         </androidx.cardview.widget.CardView>
     </LinearLayout>
