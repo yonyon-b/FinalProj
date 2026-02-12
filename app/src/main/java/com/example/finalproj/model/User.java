@@ -7,8 +7,10 @@ public class User {
     String email;
     String phone;
     String password;
+    String profilePicture;
     Boolean isAdmin;
     ItemCart cart;
+
     public User() {
     }
 
@@ -19,6 +21,7 @@ public class User {
         this.email = email;
         this.phone = phone;
         this.password = password;
+        this.profilePicture = null;
         this.isAdmin = isAdmin;
         this.cart = cart;
     }
@@ -68,6 +71,14 @@ public class User {
     }
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getProfilePicture() {
+        return profilePicture;
+    }
+
+    public void setProfilePicture(String profilePicture) {
+        this.profilePicture = profilePicture;
     }
 
     public ItemCart getCart(){
