@@ -20,9 +20,9 @@ import java.util.List;
 
 public class ItemList extends BaseActivity {
 
-    RecyclerView recyclerView;
-    ArrayList<Item> dataList = new ArrayList<>();
-    ItemRecyclerAdapter adapter;
+    private RecyclerView recyclerView;
+    private ArrayList<Item> dataList = new ArrayList<>();
+    private ItemRecyclerAdapter adapter;
     private DatabaseService databaseService;
 
     @Override

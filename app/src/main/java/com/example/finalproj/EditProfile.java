@@ -1,6 +1,8 @@
 package com.example.finalproj;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,11 +19,12 @@ import com.google.firebase.Firebase;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class EditProfile extends BaseActivity implements View.OnClickListener {
-    EditText fName, lName, phoneNum;
-    String uid;
-    Button submit;
-    DatabaseService databaseService;
-    FirebaseAuth mAuth;
+    private static final String TAG = "EditProfile";
+    private EditText fName, lName, phoneNum;
+    private String uid;
+    private Button submit;
+    private DatabaseService databaseService;
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,9 +64,22 @@ public class EditProfile extends BaseActivity implements View.OnClickListener {
         databaseService.getUser(uid, new DatabaseService.DatabaseCallback<User>() {
             @Override
             public void onCompleted(User user) {
-                user.setfName(fName.toString());
-                user.setlName(lName.toString());
-                user.setPhone(phoneNum.toString());
+                user.setfName(fName.getText().toString());
+                user.setlName(lName.getText().toString());
+                user.setPhone(phoneNum.getText().toString());
+                databaseService.updateUser(user, new DatabaseService.DatabaseCallback<Void>() {
+                    @Override
+                    public void onCompleted(Void object) {
+                        Log.d(TAG, "User updated.");
+                    }
+
+                    @Override
+                    public void onFailed(Exception e) {
+                        Log.e(TAG, "User failed to update", e);
+                    }
+                });
+                Intent i = new Intent(EditProfile.this, UserProfile.class);
+                startActivity(i);
             }
 
             @Override

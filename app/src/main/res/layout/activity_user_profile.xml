@@ -78,6 +78,15 @@
                     />
 
             </androidx.cardview.widget.CardView>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvUserProfile"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_margin="10dp"
+                android:padding="5dp"/>
+
         </com.google.android.material.card.MaterialCardView>
     </LinearLayout>
 

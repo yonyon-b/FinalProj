@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.finalproj.model.User;
 import com.example.finalproj.services.DatabaseService;
@@ -30,7 +31,8 @@ import org.w3c.dom.Text;
 public class UserProfile extends BaseActivity implements View.OnClickListener {
     private TextView userName, phoneNumber, mail;
     private String uid, fullName, phoneNum, email;
-    ImageView pfp;
+    private ImageView pfp;
+    private RecyclerView itemListForUser;
     private FirebaseAuth mAuth;
     private DatabaseService databaseService;
 
@@ -51,6 +53,9 @@ public class UserProfile extends BaseActivity implements View.OnClickListener {
         phoneNumber = findViewById(R.id.txtUserPhoneProfile);
         mail = findViewById(R.id.txtUserEmailProfile);
         pfp = findViewById(R.id.imgPfp);
+        itemListForUser = findViewById(R.id.rvUserProfile);
+
+
         Intent i = getIntent();
         uid = i.getStringExtra("USER_UID");
         if (uid == null)
