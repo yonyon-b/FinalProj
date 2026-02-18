@@ -23,7 +23,7 @@
                 android:src="@drawable/edit_profile"
                 android:layout_margin="20dp"
                 android:onClick="onClick"
-                android:id="@+id/imgPfp"/>
+                android:id="@+id/imgEditProfile"/>
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -75,6 +75,7 @@
                     android:layout_height="wrap_content"
                     android:src="@drawable/user_pfp"
                     android:layout_gravity="center"
+                    android:id="@+id/userProfilePfp"
                     />
 
             </androidx.cardview.widget.CardView>

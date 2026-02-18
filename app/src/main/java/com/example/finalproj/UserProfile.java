@@ -17,6 +17,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.finalproj.model.ImageUtil;
 import com.example.finalproj.model.User;
 import com.example.finalproj.services.DatabaseService;
 import com.google.firebase.auth.FirebaseAuth;
@@ -31,7 +32,7 @@ import org.w3c.dom.Text;
 public class UserProfile extends BaseActivity implements View.OnClickListener {
     private TextView userName, phoneNumber, mail;
     private String uid, fullName, phoneNum, email;
-    private ImageView pfp;
+    private ImageView pfp, editProfileImg;
     private RecyclerView itemListForUser;
     private FirebaseAuth mAuth;
     private DatabaseService databaseService;
@@ -52,8 +53,10 @@ public class UserProfile extends BaseActivity implements View.OnClickListener {
         userName = findViewById(R.id.txtUserNameProfile);
         phoneNumber = findViewById(R.id.txtUserPhoneProfile);
         mail = findViewById(R.id.txtUserEmailProfile);
-        pfp = findViewById(R.id.imgPfp);
+        pfp = findViewById(R.id.userProfilePfp);
+        editProfileImg = findViewById(R.id.imgEditProfile);
         itemListForUser = findViewById(R.id.rvUserProfile);
+        editProfileImg.setOnClickListener(this);
 
 
         Intent i = getIntent();
@@ -62,14 +65,17 @@ public class UserProfile extends BaseActivity implements View.OnClickListener {
             uid = mAuth.getCurrentUser().getUid();
         databaseService.getUser(uid, new DatabaseService.DatabaseCallback<User>() {
             @Override
-            public void onCompleted(User object) {
-                fullName = object.getfName() + " " + object.getlName();
-                phoneNum = object.getPhone();
-                email = object.getEmail();
+            public void onCompleted(User user) {
+                fullName = user.getfName() + " " + user.getlName();
+                phoneNum = user.getPhone();
+                email = user.getEmail();
 
                 userName.setText(fullName);
                 phoneNumber.setText(phoneNum);
                 mail.setText(email);
+                if (user.getProfilePicture() != null){
+                    pfp.setImageBitmap(ImageUtil.convertFrom64base(user.getProfilePicture()));
+                }
             }
 
             @Override
@@ -81,7 +87,7 @@ public class UserProfile extends BaseActivity implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        if (v.getId() == pfp.getId()){
+        if (v.getId() == editProfileImg.getId()){
             Intent i = new Intent(this, EditProfile.class);
             startActivity(i);
         }

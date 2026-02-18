@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -19,15 +20,21 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.finalproj.model.ImageUtil;
+import com.example.finalproj.model.User;
 import com.example.finalproj.services.DatabaseService;
+import com.google.firebase.auth.FirebaseAuth;
 import com.yalantis.ucrop.UCrop;
 
 import java.io.File;
 
 public class ProfilePicSetUp extends AppCompatActivity implements View.OnClickListener {
+    private static final String TAG = "ProfilePicSetUp";
+    private String uid;
     private Button btnSubmit, btnSkip;
     private ImageView imagePfp, imageCamera, imageGallery;
     private DatabaseService databaseService;
+    private FirebaseAuth mAuth;
     private ActivityResultLauncher<String> pickImageLauncher;
     private ActivityResultLauncher<Uri> takePictureLauncher;
     private Uri cameraImageUri;
@@ -48,10 +55,13 @@ public class ProfilePicSetUp extends AppCompatActivity implements View.OnClickLi
         imagePfp = findViewById(R.id.imgChangePfp);
         imageCamera = findViewById(R.id.imgCameraPfp);
         imageGallery = findViewById(R.id.imgGalleryPfp);
+        mAuth = FirebaseAuth.getInstance();
+        databaseService = DatabaseService.getInstance();
         imageCamera.setOnClickListener(this);
         imageGallery.setOnClickListener(this);
         btnSubmit.setOnClickListener(this);
         btnSkip.setOnClickListener(this);
+        uid = mAuth.getCurrentUser().getUid();
 
         takePictureLauncher =
                 registerForActivityResult(new ActivityResultContracts.TakePicture(), success -> {
@@ -79,11 +89,35 @@ public class ProfilePicSetUp extends AppCompatActivity implements View.OnClickLi
         }
 
         if (v.getId() == btnSubmit.getId()){
+            databaseService.getUser(uid, new DatabaseService.DatabaseCallback<User>() {
+                @Override
+                public void onCompleted(User user) {
+                    user.setProfilePicture(ImageUtil.convertTo64Base(imagePfp));
+                    databaseService.updateUser(user, new DatabaseService.DatabaseCallback<Void>() {
+                        @Override
+                        public void onCompleted(Void object) {
+                            Log.d(TAG, "User updated.");
+                        }
 
+                        @Override
+                        public void onFailed(Exception e) {
+                            Log.e(TAG, "User failed to update", e);
+                        }
+                    });
+                    Intent i = new Intent(ProfilePicSetUp.this, UserActivity.class);
+                    startActivity(i);
+                }
+
+                @Override
+                public void onFailed(Exception e) {
+
+                }
+            });
         }
 
         if (v.getId() == btnSkip.getId()){
-
+            Intent i = new Intent(this, UserActivity.class);
+            startActivity(i);
         }
     }
     private void openCamera() {
