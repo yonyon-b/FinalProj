@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.finalproj.model.User;
 import com.example.finalproj.model.UserAdapter;
 import com.example.finalproj.services.DatabaseService;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.List;
 
@@ -27,6 +28,7 @@ public class UserList extends BaseActivity {
     private UserAdapter userAdapter;
     private TextView tvUserCount;
     private DatabaseService databaseService;
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +42,7 @@ public class UserList extends BaseActivity {
         });
         RecyclerView usersList = findViewById(R.id.rv_users_list);
         databaseService = DatabaseService.getInstance();
+        mAuth = FirebaseAuth.getInstance();
         usersList.setLayoutManager(new LinearLayoutManager(this));
         userAdapter = new UserAdapter(new UserAdapter.OnUserClickListener() {
             @Override
@@ -77,7 +80,6 @@ public class UserList extends BaseActivity {
                         return true;
 
                     } else if (id == R.id.action_admin) {
-                        // Handle message action
                         if (user.getAdmin()){
                             user.setAdmin(false);
                         }
@@ -98,7 +100,7 @@ public class UserList extends BaseActivity {
                         return true;
 
                     } else if (id == R.id.action_delete) {
-                        // Handle delete action
+
                         Log.d(TAG, "Delete user: " + user.getId());
                         return true;
                     }

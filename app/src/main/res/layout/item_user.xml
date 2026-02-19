@@ -34,7 +34,8 @@
                 android:text="JD"
                 android:textSize="20sp"
                 android:textStyle="bold"
-                android:textColor="?attr/colorPrimary" />
+                android:textColor="?attr/colorPrimary"
+                />
 
         </com.google.android.material.card.MaterialCardView>
 
@@ -44,7 +45,7 @@
             android:layout_weight="1"
             android:orientation="vertical"
             android:layout_marginStart="16dp"
-            android:layout_marginEnd="8dp">
+            >
 
             <TextView
                 android:id="@+id/tv_item_user_name"
@@ -108,6 +109,7 @@
 
         </LinearLayout>
 
+
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -123,15 +125,8 @@
                 android:visibility="gone"
                 app:chipBackgroundColor="?attr/colorSecondary"
                 app:chipStrokeWidth="0dp"
-                tools:visibility="visible" />
-
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_marginTop="8dp"
-                android:src="@android:drawable/ic_menu_more"
-                app:tint="#999999" />
-
+                tools:visibility="visible"
+                />
         </LinearLayout>
 
     </LinearLayout>

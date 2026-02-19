@@ -3,6 +3,7 @@ package com.example.finalproj.model;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -11,7 +12,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.finalproj.R;
 import com.example.finalproj.model.User;
+import com.example.finalproj.services.DatabaseService;
 import com.google.android.material.chip.Chip;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -111,6 +114,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView tvName, tvEmail, tvPhone, tvInitials;
+        ImageView imgRemove;
         Chip chipRole;
 
         public ViewHolder(@NonNull View itemView) {
