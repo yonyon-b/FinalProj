@@ -6,34 +6,27 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".BaseActivity">
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:orientation="vertical"
+
+    <FrameLayout
+        android:id="@+id/content_frame"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <!-- Common header -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <androidx.appcompat.widget.Toolbar
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:navigationIcon="@drawable/back_arrow"
-                android:navigationContentDescription="Go Back"
-                app:title="Lost &amp; Found"
-
-                android:id="@+id/toolBarBase"
-                />
-        </LinearLayout>
-
-        <!-- Content placeholder -->
-        <FrameLayout
-            android:id="@+id/content_frame"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
-
-    </LinearLayout>
-
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolBarBase"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@android:color/transparent"
+        android:elevation="0dp"
+        android:navigationContentDescription="Go Back"
+        android:navigationIcon="@drawable/back_arrow"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:title="LostLink"
+        app:titleTextColor="#FFFFFF" />
 </androidx.constraintlayout.widget.ConstraintLayout>
