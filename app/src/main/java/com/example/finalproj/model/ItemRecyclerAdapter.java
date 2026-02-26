@@ -60,10 +60,23 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter<ItemRecyclerAdapte
                 Html.fromHtml("<b>Details:</b><br>" + item.getDetails())
         );
 
-        try {
-            holder.imgItem.setImageBitmap(ImageUtil.convertFrom64base(item.getPic()));
-            holder.imgItemEx.setImageBitmap(ImageUtil.convertFrom64base(item.getPic()));
-        } catch (Exception e) {
+        if (item.getPic() != null && !item.getPic().isEmpty()) {
+            // Decode the string to bytes
+            byte[] imageBytes = android.util.Base64.decode(item.getPic(), android.util.Base64.DEFAULT);
+
+            // Use Glide to load the bytes into both ImageViews
+            com.bumptech.glide.Glide.with(context)
+                    .asBitmap()
+                    .load(imageBytes)
+                    .placeholder(R.drawable.ic_launcher_background) // loading
+                    .error(R.drawable.ic_launcher_background)       // fails
+                    .into(holder.imgItem);
+
+            com.bumptech.glide.Glide.with(context)
+                    .asBitmap()
+                    .load(imageBytes)
+                    .into(holder.imgItemEx);
+        } else {
             holder.imgItem.setImageResource(R.drawable.ic_launcher_background);
             holder.imgItemEx.setImageResource(R.drawable.ic_launcher_background);
         }

@@ -125,7 +125,7 @@
                         android:id="@+id/imgList"
                         android:layout_width="48dp"
                         android:layout_height="48dp"
-                        android:src="@android:drawable/ic_menu_sort_by_size"
+                        android:src="@drawable/item_list"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
