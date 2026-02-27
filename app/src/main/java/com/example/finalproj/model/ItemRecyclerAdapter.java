@@ -19,6 +19,10 @@ import com.example.finalproj.services.DatabaseService;
 
 import java.util.List;
 
+import android.util.Base64;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+
 public class ItemRecyclerAdapter extends RecyclerView.Adapter<ItemRecyclerAdapter.ItemViewHolder> {
 
     private final Context context;
@@ -46,69 +50,52 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter<ItemRecyclerAdapte
 
         holder.txtName.setText(item.getName());
 
-        if (item.isLost()) {
-            holder.txtLost.setText("Lost Item");
-            holder.txtDate.setText(Html.fromHtml("<b>Lost at:</b> " + item.getDate()));
-            holder.txtPosition.setText(Html.fromHtml("<b>Location Lost:</b><br>" + item.getPosition()));
-        } else {
-            holder.txtLost.setText("Found Item");
-            holder.txtDate.setText(Html.fromHtml("<b>Found at:</b> " + item.getDate()));
-            holder.txtPosition.setText(Html.fromHtml("<b>Location Found:</b><br>" + item.getPosition()));
-        }
+        String typePrefix = item.isLost() ? "Lost at: " : "Found at: ";
+        holder.txtLost.setText(item.isLost() ? "Lost Item" : "Found Item");
+        holder.txtDate.setText(typePrefix + item.getDate());
 
-        holder.txtDetails.setText(
-                Html.fromHtml("<b>Details:</b><br>" + item.getDetails())
-        );
+        holder.txtPosition.setText(Html.fromHtml("<b>Location:</b> " + item.getPosition()));
+        holder.txtDetails.setText(Html.fromHtml("<b>Details:</b> " + item.getDetails()));
 
-        if (item.getPic() != null && !item.getPic().isEmpty()) {
-            // Decode the string to bytes
-            byte[] imageBytes = android.util.Base64.decode(item.getPic(), android.util.Base64.DEFAULT);
+        // Image Loading
+        try {
+            String base64String = item.getPic();
+            if (base64String != null && !base64String.isEmpty()) {
+                // Decode the Base64 string to a byte array
+                byte[] imageByteArray = Base64.decode(base64String, Base64.DEFAULT);
 
-            // Use Glide to load the bytes into both ImageViews
-            com.bumptech.glide.Glide.with(context)
-                    .asBitmap()
-                    .load(imageBytes)
-                    .placeholder(R.drawable.ic_launcher_background) // loading
-                    .error(R.drawable.ic_launcher_background)       // fails
-                    .into(holder.imgItem);
-
-            com.bumptech.glide.Glide.with(context)
-                    .asBitmap()
-                    .load(imageBytes)
-                    .into(holder.imgItemEx);
-        } else {
+                // Use Glide to load the byte array into the single ImageView
+                Glide.with(context)
+                        .asBitmap()
+                        .load(imageByteArray)
+                        .placeholder(R.drawable.ic_launcher_background) // placeholder while loading
+                        .error(R.drawable.ic_launcher_background)       // fallback on error
+                        .diskCacheStrategy(DiskCacheStrategy.NONE)      // don't cache raw byte arrays to disk
+                        .into(holder.imgItem);
+            } else {
+                holder.imgItem.setImageResource(R.drawable.ic_launcher_background);
+            }
+        } catch (Exception e) {
+            // base64 string is corrupted or decoding fails
             holder.imgItem.setImageResource(R.drawable.ic_launcher_background);
-            holder.imgItemEx.setImageResource(R.drawable.ic_launcher_background);
         }
 
-        databaseService.getUser(item.getUserId(),
-                new DatabaseService.DatabaseCallback<User>() {
-                    @Override
-                    public void onCompleted(User user) {
-                        try {
-                            holder.txtUserName.setText(
-                                    Html.fromHtml("<b>User:</b><br>" + user.getfName() + " " + user.getlName()));
-                            holder.txtUserPhone.setText(
-                                    Html.fromHtml("<b>Phone Number:</b><br>" + user.getPhone()));
-                        } catch (Exception e) {
-                            holder.txtUserName.setText(
-                                    Html.fromHtml("<b>User:</b><br>" + "Deleted User"));
-                            holder.txtUserPhone.setText(
-                                    Html.fromHtml("<b>Phone Number:</b><br>" + "Unknown"));
-                        }
-                    }
+        // Load User Data
+        databaseService.getUser(item.getUserId(), new DatabaseService.DatabaseCallback<User>() {
+            @Override
+            public void onCompleted(User user) {
+                if (user != null) {
+                    holder.txtUserName.setText("Posted by: " + user.getfName() + " " + user.getlName());
+                    holder.txtUserPhone.setText("Contact: " + user.getPhone());
+                }
+            }
+            @Override
+            public void onFailed(Exception e) { /* Handle error */ }
+        });
 
-                    @Override
-                    public void onFailed(Exception e) {
-
-                    }
-                });
-
-        // Expand / collapse state
+        // Expand Logic
         boolean expanded = expandState.get(position, false);
         holder.layoutExpanded.setVisibility(expanded ? View.VISIBLE : View.GONE);
-        holder.imgItemEx.setVisibility(expanded ? View.VISIBLE : View.GONE);
-        holder.imgItem.setVisibility(expanded ? View.GONE : View.VISIBLE);
 
         holder.itemView.setOnClickListener(v -> {
             expandState.put(position, !expanded);
@@ -123,7 +110,7 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter<ItemRecyclerAdapte
 
     static class ItemViewHolder extends RecyclerView.ViewHolder {
 
-        ImageView imgItem, imgItemEx;
+        ImageView imgItem;
         TextView txtName, txtDate, txtLost;
         TextView txtPosition, txtDetails, txtUserName, txtUserPhone;
         LinearLayout layoutExpanded;
@@ -132,7 +119,6 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter<ItemRecyclerAdapte
             super(itemView);
 
             imgItem = itemView.findViewById(R.id.imgItem);
-            imgItemEx = itemView.findViewById(R.id.imgItemExpanded);
 
             txtName = itemView.findViewById(R.id.txtName);
             txtDate = itemView.findViewById(R.id.txtDate);
