@@ -90,7 +90,10 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter<ItemRecyclerAdapte
                 }
             }
             @Override
-            public void onFailed(Exception e) { /* Handle error */ }
+            public void onFailed(Exception e) {
+                holder.txtUserName.setText("Posted by: User");
+                holder.txtUserPhone.setText("Contact: Unknown");
+            }
         });
 
         // Expand Logic

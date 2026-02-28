@@ -6,6 +6,7 @@ import android.nfc.Tag;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -128,6 +129,11 @@ public class AddItem extends BaseActivity implements View.OnClickListener {
         itemLocation = findViewById(R.id.etItemLocation);
         itemDesc = findViewById(R.id.etItemDesc);
         itemType = findViewById(R.id.spItemType);
+
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.LostOrFound, R.layout.spinner_add_item);
+        adapter.setDropDownViewResource(R.layout.spinner_add_item);
+        itemType.setAdapter(adapter);
 
         btnSelect = findViewById(R.id.btnSelectImg);
         btnCamera = findViewById(R.id.btnCamera);
