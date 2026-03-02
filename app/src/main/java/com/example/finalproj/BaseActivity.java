@@ -17,18 +17,21 @@ import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 
 import com.example.finalproj.model.User;
 import com.example.finalproj.services.DatabaseService;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+
+import org.jspecify.annotations.NonNull;
 
 import java.util.Objects;
 
-public class BaseActivity extends AppCompatActivity{
+public class BaseActivity extends AppCompatActivity {
     private static final String TAG = "BaseActivity";
-    private FirebaseAuth mAuth;
-    private DatabaseService databaseService;
-    private User currentUser;
 
     @Override
     public void setContentView(int layoutResID) {
@@ -42,85 +45,37 @@ public class BaseActivity extends AppCompatActivity{
         inflater.inflate(layoutResID, content, true);
 
         super.setContentView(base);
-
-        Toolbar toolBar = findViewById(R.id.toolBarBase);
-        setSupportActionBar(toolBar);
-        toolBar.setOverflowIcon(ContextCompat.getDrawable(this, R.drawable.overflow_menu_icon));
-
-        if (shouldShowBackButton()) {
-            Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setHomeAsUpIndicator(R.drawable.back_arrow);
-        }
+        setupBottomNavigation();
     }
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu, menu);
-        MenuItem item = menu.findItem(R.id.action_sign_out);
-        SpannableString str = new SpannableString(item.getTitle());
-        str.setSpan(new ForegroundColorSpan(Color.RED), 0, str.length(), 0);
-        item.setTitle(str);
 
-        /// Admin page visibility & color
-        DatabaseService.getInstance().getUser(FirebaseAuth.getInstance().getCurrentUser().getUid(), new DatabaseService.DatabaseCallback<User>() {
-            @Override
-            public void onCompleted(User object) {
-                currentUser = object;
-                if (currentUser.getAdmin()) {
-                    MenuItem item2 = menu.findItem(R.id.action_admin);
-                    item2.setVisible(true);
-                    SpannableString str2 = new SpannableString(item2.getTitle());
-                    str2.setSpan(new ForegroundColorSpan(Color.CYAN), 0, str2.length(), 0);
-                    item2.setTitle(str2);
-                }
-            }
-
-            @Override
-            public void onFailed(Exception e) {
-                Log.d(TAG, "onFailed: failed" + e);
-            }
+    private void setupBottomNavigation() {
+        BottomNavigationView bottomNavigation = findViewById(R.id.bottom_navigation);
+        ViewCompat.setOnApplyWindowInsetsListener(bottomNavigation, (v, insets) -> {
+            return insets;
         });
-        return true;
+        bottomNavigation.setOnItemSelectedListener(item -> {
+            int itemId = item.getItemId();
+
+            if (itemId == R.id.nav_home) {
+                startActivity(new Intent(this, UserActivity.class));
+                return true;
+            } else if (itemId == R.id.nav_add_item) {
+                startActivity(new Intent(this, AddItem.class));
+                return true;
+            } else if (itemId == R.id.nav_profile) {
+                startActivity(new Intent(this, UserProfile.class));
+                return true;
+            } else if (itemId == R.id.nav_list_item) {
+                startActivity(new Intent(this, ItemList.class));
+                return true;
+            }
+            return false;
+        });
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home){
-            return super.onOptionsItemSelected(item);
-        }
-        if (item.getItemId() == R.id.action_settings){
-            Intent i = new Intent(this, Settings.class);
-            startActivity(i);
-        }
-        else if (item.getItemId() == R.id.action_profile){
-            Intent i = new Intent(this, UserProfile.class);
-            startActivity(i);
-        }
-        else if (item.getItemId() == R.id.action_admin){
-            Intent i = new Intent(this, MainAdmin.class);
-            startActivity(i);
-        }
-        else if (item.getItemId() == R.id.action_sign_out){
-            mAuth = FirebaseAuth.getInstance();
-            mAuth.signOut();
-            Intent i = new Intent(this, Register.class);
-            startActivity(i);
-        }
-        return true;
-    }
-    protected boolean shouldShowBackButton() {
-        return true;
-    }
-
-    // Handle back button click
-    @Override
-    public boolean onSupportNavigateUp() {
-        finish();
-        return true;
-    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
     }
-
 }
