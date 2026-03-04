@@ -30,21 +30,19 @@ import org.jspecify.annotations.NonNull;
 
 import java.util.Objects;
 
-public class BaseActivity extends AppCompatActivity {
+public abstract class BaseActivity extends AppCompatActivity {
     private static final String TAG = "BaseActivity";
 
     @Override
     public void setContentView(int layoutResID) {
-        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        super.setContentView(R.layout.activity_base);
 
-        // Inflate base layout
-        View base = inflater.inflate(R.layout.activity_base, null);
+        FrameLayout content = findViewById(R.id.content_frame);
 
-        // Inflate child layout inside placeholder
-        FrameLayout content = base.findViewById(R.id.content_frame);
-        inflater.inflate(layoutResID, content, true);
+        if (content != null) {
+            getLayoutInflater().inflate(layoutResID, content, true);
+        }
 
-        super.setContentView(base);
         setupBottomNavigation();
     }
 
@@ -55,7 +53,9 @@ public class BaseActivity extends AppCompatActivity {
         });
         bottomNavigation.setOnItemSelectedListener(item -> {
             int itemId = item.getItemId();
-
+            if (itemId == getNavigationMenuItemId()) {
+                return true;
+            }
             if (itemId == R.id.nav_home) {
                 startActivity(new Intent(this, UserActivity.class));
                 return true;
@@ -71,7 +71,12 @@ public class BaseActivity extends AppCompatActivity {
             }
             return false;
         });
+        int selectedItemId = getNavigationMenuItemId();
+        if (selectedItemId != 0) {
+            bottomNavigation.getMenu().findItem(selectedItemId).setChecked(true);
+        }
     }
+    protected abstract int getNavigationMenuItemId();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

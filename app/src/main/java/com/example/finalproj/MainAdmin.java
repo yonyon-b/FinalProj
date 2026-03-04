@@ -35,4 +35,7 @@ public class MainAdmin extends BaseActivity implements View.OnClickListener {
             startActivity(i);
         }
     }
+    protected int getNavigationMenuItemId() {
+        return 0;
+    }
 }

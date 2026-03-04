@@ -202,4 +202,7 @@ public class EditProfile extends BaseActivity implements View.OnClickListener {
             }
         }
     }
+    protected int getNavigationMenuItemId() {
+        return 0;
+    }
 }

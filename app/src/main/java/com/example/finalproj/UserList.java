@@ -128,4 +128,8 @@ public class UserList extends BaseActivity {
             }
         });
     }
+    @Override
+    protected int getNavigationMenuItemId() {
+        return 0;
+    }
 }

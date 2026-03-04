@@ -65,5 +65,7 @@ public class ItemList extends BaseActivity {
             }
         });
     }
-
+    protected int getNavigationMenuItemId() {
+        return R.id.nav_list_item;
+    }
 }

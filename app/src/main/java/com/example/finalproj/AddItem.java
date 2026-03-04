@@ -160,4 +160,8 @@ public class AddItem extends BaseActivity implements View.OnClickListener {
 
         item = new Item();
     }
+    @Override
+    protected int getNavigationMenuItemId() {
+        return R.id.nav_add_item;
+    }
 }
