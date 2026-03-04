@@ -4,7 +4,8 @@
     <color name="white">#FFFFFFFF</color>
     <color name="gray">#a2a8a3</color>
     <color name="lightGreen">#2ef252</color>
-    <color name="bgDarkGreen">#102219</color>
-    <color name="bgDarkLightGreen">#f6f8f7</color>
     <color name="bgCardGreen">#1a2e24</color>
+    <color name="toolBarBg">#0f2119</color>
+    <color name="toolBarItems">#13ec80</color>
+    <color name="toolBarItemSelected">#0f3523</color>
 </resources>
