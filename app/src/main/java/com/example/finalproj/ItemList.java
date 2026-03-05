@@ -2,6 +2,7 @@ package com.example.finalproj;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -27,6 +28,9 @@ public class ItemList extends BaseActivity {
     private ItemRecyclerAdapter adapter;
     private DatabaseService databaseService;
     private SearchView searchView;
+    private Button btnFilterAll, btnFilterLost, btnFilterFound;
+    private String currentSearchText = "";
+    private Boolean currentFilterIsLost = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,9 +44,16 @@ public class ItemList extends BaseActivity {
         });
         recyclerView = findViewById(R.id.rvItems);
         searchView = findViewById(R.id.searchView);
+        btnFilterAll = findViewById(R.id.btnFilterAll);
+        btnFilterLost = findViewById(R.id.btnFilterLost);
+        btnFilterFound = findViewById(R.id.btnFilterFound);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
+
+        btnFilterAll.setOnClickListener(v -> filterList(null));
+        btnFilterLost.setOnClickListener(v -> filterList(true));
+        btnFilterFound.setOnClickListener(v -> filterList(false));
 
         adapter = new ItemRecyclerAdapter(this, dataList);
         recyclerView.setAdapter(adapter);
@@ -57,7 +68,7 @@ public class ItemList extends BaseActivity {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                filterList(newText);
+                searchList(newText);
                 return true;
             }
         });
@@ -89,20 +100,55 @@ public class ItemList extends BaseActivity {
     protected int getNavigationMenuItemId() {
         return R.id.nav_list_item;
     }
-    private void filterList(String text) {
-        ArrayList<Item> filteredList = new ArrayList<>();
 
+    private void searchList(String text) {
+        currentSearchText = text;
+        applyFilters();
+    }
+
+    private void filterList(Boolean isLost) {
+        currentFilterIsLost = isLost;
+        // set color for filters
+        if (isLost == null){
+            btnFilterAll.setBackgroundColor(getColor(R.color.toolBarItems));
+            btnFilterFound.setBackgroundColor(getColor(R.color.bgCardGreen));
+            btnFilterLost.setBackgroundColor(getColor(R.color.bgCardGreen));
+        }
+        else if (isLost){
+            btnFilterAll.setBackgroundColor(getColor(R.color.bgCardGreen));
+            btnFilterFound.setBackgroundColor(getColor(R.color.bgCardGreen));
+            btnFilterLost.setBackgroundColor(getColor(R.color.toolBarItems));
+        }
+        else{
+            btnFilterAll.setBackgroundColor(getColor(R.color.bgCardGreen));
+            btnFilterFound.setBackgroundColor(getColor(R.color.toolBarItems));
+            btnFilterLost.setBackgroundColor(getColor(R.color.bgCardGreen));
+        }
+        applyFilters();
+    }
+
+    private void applyFilters() {
+        dataList.clear();
         for (Item item : allItems) {
-            if (item.getName().toLowerCase().contains(text.toLowerCase())) {
-                filteredList.add(item);
+            boolean matchesSearch = true;
+            boolean matchesCategory = true;
+
+            if (currentSearchText != null && !currentSearchText.trim().isEmpty()) {
+                if (!item.getName().toLowerCase().contains(currentSearchText.toLowerCase())) {
+                    matchesSearch = false;
+                }
+            }
+            if (currentFilterIsLost != null) {
+                if (item.isLost() != currentFilterIsLost) {
+                    matchesCategory = false;
+                }
+            }
+            if (matchesSearch && matchesCategory) {
+                dataList.add(item);
             }
         }
-
-        dataList.clear();
-        if (filteredList.isEmpty()) {
-            // "No Data Found"
-        } else {
-            dataList.addAll(filteredList);
+        if (dataList.isEmpty()) {
+            //No items found
         }
         adapter.notifyDataSetChanged();
     }
