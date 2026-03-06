@@ -8,4 +8,5 @@
     <color name="toolBarBg">#0f2119</color>
     <color name="toolBarItems">#13ec80</color>
     <color name="toolBarItemSelected">#0f3523</color>
+    <color name="buttonBg">#103623</color>
 </resources>

@@ -15,9 +15,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.finalproj.model.ImageUtil;
+import com.example.finalproj.model.Item;
+import com.example.finalproj.model.ItemRecyclerAdapter;
 import com.example.finalproj.model.User;
 import com.example.finalproj.services.DatabaseService;
 import com.google.firebase.auth.FirebaseAuth;
@@ -29,11 +32,17 @@ import com.google.firebase.database.ValueEventListener;
 
 import org.w3c.dom.Text;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class UserProfile extends BaseActivity implements View.OnClickListener {
     private TextView userName, phoneNumber, mail;
     private String uid, fullName, phoneNum, email;
-    private ImageView pfp, editProfileImg;
-    private RecyclerView itemListForUser;
+    private ImageView pfp;
+    private Button editProfile;
+    private RecyclerView userItemList;
+    private ItemRecyclerAdapter adapter;
+    private ArrayList<Item> dataList = new ArrayList<>();
     private FirebaseAuth mAuth;
     private DatabaseService databaseService;
 
@@ -54,10 +63,14 @@ public class UserProfile extends BaseActivity implements View.OnClickListener {
         phoneNumber = findViewById(R.id.txtUserPhoneProfile);
         mail = findViewById(R.id.txtUserEmailProfile);
         pfp = findViewById(R.id.userProfilePfp);
-        editProfileImg = findViewById(R.id.imgEditProfile);
-        itemListForUser = findViewById(R.id.rvUserProfile);
-        editProfileImg.setOnClickListener(this);
+        editProfile = findViewById(R.id.btnEditProfile);
+        userItemList = findViewById(R.id.rvUserProfile);
+        editProfile.setOnClickListener(this);
 
+        userItemList.setLayoutManager(new LinearLayoutManager(this));
+        userItemList.setHasFixedSize(true);
+        adapter = new ItemRecyclerAdapter(this, dataList);
+        userItemList.setAdapter(adapter);
 
         Intent i = getIntent();
         uid = i.getStringExtra("USER_UID");
@@ -83,14 +96,44 @@ public class UserProfile extends BaseActivity implements View.OnClickListener {
 
             }
         });
+        loadUserItems(uid);
     }
 
     @Override
     public void onClick(View v) {
-        if (v.getId() == editProfileImg.getId()){
+        if (v.getId() == editProfile.getId()){
             Intent i = new Intent(this, EditProfile.class);
             startActivity(i);
         }
+    }
+    private void loadUserItems(String profileUid) {
+        databaseService.getItemList(new DatabaseService.DatabaseCallback<List<Item>>() {
+            @Override
+            public void onCompleted(List<Item> items) {
+                dataList.clear();
+                List<Item> userItems = new ArrayList<>();
+
+                for (Item item : items) {
+                    if (item.getUserId() != null && item.getUserId().equals(profileUid)) {
+                        userItems.add(item);
+                    }
+                }
+
+                int size = userItems.size();
+                if (size > 2) {
+                    dataList.addAll(userItems.subList(size - 2, size));
+                } else {
+                    dataList.addAll(userItems);
+                }
+
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailed(Exception e) {
+                Log.e("UserProfile", "Failed to load items for user", e);
+            }
+        });
     }
     protected int getNavigationMenuItemId() {
         return R.id.nav_profile;
