@@ -5,6 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/gradient_long"
     tools:context=".AddItem">
     <ScrollView
         android:layout_width="match_parent"
@@ -16,7 +17,6 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="20dp"
-            android:background="@drawable/gradient"
             android:gravity="center_horizontal">
 
             <TextView
