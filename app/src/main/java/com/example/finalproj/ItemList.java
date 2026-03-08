@@ -14,11 +14,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.finalproj.model.Item;
 import com.example.finalproj.model.ItemRecyclerAdapter;
+import com.example.finalproj.model.User;
 import com.example.finalproj.services.DatabaseService;
 
 import androidx.appcompat.widget.SearchView;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ItemList extends BaseActivity {
 
@@ -31,7 +34,7 @@ public class ItemList extends BaseActivity {
     private Button btnFilterAll, btnFilterLost, btnFilterFound;
     private String currentSearchText = "";
     private Boolean currentFilterIsLost = null;
-
+    private Map<String, User> userCache = new HashMap<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,20 +75,42 @@ public class ItemList extends BaseActivity {
                 return true;
             }
         });
+        loadUsersAndItems();
+        String incomingQuery = getIntent().getStringExtra("SEARCH_QUERY");
+        if (incomingQuery != null && !incomingQuery.isEmpty()) {
+            searchView.setQuery(incomingQuery, false);
+            searchView.clearFocus();
+        }
+    }
+    private void loadUsersAndItems() {
+        // Fetch all users once and cache them
+        databaseService.getUserList(new DatabaseService.DatabaseCallback<List<User>>() {
+            @Override
+            public void onCompleted(List<User> users) {
+                userCache.clear();
+                for (User user : users) {
+                    userCache.put(user.getId(), user);
+                }
+                // Now load the items
+                loadItemsFromFirebase();
+            }
 
-        loadItemsFromFirebase();
+            @Override
+            public void onFailed(Exception e) {
+                Log.e("ItemList", "Failed to load users for caching", e);
+                // Even if users fail, try to load items
+                loadItemsFromFirebase();
+            }
+        });
     }
     private void loadItemsFromFirebase() {
         databaseService.getItemList(new DatabaseService.DatabaseCallback<List<Item>>() {
             @Override
             public void onCompleted(List<Item> items) {
-                dataList.clear();
                 allItems.clear();
-
                 allItems.addAll(items);
-                dataList.addAll(items);
 
-                adapter.notifyDataSetChanged();
+                applyFilters();
             }
 
             @Override
@@ -127,28 +152,47 @@ public class ItemList extends BaseActivity {
         applyFilters();
     }
 
+
     private void applyFilters() {
         dataList.clear();
         for (Item item : allItems) {
             boolean matchesSearch = true;
             boolean matchesCategory = true;
 
+            // fetch owner name from local cache
+            String ownerName = "";
+            User owner = userCache.get(item.getUserId());
+            if (owner != null) {
+                String fName = owner.getfName() != null ? owner.getfName() : "";
+                String lName = owner.getlName() != null ? owner.getlName() : "";
+                ownerName = fName + " " + lName;
+            }
+
+            // item matches search text (item name or owner name)
             if (currentSearchText != null && !currentSearchText.trim().isEmpty()) {
-                if (!item.getName().toLowerCase().contains(currentSearchText.toLowerCase())) {
+                String query = currentSearchText.toLowerCase();
+                boolean nameMatches = item.getName() != null && item.getName().toLowerCase().contains(query);
+                boolean ownerMatches = ownerName.toLowerCase().equals(query);
+
+                if (!nameMatches && !ownerMatches) {
                     matchesSearch = false;
                 }
             }
+
+            // item matches lost/found filter
             if (currentFilterIsLost != null) {
                 if (item.isLost() != currentFilterIsLost) {
                     matchesCategory = false;
                 }
             }
+
             if (matchesSearch && matchesCategory) {
                 dataList.add(item);
             }
         }
+
         if (dataList.isEmpty()) {
-            //No items found
+            // No items found
         }
         adapter.notifyDataSetChanged();
     }

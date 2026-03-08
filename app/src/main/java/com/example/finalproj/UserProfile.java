@@ -39,7 +39,7 @@ public class UserProfile extends BaseActivity implements View.OnClickListener {
     private TextView userName, phoneNumber, mail;
     private String uid, fullName, phoneNum, email;
     private ImageView pfp;
-    private Button editProfile;
+    private Button editProfile, allItems;
     private RecyclerView userItemList;
     private ItemRecyclerAdapter adapter;
     private ArrayList<Item> dataList = new ArrayList<>();
@@ -65,6 +65,8 @@ public class UserProfile extends BaseActivity implements View.OnClickListener {
         pfp = findViewById(R.id.userProfilePfp);
         editProfile = findViewById(R.id.btnEditProfile);
         userItemList = findViewById(R.id.rvUserProfile);
+        allItems = findViewById(R.id.btnAllPostedItems);
+        allItems.setOnClickListener(this);
         editProfile.setOnClickListener(this);
 
         userItemList.setLayoutManager(new LinearLayoutManager(this));
@@ -104,6 +106,13 @@ public class UserProfile extends BaseActivity implements View.OnClickListener {
         if (v.getId() == editProfile.getId()){
             Intent i = new Intent(this, EditProfile.class);
             startActivity(i);
+        }
+        else if (v.getId() == allItems.getId()){
+            Intent intent = new Intent(this, ItemList.class);
+            if (fullName != null && !fullName.isEmpty()) {
+                intent.putExtra("SEARCH_QUERY", fullName.trim());
+            }
+            startActivity(intent);
         }
     }
     private void loadUserItems(String profileUid) {

@@ -27,7 +27,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
     SharedPreferences sharedpreferences;
     private String emailPref, passPref;
     private EditText etEmail, etPassword;
-
+    private TextView tvSignUp;
     private Button btnLogin;
     private DatabaseService databaseService;
 
@@ -44,9 +44,11 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         etEmail = findViewById(R.id.login_email);
         etPassword = findViewById(R.id.login_password);
         btnLogin = findViewById(R.id.btn_login_login);
+        tvSignUp = findViewById(R.id.tvSignUp);
         databaseService=DatabaseService.getInstance();
 
         btnLogin.setOnClickListener(this);
+        tvSignUp.setOnClickListener(this);
 
         sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
 
@@ -83,6 +85,10 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
 
             /// Login user
             loginUser(email, password);
+        }
+        if (v.getId() == tvSignUp.getId()){
+            Intent i = new Intent(this, Register.class);
+            startActivity(i);
         }
     }
     private void loginUser(String email, String password) {
