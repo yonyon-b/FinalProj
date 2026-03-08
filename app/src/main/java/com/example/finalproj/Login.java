@@ -27,6 +27,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
     SharedPreferences sharedpreferences;
     private String emailPref, passPref;
     private EditText etEmail, etPassword;
+
     private Button btnLogin;
     private DatabaseService databaseService;
 
@@ -40,8 +41,8 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        etEmail = findViewById(R.id.et_login_email);
-        etPassword = findViewById(R.id.et_login_password);
+        etEmail = findViewById(R.id.login_email);
+        etPassword = findViewById(R.id.login_password);
         btnLogin = findViewById(R.id.btn_login_login);
         databaseService=DatabaseService.getInstance();
 
