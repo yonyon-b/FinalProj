@@ -110,6 +110,13 @@
                     android:layout_height="wrap_content"
                     android:textSize="13sp"/>
             </LinearLayout>
+            <ImageButton
+                android:id="@+id/btnChat"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@android:drawable/ic_dialog_email"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Message Owner" />
         </LinearLayout>
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>

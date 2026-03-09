@@ -12,10 +12,16 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.FinalProj">
         <activity
+            android:name=".ChatActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ChatList"
+            android:exported="false" />
+        <activity
             android:name="com.yalantis.ucrop.UCropActivity"
             android:exported="false"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
             android:name=".ProfilePicSetUp"
             android:exported="false" />
@@ -63,7 +69,7 @@
             android:exported="false" />
         <activity
             android:name=".Splash"
-            android:exported="false"/>
+            android:exported="false" />
 
         <provider
             android:name="androidx.core.content.FileProvider"

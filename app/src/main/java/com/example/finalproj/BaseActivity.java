@@ -69,6 +69,10 @@ public abstract class BaseActivity extends AppCompatActivity {
                 startActivity(new Intent(this, ItemList.class));
                 return true;
             }
+            else if (itemId == R.id.nav_chat) {
+                startActivity(new Intent(this, ChatList.class));
+                return true;
+            }
             return false;
         });
         int selectedItemId = getNavigationMenuItemId();

@@ -5,6 +5,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.example.finalproj.model.ChatMessage;
 import com.example.finalproj.model.Item;
 import com.example.finalproj.model.ItemCart;
 import com.example.finalproj.model.User;
@@ -270,6 +271,42 @@ public class DatabaseService {
 
     public void deleteItem(@NotNull final String itemId, @Nullable final DatabaseCallback<Void> callback) {
         deleteData(ITEMS_PATH + "/" + itemId, callback);
+    }
+
+    // endregion
+
+
+    // region Chat Section
+
+    private static final String CHATS_PATH = "chats";
+
+    public String generateChatId(String uid1, String uid2) {
+        // Ensure consistent ID generation regardless of who starts the chat
+        return uid1.compareTo(uid2) < 0 ? uid1 + "_" + uid2 : uid2 + "_" + uid1;
+    }
+
+    public void sendMessage(@NotNull String chatId, @NotNull ChatMessage message, @Nullable DatabaseCallback<Void> callback) {
+        String messageId = databaseReference.child(CHATS_PATH).child(chatId).child("messages").push().getKey();
+        if (messageId != null) {
+            databaseReference.child(CHATS_PATH).child(chatId).child("messages").child(messageId).setValue(message, (error, ref) -> {
+                if (error != null) {
+                    if (callback != null) callback.onFailed(error.toException());
+                } else {
+                    // Update last message and timestamp
+                    databaseReference.child(CHATS_PATH).child(chatId).child("lastMessage").setValue(message.getText());
+                    databaseReference.child(CHATS_PATH).child(chatId).child("timestamp").setValue(message.getTimestamp());
+                    if (callback != null) callback.onCompleted(null);
+                }
+            });
+        }
+    }
+
+    public DatabaseReference getChatMessagesReference(String chatId) {
+        return databaseReference.child(CHATS_PATH).child(chatId).child("messages");
+    }
+
+    public DatabaseReference getUserChatsReference(String userId) {
+        return databaseReference.child(CHATS_PATH);
     }
 
     // endregion

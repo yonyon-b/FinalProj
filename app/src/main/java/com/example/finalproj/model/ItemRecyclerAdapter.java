@@ -2,11 +2,14 @@ package com.example.finalproj.model;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.text.Html;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -14,14 +17,19 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.finalproj.ChatActivity;
+import com.example.finalproj.ItemList;
 import com.example.finalproj.R;
 import com.example.finalproj.services.DatabaseService;
 
 import java.util.List;
 
 import android.util.Base64;
+import android.widget.Toast;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class ItemRecyclerAdapter extends RecyclerView.Adapter<ItemRecyclerAdapter.ItemViewHolder> {
 
@@ -56,6 +64,24 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter<ItemRecyclerAdapte
 
         holder.txtPosition.setText(Html.fromHtml("<b>Location:</b> " + item.getPosition()));
         holder.txtDetails.setText(Html.fromHtml("<b>Details:</b> " + item.getDetails()));
+
+        holder.btnChat.setOnClickListener(v -> {
+            // IMPORTANT: Replace 'getUserId()' with whatever method your Item.java
+            // uses to return the ID of the person who uploaded the item.
+            String ownerId = item.getUserId();
+            String currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+            // Safety check: Don't let users start a chat with themselves!
+            if (ownerId.equals(currentUserId)) {
+                Toast.makeText(context, "This is your item!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            // Start the ChatActivity and pass the owner's ID
+            Intent intent = new Intent(context, ChatActivity.class);
+            intent.putExtra("otherUserId", ownerId);
+            context.startActivity(intent);
+        });
 
         // Image Loading
         try {
@@ -106,6 +132,7 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter<ItemRecyclerAdapte
         });
     }
 
+
     @Override
     public int getItemCount() {
         return items.size();
@@ -117,6 +144,7 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter<ItemRecyclerAdapte
         TextView txtName, txtDate, txtLost;
         TextView txtPosition, txtDetails, txtUserName, txtUserPhone;
         LinearLayout layoutExpanded;
+        ImageButton btnChat;
 
         ItemViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -130,9 +158,11 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter<ItemRecyclerAdapte
             txtDetails = itemView.findViewById(R.id.txtDetails);
             txtUserName = itemView.findViewById(R.id.txtUserName);
             txtUserPhone = itemView.findViewById(R.id.txtUserPhone);
+            btnChat = itemView.findViewById(R.id.btnChat);
 
             layoutExpanded = itemView.findViewById(R.id.layoutExpanded);
         }
+
     }
 }
 
