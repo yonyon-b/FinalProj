@@ -1,8 +1,13 @@
 package com.example.finalproj;
 
 import android.os.Bundle;
+
+import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -18,7 +23,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ChatList extends AppCompatActivity {
+public class ChatList extends BaseActivity {
     private RecyclerView recyclerView;
     private ChatListAdapter adapter;
     private List<Chat> chatList = new ArrayList<>();
@@ -28,7 +33,13 @@ public class ChatList extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_chat_list);
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
 
         currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         chatsRef = FirebaseDatabase.getInstance().getReference("chats");
@@ -62,5 +73,8 @@ public class ChatList extends AppCompatActivity {
             @Override
             public void onCancelled(@NonNull DatabaseError error) {}
         });
+    }
+    protected int getNavigationMenuItemId() {
+        return 0;
     }
 }

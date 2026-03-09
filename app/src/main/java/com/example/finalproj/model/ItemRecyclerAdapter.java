@@ -20,6 +20,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.finalproj.ChatActivity;
 import com.example.finalproj.ItemList;
 import com.example.finalproj.R;
+import com.example.finalproj.UserList;
+import com.example.finalproj.UserProfile;
 import com.example.finalproj.services.DatabaseService;
 
 import java.util.List;
@@ -71,7 +73,6 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter<ItemRecyclerAdapte
             String ownerId = item.getUserId();
             String currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-            // Safety check: Don't let users start a chat with themselves!
             if (ownerId.equals(currentUserId)) {
                 Toast.makeText(context, "This is your item!", Toast.LENGTH_SHORT).show();
                 return;
@@ -81,6 +82,46 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter<ItemRecyclerAdapte
             Intent intent = new Intent(context, ChatActivity.class);
             intent.putExtra("otherUserId", ownerId);
             context.startActivity(intent);
+        });
+        holder.btnProfile.setOnClickListener(v -> {
+            String ownerId = item.getUserId();
+            String currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+            if (ownerId.equals(currentUserId)) {
+                Toast.makeText(context, "This is your profile!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            Intent intent = new Intent(context, UserProfile.class);
+            intent.putExtra("USER_UID", ownerId);
+            context.startActivity(intent);
+        });
+
+        // load profile picture into imageButton
+        databaseService.getUser(item.getUserId(), new DatabaseService.DatabaseCallback<User>() {
+            @Override
+            public void onCompleted(User user) {
+                String base64String = user.getProfilePicture();
+                if (base64String != null && !base64String.isEmpty()) {
+                    // Decode the Base64 string to a byte array
+                    byte[] imageByteArray = Base64.decode(base64String, Base64.DEFAULT);
+
+                    // Use Glide to load the byte array into the single ImageView
+                    Glide.with(context)
+                            .asBitmap()
+                            .load(imageByteArray)
+                            .placeholder(R.drawable.user_pfp_for_item) // placeholder while loading
+                            .error(R.drawable.user_pfp_for_item)       // fallback on error
+                            .diskCacheStrategy(DiskCacheStrategy.NONE)      // don't cache raw byte arrays to disk
+                            .into(holder.btnProfile);
+                } else {
+                    holder.btnProfile.setImageResource(R.drawable.user_pfp_for_item);
+                }
+            }
+
+            @Override
+            public void onFailed(Exception e) {
+                holder.btnProfile.setImageResource(R.drawable.user_pfp_for_item);
+            }
         });
 
         // Image Loading
@@ -144,7 +185,7 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter<ItemRecyclerAdapte
         TextView txtName, txtDate, txtLost;
         TextView txtPosition, txtDetails, txtUserName, txtUserPhone;
         LinearLayout layoutExpanded;
-        ImageButton btnChat;
+        ImageButton btnChat, btnProfile;
 
         ItemViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -158,7 +199,8 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter<ItemRecyclerAdapte
             txtDetails = itemView.findViewById(R.id.txtDetails);
             txtUserName = itemView.findViewById(R.id.txtUserName);
             txtUserPhone = itemView.findViewById(R.id.txtUserPhone);
-            btnChat = itemView.findViewById(R.id.btnChat);
+            btnChat = itemView.findViewById(R.id.imgBtnChat);
+            btnProfile = itemView.findViewById(R.id.imgBtnProfile);
 
             layoutExpanded = itemView.findViewById(R.id.layoutExpanded);
         }

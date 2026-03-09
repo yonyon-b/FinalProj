@@ -4,8 +4,12 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
 
+import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -23,7 +27,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ChatActivity extends AppCompatActivity {
+public class ChatActivity extends BaseActivity {
     private RecyclerView recyclerView;
     private EditText chatBox;
     private Button sendBtn;
@@ -39,7 +43,13 @@ public class ChatActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_chat);
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
 
         currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         otherUserId = getIntent().getStringExtra("otherUserId");
@@ -105,5 +115,8 @@ public class ChatActivity extends AppCompatActivity {
         chatUpdates.put("members/" + otherUserId, true);
 
         chatRef.updateChildren(chatUpdates);
+    }
+    protected int getNavigationMenuItemId() {
+        return 0;
     }
 }
