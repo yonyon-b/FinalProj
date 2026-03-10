@@ -78,6 +78,9 @@ public class UserProfile extends BaseActivity implements View.OnClickListener {
         uid = i.getStringExtra("USER_UID");
         if (uid == null)
             uid = mAuth.getCurrentUser().getUid();
+        else{
+            editProfile.setText("Message User");
+        }
         databaseService.getUser(uid, new DatabaseService.DatabaseCallback<User>() {
             @Override
             public void onCompleted(User user) {
@@ -104,7 +107,14 @@ public class UserProfile extends BaseActivity implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         if (v.getId() == editProfile.getId()){
-            Intent i = new Intent(this, EditProfile.class);
+            Intent i;
+            if (editProfile.getText().toString().equals("Edit Profile")) {
+                i = new Intent(this, EditProfile.class);
+            }
+            else{
+                i = new Intent(this, ChatActivity.class);
+                i.putExtra("otherUserId", getIntent().getStringExtra("USER_UID"));
+            }
             startActivity(i);
         }
         else if (v.getId() == allItems.getId()){
