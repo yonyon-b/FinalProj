@@ -2,13 +2,18 @@ package com.example.finalproj.model;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.finalproj.ChatActivity;
 import com.example.finalproj.R;
 import com.example.finalproj.services.DatabaseService;
@@ -19,7 +24,7 @@ import java.util.List;
 public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ChatViewHolder> {
     private List<Chat> chatList;
     private Context context;
-    private String currentUserId,otherUserId, otherUserName = "";
+    private String currentUserId;
 
     public ChatListAdapter(Context context, List<Chat> chatList) {
         this.context = context;
@@ -39,28 +44,43 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ChatVi
         Chat chat = chatList.get(position);
         holder.lastMessage.setText(chat.getLastMessage());
 
-        // Find the OTHER user's ID
+        String otherUserId = "";
         for (String id : chat.getMembers().keySet()) {
             if (!id.equals(currentUserId)) {
                 otherUserId = id;
                 break;
             }
         }
+        final String finalOtherUserId = otherUserId;
 
-        DatabaseService.getInstance().getUser(otherUserId, new DatabaseService.DatabaseCallback<User>() {
+        DatabaseService.getInstance().getUser(finalOtherUserId, new DatabaseService.DatabaseCallback<User>() {
             @Override
             public void onCompleted(User otherUser) {
-                otherUserName = otherUser.getfName() + " " + otherUser.getlName();
-                holder.otherUserEmail.setText("Chat with " + otherUserName);
+                String otherUserFullName = otherUser.getfName() + " " + otherUser.getlName();
+                holder.otherUserName.setText("Chat with " + otherUserFullName);
+
+                String base64String = otherUser.getProfilePicture();
+                if (base64String != null && !base64String.isEmpty()) {
+                    byte[] imageByteArray = Base64.decode(base64String, Base64.DEFAULT);
+                    // Use Glide to load the byte array into the single ImageView
+                    Glide.with(context)
+                            .asBitmap()
+                            .load(imageByteArray)
+                            .placeholder(R.drawable.user_pfp_for_item) // placeholder while loading
+                            .error(R.drawable.user_pfp_for_item)       // fallback on error
+                            .diskCacheStrategy(DiskCacheStrategy.NONE)      // don't cache raw byte arrays to disk
+                            .into(holder.otherUserPfp);
+                } else {
+                    holder.otherUserPfp.setImageResource(R.drawable.user_pfp_for_item);
+                }
             }
 
             @Override
             public void onFailed(Exception e) {
-                otherUserName = "Failed to find user";
+                holder.otherUserName.setText("Unknown User");
             }
         });
 
-        String finalOtherUserId = otherUserId;
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(context, ChatActivity.class);
             intent.putExtra("otherUserId", finalOtherUserId);
@@ -72,12 +92,14 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ChatVi
     public int getItemCount() { return chatList.size(); }
 
     static class ChatViewHolder extends RecyclerView.ViewHolder {
-        TextView otherUserEmail, lastMessage;
+        TextView otherUserName, lastMessage;
+        ImageView otherUserPfp;
 
         public ChatViewHolder(@NonNull View itemView) {
             super(itemView);
-            otherUserEmail = itemView.findViewById(R.id.chatOtherUserEmail);
+            otherUserName = itemView.findViewById(R.id.chatOtherUserName);
             lastMessage = itemView.findViewById(R.id.chatLastMessage);
+            otherUserPfp = itemView.findViewById(R.id.chatProfilePic);
         }
     }
 }

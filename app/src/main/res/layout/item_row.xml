@@ -101,11 +101,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#F9F9F9"
+                android:padding="8dp"
                 android:orientation="horizontal">
                 <androidx.cardview.widget.CardView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:cardCornerRadius="100dp"
+                    app:cardBackgroundColor="@color/white"
+                    app:cardCornerRadius="80dp"
                     >
                 <ImageButton
                     android:id="@+id/imgBtnProfile"
@@ -122,6 +124,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
+                    android:layout_gravity="center_vertical"
                     android:padding="8dp">
                     <TextView
                         android:id="@+id/txtUserName"

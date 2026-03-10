@@ -9,4 +9,6 @@
     <color name="toolBarItems">#13ec80</color>
     <color name="toolBarItemSelected">#0f3523</color>
     <color name="buttonBg">#103623</color>
+    <color name="messageSent">#144d37</color>
+    <color name="messageReceived">#242626</color>
 </resources>
