@@ -1,5 +1,8 @@
 package com.example.finalproj;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -19,15 +22,15 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.finalproj.model.GalleryAdapter;
 import com.example.finalproj.model.Item;
 import com.example.finalproj.services.DatabaseService;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.os.Build;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 
@@ -55,7 +58,7 @@ public class UserActivity extends BaseActivity implements View.OnClickListener {
 
         databaseService = DatabaseService.getInstance();
         loadLatestItems();
-
+        checkPermissionsAndScheduleAlarm();
     }
     private void loadLatestItems() {
         databaseService.getItemList(new DatabaseService.DatabaseCallback<List<Item>>() {
@@ -86,5 +89,63 @@ public class UserActivity extends BaseActivity implements View.OnClickListener {
     }
     protected int getNavigationMenuItemId() {
         return R.id.nav_home;
+    }
+
+    private static final int PERMISSION_REQUEST_CODE = 101;
+
+    private void checkPermissionsAndScheduleAlarm() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.POST_NOTIFICATIONS}, PERMISSION_REQUEST_CODE);
+            } else {
+                scheduleDailyReminder(this);
+            }
+        } else {
+            scheduleDailyReminder(this);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == PERMISSION_REQUEST_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permission granted
+                scheduleDailyReminder(this);
+            }
+        }
+    }
+
+    public void scheduleDailyReminder(Context context) {
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(context, ReminderReceiver.class);
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                context,
+                0,
+                intent,
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
+        );
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        calendar.set(Calendar.HOUR_OF_DAY, 14);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+
+        // If the time has already passed today, schedule it for tomorrow
+        if (calendar.getTimeInMillis() <= System.currentTimeMillis()) {
+            calendar.add(Calendar.DAY_OF_YEAR, 1);
+        }
+
+        // Schedule the alarm to repeat daily
+        if (alarmManager != null) {
+            alarmManager.setRepeating(
+                    AlarmManager.RTC_WAKEUP,
+                    calendar.getTimeInMillis(),
+                    AlarmManager.INTERVAL_DAY, // Repeat every 24 hours
+                    pendingIntent
+            );
+        }
     }
 }
