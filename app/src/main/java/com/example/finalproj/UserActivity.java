@@ -22,6 +22,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.finalproj.model.GalleryAdapter;
 import com.example.finalproj.model.Item;
 import com.example.finalproj.services.DatabaseService;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
@@ -59,6 +62,7 @@ public class UserActivity extends BaseActivity implements View.OnClickListener {
         databaseService = DatabaseService.getInstance();
         loadLatestItems();
         checkPermissionsAndScheduleAlarm();
+        initFCMToken();
     }
     private void loadLatestItems() {
         databaseService.getItemList(new DatabaseService.DatabaseCallback<List<Item>>() {
@@ -147,5 +151,14 @@ public class UserActivity extends BaseActivity implements View.OnClickListener {
                     pendingIntent
             );
         }
+    }
+    public void initFCMToken(){
+        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(task -> {
+            if (task.isSuccessful() && FirebaseAuth.getInstance().getCurrentUser() != null) {
+                String token = task.getResult();
+                String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                FirebaseDatabase.getInstance().getReference("users").child(uid).child("fcmToken").setValue(token);
+            }
+        });
     }
 }

@@ -16,6 +16,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Transaction;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -33,6 +34,7 @@ public class DatabaseService {
     private static final String USERS_PATH = "users";
     private static final String ITEMS_PATH = "items";
     private static final String CARTS_PATH = "carts";
+    private static final String CHATS_PATH = "chats";
 
     // Singleton instance
     private static DatabaseService instance;
@@ -248,6 +250,19 @@ public class DatabaseService {
         });
     }
 
+    public void updateFcmToken(String userId) {
+        FirebaseMessaging.getInstance().getToken()
+                .addOnCompleteListener(task -> {
+                    if (!task.isSuccessful()) {
+                        Log.w(TAG, "Fetching FCM registration token failed", task.getException());
+                        return;
+                    }
+                    String token = task.getResult();
+
+                    databaseReference.child(USERS_PATH).child(userId).child("fcmToken").setValue(token);
+                });
+    }
+
     // endregion
 
 
@@ -278,7 +293,7 @@ public class DatabaseService {
 
     // region Chat Section
 
-    private static final String CHATS_PATH = "chats";
+
 
     public String generateChatId(String uid1, String uid2) {
         // Ensure consistent ID generation regardless of who starts the chat

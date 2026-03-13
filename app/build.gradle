@@ -38,6 +38,7 @@ dependencies {
     implementation libs.constraintlayout
     implementation libs.firebase.database
     implementation libs.firebase.auth
+    implementation 'com.google.firebase:firebase-messaging:23.4.1'
     implementation libs.credentials
     implementation libs.credentials.play.services.auth
     implementation libs.googleid
