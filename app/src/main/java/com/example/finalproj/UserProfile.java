@@ -39,7 +39,7 @@ public class UserProfile extends BaseActivity implements View.OnClickListener {
     private TextView userName, phoneNumber, mail;
     private String uid, fullName, phoneNum, email;
     private ImageView pfp;
-    private Button editProfile, allItems;
+    private Button editProfile, allItems, btnSignOut;
     private RecyclerView userItemList;
     private ItemRecyclerAdapter adapter;
     private ArrayList<Item> dataList = new ArrayList<>();
@@ -65,9 +65,11 @@ public class UserProfile extends BaseActivity implements View.OnClickListener {
         pfp = findViewById(R.id.userProfilePfp);
         editProfile = findViewById(R.id.btnEditProfile);
         userItemList = findViewById(R.id.rvUserProfile);
+        btnSignOut = findViewById(R.id.btnSignOut);
         allItems = findViewById(R.id.btnAllPostedItems);
         allItems.setOnClickListener(this);
         editProfile.setOnClickListener(this);
+        btnSignOut.setOnClickListener(this);
 
         userItemList.setLayoutManager(new LinearLayoutManager(this));
         userItemList.setHasFixedSize(true);
@@ -80,6 +82,7 @@ public class UserProfile extends BaseActivity implements View.OnClickListener {
             uid = mAuth.getCurrentUser().getUid();
         else{
             editProfile.setText("Message User");
+            btnSignOut.setVisibility(View.GONE);
         }
         databaseService.getUser(uid, new DatabaseService.DatabaseCallback<User>() {
             @Override
@@ -123,6 +126,11 @@ public class UserProfile extends BaseActivity implements View.OnClickListener {
                 intent.putExtra("SEARCH_QUERY", fullName.trim());
             }
             startActivity(intent);
+        }
+        else if (v.getId() == btnSignOut.getId()){
+            mAuth.signOut();
+            Intent i = new Intent(this, Login.class);
+            startActivity(i);
         }
     }
     private void loadUserItems(String profileUid) {

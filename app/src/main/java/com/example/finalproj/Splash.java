@@ -13,6 +13,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.finalproj.services.DatabaseService;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class Splash extends AppCompatActivity {
 
@@ -31,13 +32,22 @@ public class Splash extends AppCompatActivity {
             public void run() {
                 try {
                     synchronized (this) {
-                        wait(3000);
+                        wait(1000);
+
                     }
                 } catch (InterruptedException ex) {
                 }
-                finish();
-                    Intent intent = new Intent(Splash.this, Register.class);
+                FirebaseAuth mAuth = FirebaseAuth.getInstance();
+                if (mAuth.getCurrentUser() != null) {
+                    // Firebase remembers the session! The user is already logged in.
+                    Intent intent = new Intent(Splash.this, UserActivity.class);
                     startActivity(intent);
+                } else {
+                    // No user is logged in
+                    Intent intent = new Intent(Splash.this, Login.class);
+                    startActivity(intent);
+                }
+                finish();
             }
         };
         mSpleashThread.start();
