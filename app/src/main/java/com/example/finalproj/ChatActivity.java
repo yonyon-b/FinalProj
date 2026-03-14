@@ -1,8 +1,11 @@
 package com.example.finalproj;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -14,7 +17,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.finalproj.model.ChatMessage;
+import com.example.finalproj.model.ImageUtil;
 import com.example.finalproj.model.MessageAdapter;
+import com.example.finalproj.model.User;
+import com.example.finalproj.services.DatabaseService;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -27,14 +33,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ChatActivity extends BaseActivity {
+public class ChatActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private EditText chatBox;
     private Button sendBtn;
+    private TextView otherUserName;
+    private ImageView otherUserPfp;
 
-    private String currentUserId;
-    private String otherUserId;
-    private String chatId;
+    private String currentUserId, otherUserId, chatId;
 
     private List<ChatMessage> messageList = new ArrayList<>();
     private MessageAdapter adapter;
@@ -46,7 +52,7 @@ public class ChatActivity extends BaseActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_chat);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars() | WindowInsetsCompat.Type.ime());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
@@ -64,6 +70,35 @@ public class ChatActivity extends BaseActivity {
         recyclerView = findViewById(R.id.messagesRecyclerView);
         chatBox = findViewById(R.id.edittext_chatbox);
         sendBtn = findViewById(R.id.button_chatbox_send);
+        otherUserName = findViewById(R.id.tvOtherUserName);
+        otherUserPfp = findViewById(R.id.imgOtherUserPfp);
+        DatabaseService.getInstance().getUser(otherUserId, new DatabaseService.DatabaseCallback<User>() {
+            @Override
+            public void onCompleted(User otherUser) {
+                otherUserName.setText(otherUser.getfName() + " " + otherUser.getlName());
+                if (otherUser.getProfilePicture() != null)
+                    otherUserPfp.setImageBitmap(ImageUtil.convertFrom64base(otherUser.getProfilePicture()));
+            }
+
+            @Override
+            public void onFailed(Exception e) {
+                otherUserName.setText("Unknown User");
+            }
+        });
+        // scroll listener for gradient for sent messages
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                for (int i = 0; i < recyclerView.getChildCount(); i++) {
+                    View child = recyclerView.getChildAt(i);
+                    View bubble = child.findViewById(R.id.gradient_bubble);
+                    if (bubble != null) {
+                        bubble.invalidate();
+                    }
+                }
+            }
+        });
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setStackFromEnd(true); // Start from bottom
