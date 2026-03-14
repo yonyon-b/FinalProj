@@ -1,9 +1,11 @@
 package com.example.finalproj;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -36,7 +38,7 @@ import java.util.Map;
 public class ChatActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private EditText chatBox;
-    private Button sendBtn;
+    private ImageButton sendBtn;
     private TextView otherUserName;
     private ImageView otherUserPfp;
 
@@ -72,6 +74,13 @@ public class ChatActivity extends AppCompatActivity {
         sendBtn = findViewById(R.id.button_chatbox_send);
         otherUserName = findViewById(R.id.tvOtherUserName);
         otherUserPfp = findViewById(R.id.imgOtherUserPfp);
+
+        otherUserName.setOnClickListener(v -> {
+            Intent i = new Intent(this, UserProfile.class);
+            i.putExtra("USER_UID", otherUserId);
+            startActivity(i);
+        });
+
         DatabaseService.getInstance().getUser(otherUserId, new DatabaseService.DatabaseCallback<User>() {
             @Override
             public void onCompleted(User otherUser) {

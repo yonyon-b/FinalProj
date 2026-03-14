@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -12,12 +13,22 @@
         android:orientation="horizontal"
         android:padding="3dp"
         android:elevation="4dp">
-        <ImageView
-            android:id="@+id/imgOtherUserPfp"
+        <androidx.cardview.widget.CardView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/user_pfp_for_item"
-            />
+            app:cardCornerRadius="48dp"
+            app:cardBackgroundColor="@android:color/transparent">
+            <ImageView
+                android:id="@+id/imgOtherUserPfp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxWidth="48dp"
+                android:maxHeight="48dp"
+                android:scaleType="centerCrop"
+                android:adjustViewBounds="true"
+                android:src="@drawable/user_pfp_for_item"
+                />
+        </androidx.cardview.widget.CardView>
         <TextView
             android:id="@+id/tvOtherUserName"
             android:layout_width="wrap_content"
@@ -25,6 +36,7 @@
             android:textColor="@color/white"
             android:textStyle="bold"
             android:textSize="22dp"
+            android:clickable="true"
             android:layout_gravity="center_vertical"
             android:layout_marginStart="10dp"
             />
@@ -38,32 +50,50 @@
             android:id="@+id/messagesRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_above="@+id/layout_chatbox"
+            android:layout_above="@+id/card_chatbox"
             android:padding="8dp"/>
 
-        <LinearLayout
-            android:id="@+id/layout_chatbox"
+        <androidx.cardview.widget.CardView
+            android:id="@+id/card_chatbox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:orientation="horizontal"
-            android:padding="8dp"
-            android:background="#EEEEEE">
-
-            <EditText
-                android:id="@+id/edittext_chatbox"
-                android:layout_width="0dp"
+            android:layout_margin="5dp"
+            app:cardCornerRadius="30dp"
+            >
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:hint="Type message..."
-                android:padding="12dp"
-                android:background="@android:color/white"/>
+                android:orientation="horizontal"
+                android:padding="3dp"
+                android:background="@color/messageReceived">
 
-            <Button
-                android:id="@+id/button_chatbox_send"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Send" />
-        </LinearLayout>
+                <EditText
+                    android:id="@+id/edittext_chatbox"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="Message..."
+                    android:textColorHint="@color/gray"
+                    android:textColor="@color/white"
+                    android:background="@android:color/transparent"
+                    android:padding="12dp"
+
+                    />
+
+                <ImageButton
+                    android:id="@+id/button_chatbox_send"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/message_send"
+                    android:background="@android:color/transparent"
+                    android:contentDescription="Send Message"
+                    android:layout_marginEnd="8dp"
+                    android:layout_gravity="center_vertical"
+                    />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+
     </RelativeLayout>
 </LinearLayout>

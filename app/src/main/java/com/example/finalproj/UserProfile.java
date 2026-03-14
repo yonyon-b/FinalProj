@@ -128,9 +128,23 @@ public class UserProfile extends BaseActivity implements View.OnClickListener {
             startActivity(intent);
         }
         else if (v.getId() == btnSignOut.getId()){
-            mAuth.signOut();
-            Intent i = new Intent(this, Login.class);
-            startActivity(i);
+            String currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+            // remove FCM token from database
+            DatabaseReference userTokenRef = FirebaseDatabase.getInstance()
+                    .getReference("users")
+                    .child(currentUserId)
+                    .child("fcmToken"); // Or whatever key you used to save the token
+
+            userTokenRef.removeValue().addOnCompleteListener(task -> {
+
+                FirebaseAuth.getInstance().signOut();
+
+                Intent intent = new Intent(this, Login.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+                finish();
+            });
         }
     }
     private void loadUserItems(String profileUid) {
