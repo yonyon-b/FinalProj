@@ -17,6 +17,11 @@
         android:icon="@drawable/messages"
         android:title="Chat" />
     <item
+        android:id="@+id/nav_admin"
+        android:icon="@drawable/admin_icon"
+        android:title="Admin"
+        android:visible="false"/>
+    <item
         android:id="@+id/nav_profile"
         android:icon="@drawable/user_pfp"
         android:title="Profile" />

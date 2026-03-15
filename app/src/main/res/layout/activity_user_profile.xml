@@ -8,38 +8,14 @@
     android:layout_height="match_parent"
     android:background="@drawable/gradient"
     tools:context=".UserProfile">
-        <LinearLayout
-            android:id="@+id/topProfileLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            android:orientation="vertical">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="30dp"
-                android:text="Profile"
-                android:textColor="@color/white"
-                android:textSize="32sp"
-                android:textStyle="bold"
-                />
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginHorizontal="20dp"
-                android:layout_marginTop="10dp"
-                android:background="@color/gray"
-                />
-        </LinearLayout>
+
         <androidx.cardview.widget.CardView
             android:id="@+id/userProfilePfpCard"
             android:layout_width="120dp"
             android:layout_height="120dp"
             android:layout_margin="20dp"
-            app:layout_constraintStart_toStartOf="@id/topProfileLayout"
-            app:layout_constraintTop_toBottomOf="@id/topProfileLayout"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             app:cardCornerRadius="90dp"
             app:cardBackgroundColor="@color/white">
 
@@ -90,19 +66,17 @@
                 android:textColor="@color/gray"
                 tools:text="test@gmail.com" />
         </LinearLayout>
-        <Button
-            android:id="@+id/btnSignOut"
-            android:layout_width="0dp"
+        <ImageButton
+            android:id="@+id/ivProfileMenu"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Sign Out"
-            android:textColor="@color/white"
-            android:textStyle="bold"
-            android:backgroundTint="@android:color/holo_red_light"
-            android:layout_marginHorizontal="10dp"
-            android:layout_marginTop="30dp"
+            android:src="@drawable/popup_menu"
+            android:background="@android:color/transparent"
+            android:contentDescription="menu"
+            android:layout_marginTop="36dp"
+            android:layout_marginEnd="20dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/textProfileLayout"
-            app:layout_constraintTop_toBottomOf="@id/topProfileLayout"
+            app:layout_constraintTop_toTopOf="parent"
             />
         <Button
             android:id="@+id/btnEditProfile"

@@ -21,8 +21,10 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.finalproj.model.Item;
 import com.example.finalproj.model.User;
 import com.example.finalproj.services.DatabaseService;
+import com.google.android.material.bottomnavigation.BottomNavigationItemView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -51,6 +53,19 @@ public abstract class BaseActivity extends AppCompatActivity {
         ViewCompat.setOnApplyWindowInsetsListener(bottomNavigation, (v, insets) -> {
             return insets;
         });
+        DatabaseService.getInstance().getUser(FirebaseAuth.getInstance().getCurrentUser().getUid(), new DatabaseService.DatabaseCallback<User>() {
+            @Override
+            public void onCompleted(User currentUser) {
+                if (currentUser.getAdmin()){
+                    bottomNavigation.getMenu().findItem(R.id.nav_admin).setVisible(true);
+                }
+            }
+            @Override
+            public void onFailed(Exception e) {
+
+            }
+        });
+
         bottomNavigation.setOnItemSelectedListener(item -> {
             int itemId = item.getItemId();
             if (itemId == getNavigationMenuItemId()) {
@@ -71,6 +86,10 @@ public abstract class BaseActivity extends AppCompatActivity {
             }
             else if (itemId == R.id.nav_chat) {
                 startActivity(new Intent(this, ChatList.class));
+                return true;
+            }
+            else if (itemId == R.id.nav_admin) {
+                startActivity(new Intent(this, MainAdmin.class));
                 return true;
             }
             return false;
