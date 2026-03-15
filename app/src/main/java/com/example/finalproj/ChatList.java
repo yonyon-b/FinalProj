@@ -1,6 +1,8 @@
 package com.example.finalproj;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Button;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -29,6 +31,7 @@ public class ChatList extends BaseActivity {
     private List<Chat> chatList = new ArrayList<>();
     private DatabaseReference chatsRef;
     private String currentUserId;
+    private Button btnChatAi;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +46,10 @@ public class ChatList extends BaseActivity {
 
         currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         chatsRef = FirebaseDatabase.getInstance().getReference("chats");
+        btnChatAi = findViewById(R.id.btn_chat_ai);
+        btnChatAi.setOnClickListener(view -> {
+            startActivity(new Intent(this, ChatActivity.class));
+        });
 
         recyclerView = findViewById(R.id.chatListRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));

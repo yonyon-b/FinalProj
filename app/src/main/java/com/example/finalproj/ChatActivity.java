@@ -2,11 +2,13 @@ package com.example.finalproj;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
@@ -29,11 +31,21 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.ai.client.generativeai.GenerativeModel;
+import com.google.ai.client.generativeai.java.ChatFutures;
+import com.google.ai.client.generativeai.java.GenerativeModelFutures;
+import com.google.ai.client.generativeai.type.Content;
+import com.google.ai.client.generativeai.type.GenerateContentResponse;
+import com.google.common.util.concurrent.FutureCallback;
+import com.google.common.util.concurrent.Futures;
+import com.google.common.util.concurrent.ListenableFuture;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 public class ChatActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
@@ -41,12 +53,16 @@ public class ChatActivity extends AppCompatActivity {
     private ImageButton sendBtn;
     private TextView otherUserName;
     private ImageView otherUserPfp;
+    private LinearLayout chatToolBar;
 
     private String currentUserId, otherUserId, chatId;
 
     private List<ChatMessage> messageList = new ArrayList<>();
     private MessageAdapter adapter;
     private DatabaseReference chatRef;
+
+    private ChatFutures aiChat;
+    private Executor executor = Executors.newSingleThreadExecutor();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,14 +74,21 @@ public class ChatActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-
+        chatToolBar = findViewById(R.id.chat_toolbar);
         currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        otherUserId = getIntent().getStringExtra("otherUserId");
 
-        // Generate consistent Chat ID based on alphabetical order of UIDs
-        chatId = currentUserId.compareTo(otherUserId) < 0
-                ? currentUserId + "_" + otherUserId
-                : otherUserId + "_" + currentUserId;
+        if (otherUserId != null) {
+            // normal chat
+            chatId = currentUserId.compareTo(otherUserId) < 0
+                    ? currentUserId + "_" + otherUserId
+                    : otherUserId + "_" + currentUserId;
+        } else {
+            // AI chat
+            otherUserId = "gemini_ai_bot";
+            chatId = currentUserId + "_" + otherUserId;
+            chatToolBar.setVisibility(View.GONE);
+            setupGeminiChat();
+        }
 
         chatRef = FirebaseDatabase.getInstance().getReference("chats").child(chatId);
 
@@ -75,25 +98,28 @@ public class ChatActivity extends AppCompatActivity {
         otherUserName = findViewById(R.id.tvOtherUserName);
         otherUserPfp = findViewById(R.id.imgOtherUserPfp);
 
-        otherUserName.setOnClickListener(v -> {
-            Intent i = new Intent(this, UserProfile.class);
-            i.putExtra("USER_UID", otherUserId);
-            startActivity(i);
-        });
+        if (!otherUserId.equals("gemini_ai_bot")) {
+            otherUserName.setOnClickListener(v -> {
+                Intent i = new Intent(this, UserProfile.class);
+                i.putExtra("USER_UID", otherUserId);
+                startActivity(i);
+            });
 
-        DatabaseService.getInstance().getUser(otherUserId, new DatabaseService.DatabaseCallback<User>() {
-            @Override
-            public void onCompleted(User otherUser) {
-                otherUserName.setText(otherUser.getfName() + " " + otherUser.getlName());
-                if (otherUser.getProfilePicture() != null)
-                    otherUserPfp.setImageBitmap(ImageUtil.convertFrom64base(otherUser.getProfilePicture()));
-            }
+            DatabaseService.getInstance().getUser(otherUserId, new DatabaseService.DatabaseCallback<User>() {
+                @Override
+                public void onCompleted(User otherUser) {
+                    otherUserName.setText(otherUser.getfName() + " " + otherUser.getlName());
+                    if (otherUser.getProfilePicture() != null)
+                        otherUserPfp.setImageBitmap(ImageUtil.convertFrom64base(otherUser.getProfilePicture()));
+                }
 
-            @Override
-            public void onFailed(Exception e) {
-                otherUserName.setText("Unknown User");
-            }
-        });
+                @Override
+                public void onFailed(Exception e) {
+                    otherUserName.setText("Unknown User");
+                }
+            });
+        }
+
         // scroll listener for gradient for sent messages
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -121,6 +147,11 @@ public class ChatActivity extends AppCompatActivity {
             String msg = chatBox.getText().toString().trim();
             if (!msg.isEmpty()) {
                 sendMessage(msg);
+
+                if ("gemini_ai_bot".equals(otherUserId)) {
+                    sendMessageToAI(msg);
+                }
+
                 chatBox.setText("");
             }
         });
@@ -159,6 +190,56 @@ public class ChatActivity extends AppCompatActivity {
         chatUpdates.put("members/" + otherUserId, true);
 
         chatRef.updateChildren(chatUpdates);
+    }
+
+    private void setupGeminiChat() {
+        GenerativeModel gm = new GenerativeModel(
+                "gemini-2.5-flash",
+                BuildConfig.GEMINI_API_KEY // Fetched from your build config securely
+        );
+
+        GenerativeModelFutures modelFutures = GenerativeModelFutures.from(gm);
+
+        aiChat = modelFutures.startChat();
+    }
+
+    private void sendMessageToAI(String userText) {
+        Content.Builder userMessageBuilder = new Content.Builder();
+        userMessageBuilder.setRole("user");
+        userMessageBuilder.addText(userText);
+        Content userMessage = userMessageBuilder.build();
+
+        ListenableFuture<GenerateContentResponse> response = aiChat.sendMessage(userMessage);
+
+        Futures.addCallback(response, new FutureCallback<GenerateContentResponse>() {
+            @Override
+            public void onSuccess(GenerateContentResponse result) {
+                String aiResponse = result.getText();
+
+                // Always update UI and Firebase on the main thread
+                runOnUiThread(() -> {
+                    Log.d("AiMessage", "Message sent?");
+                    long timestamp = System.currentTimeMillis();
+                    ChatMessage aiMessage = new ChatMessage(otherUserId, aiResponse, timestamp);
+
+                    chatRef.child("messages").push().setValue(aiMessage);
+
+                    Map<String, Object> chatUpdates = new HashMap<>();
+                    chatUpdates.put("lastMessage", aiResponse);
+                    chatUpdates.put("timestamp", timestamp);
+
+                    chatRef.updateChildren(chatUpdates);
+                });
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+                t.printStackTrace();
+                runOnUiThread(() -> {
+                    // Show an error toast to the user
+                });
+            }
+        }, executor);
     }
     protected int getNavigationMenuItemId() {
         return 0;

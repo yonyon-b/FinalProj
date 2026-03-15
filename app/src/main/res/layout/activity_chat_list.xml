@@ -15,6 +15,11 @@
         android:textSize="24sp"
         android:textStyle="bold"
         android:layout_marginBottom="16dp"/>
+    <Button
+        android:id="@+id/btn_chat_ai"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="chat with AI"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/chatListRecyclerView"
