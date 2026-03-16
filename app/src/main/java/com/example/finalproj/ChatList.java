@@ -65,12 +65,13 @@ public class ChatList extends BaseActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 chatList.clear();
                 for (DataSnapshot chatSnapshot : snapshot.getChildren()) {
-                    // Check if current user is part of this chat
-                    if (chatSnapshot.child("members").hasChild(currentUserId)) {
-                        Chat chat = chatSnapshot.getValue(Chat.class);
-                        if (chat != null) {
-                            chat.setChatId(chatSnapshot.getKey());
-                            chatList.add(chat);
+                    if (chatSnapshot.getKey() != null && !chatSnapshot.getKey().contains("gemini_ai_bot")) {
+                        if (chatSnapshot.child("members").hasChild(currentUserId)) {
+                            Chat chat = chatSnapshot.getValue(Chat.class);
+                            if (chat != null) {
+                                chat.setChatId(chatSnapshot.getKey());
+                                chatList.add(chat);
+                            }
                         }
                     }
                 }

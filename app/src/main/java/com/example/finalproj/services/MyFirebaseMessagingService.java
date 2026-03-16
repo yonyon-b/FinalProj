@@ -21,8 +21,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
 
-        // Check if message contains a data payload
-        if (remoteMessage.getData().size() > 0) {
+        // check if message contains a data payload & if was sent by AI
+        if (!remoteMessage.getData().get("senderId").contains("gemini_ai_bot") && remoteMessage.getData().size() > 0) {
             String senderId = remoteMessage.getData().get("senderId");
             String messageText = remoteMessage.getData().get("message");
 
@@ -37,7 +37,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     }
 
     private void showNotification(String senderId, String messageText) {
-        // Intent to open ChatActivity when notification is clicked
         Intent intent = new Intent(this, ChatActivity.class);
         intent.putExtra("otherUserId", senderId);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
