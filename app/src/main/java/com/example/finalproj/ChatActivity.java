@@ -76,6 +76,7 @@ public class ChatActivity extends AppCompatActivity {
         });
         chatToolBar = findViewById(R.id.chat_toolbar);
         currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        otherUserId = getIntent().getStringExtra("otherUserId");
 
         if (otherUserId != null) {
             // normal chat

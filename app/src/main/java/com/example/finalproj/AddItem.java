@@ -1,6 +1,8 @@
 package com.example.finalproj;
 
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.net.Uri;
 import android.nfc.Tag;
 import android.os.Bundle;
@@ -13,6 +15,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.NumberPicker;
 import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.activity.result.ActivityResultLauncher;
@@ -26,6 +30,7 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.finalproj.model.ImageUtil;
 import com.example.finalproj.model.Item;
 import com.example.finalproj.services.DatabaseService;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.io.File;
@@ -33,17 +38,20 @@ import java.io.File;
 public class AddItem extends BaseActivity implements View.OnClickListener {
 
     private static final String TAG = "AddItem";
-    EditText itemName, itemLocation, itemDesc;
-    Spinner itemType;
-    Button btnSelect, btnCamera, btnSubmit;
-    NumberPicker day, month, year;
-    ImageView img;
-    Item item;
+    private EditText itemName, itemLocation, itemDesc;
+    private Spinner itemType;
+    private Button btnSelect, btnCamera, btnSubmit;
+    private NumberPicker day, month, year;
+    private ImageView img;
+    private TextView tvItemImage;
+    private TextInputLayout boxItemName, boxItemLocation, boxItemDesc;
+    private Item item;
     private DatabaseService databaseService;
     private FirebaseAuth mAuth;
     private ActivityResultLauncher<String> pickImageLauncher;
     private ActivityResultLauncher<Uri> takePictureLauncher;
     private Uri cameraImageUri;
+    private boolean isImageSet = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +69,7 @@ public class AddItem extends BaseActivity implements View.OnClickListener {
                 registerForActivityResult(new ActivityResultContracts.TakePicture(), success -> {
                     if (success) {
                         img.setImageURI(cameraImageUri);
+                        isImageSet = true;
                     }
                 });
 
@@ -68,12 +77,15 @@ public class AddItem extends BaseActivity implements View.OnClickListener {
                 registerForActivityResult(new ActivityResultContracts.GetContent(), uri -> {
                     if (uri != null) {
                         img.setImageURI(uri);
+                        isImageSet = true;
                     }
                 });
     }
     @Override
     public void onClick(View view) {
         if (view.getId() == btnSubmit.getId()){
+            if (!validateInput())
+                return;
             item.setId(databaseService.generateItemId());
             item.setName(itemName.getText().toString());
             item.setLost(itemType.getSelectedItem().toString().equals("Lost"));
@@ -104,6 +116,61 @@ public class AddItem extends BaseActivity implements View.OnClickListener {
             openCamera();
         }
     }
+    private boolean validateInput(){
+        String name = itemName.getText().toString().trim();
+        boolean valid = true;
+        if (name.length() < 3 || name.length() > 20) {
+            boxItemName.setBoxStrokeColor(Color.parseColor("#e1403d"));
+            boxItemName.setHintTextColor(ColorStateList.valueOf(Color.parseColor("#e1403d")));
+            boxItemName.setHint("Name must be between 3 and 20 characters!");
+            valid = false;
+        }
+        else {
+            boxItemName.setBoxStrokeColor(Color.parseColor("#000000"));
+            boxItemName.setHintTextColor(ColorStateList.valueOf(Color.parseColor("#000000")));
+            boxItemName.setHint("Item Name");
+        }
+
+        String location = itemLocation.getText().toString().trim();
+        if (location.length() < 3 || location.length() > 20) {
+            boxItemLocation.setBoxStrokeColor(Color.parseColor("#e1403d"));
+            boxItemLocation.setHintTextColor(ColorStateList.valueOf(Color.parseColor("#e1403d")));
+            boxItemLocation.setHint("Location must be between 3 and 20 characters!");
+            valid = false;
+        }
+        else {
+            boxItemLocation.setBoxStrokeColor(Color.parseColor("#000000"));
+            boxItemLocation.setHintTextColor(ColorStateList.valueOf(Color.parseColor("#000000")));
+            boxItemLocation.setHint("Item Location");
+        }
+
+        String desc = itemDesc.getText().toString().trim();
+        if (!desc.isEmpty()) {
+            String[] lines = desc.split("\r\n|\r|\n");
+            if (lines.length > 2) {
+                boxItemDesc.setBoxStrokeColor(Color.parseColor("#e1403d"));
+                boxItemDesc.setHintTextColor(ColorStateList.valueOf(Color.parseColor("#e1403d")));
+                boxItemDesc.setHint("Item description must not exceed 2 lines!");
+                valid = false;
+            }
+            else {
+                boxItemDesc.setBoxStrokeColor(Color.parseColor("#000000"));
+                boxItemDesc.setHintTextColor(ColorStateList.valueOf(Color.parseColor("#000000")));
+                itemDesc.setHint("Item Description");
+            }
+        }
+
+        if (!isImageSet) {
+            tvItemImage.setText("Must add an image of the item!");
+            tvItemImage.setTextColor(Color.parseColor("#e1403d"));
+            valid = false;
+        }
+        else {
+            tvItemImage.setText("Item Image");
+            tvItemImage.setTextColor(Color.parseColor("#000000"));
+        }
+        return valid;
+    }
 
     private void openCamera() {
         try {
@@ -129,6 +196,10 @@ public class AddItem extends BaseActivity implements View.OnClickListener {
         itemLocation = findViewById(R.id.etItemLocation);
         itemDesc = findViewById(R.id.etItemDesc);
         itemType = findViewById(R.id.spItemType);
+        tvItemImage = findViewById(R.id.tvItemImage);
+        boxItemName = findViewById(R.id.boxItemName);
+        boxItemLocation = findViewById(R.id.boxItemLocation);
+        boxItemDesc = findViewById(R.id.boxItemDesc);
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.LostOrFound, R.layout.spinner_add_item);
@@ -148,8 +219,18 @@ public class AddItem extends BaseActivity implements View.OnClickListener {
         day.setMaxValue(31);
         month.setMinValue(1);
         month.setMaxValue(12);
-        year.setMinValue(2025);
+        year.setMinValue(2026);
         year.setMaxValue(2026);
+
+        NumberPicker.OnValueChangeListener dateChangeListener = new NumberPicker.OnValueChangeListener() {
+            @Override
+            public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+                updateMaxDays();
+            }
+        };
+        month.setOnValueChangedListener(dateChangeListener);
+        year.setOnValueChangedListener(dateChangeListener);
+        updateMaxDays();
 
         databaseService = DatabaseService.getInstance();
         mAuth = FirebaseAuth.getInstance();
@@ -159,6 +240,20 @@ public class AddItem extends BaseActivity implements View.OnClickListener {
         btnSubmit.setOnClickListener(this);
 
         item = new Item();
+    }
+    private void updateMaxDays() {
+        int m = month.getValue();
+        int y = year.getValue();
+        int maxDays = 31;
+
+        if (m == 4 || m == 6 || m == 9 || m == 11)
+            maxDays = 30;
+        else if (m == 2)
+            maxDays = 28;
+        if (day.getValue() > maxDays) {
+            day.setValue(maxDays);
+        }
+        day.setMaxValue(maxDays);
     }
     @Override
     protected int getNavigationMenuItemId() {

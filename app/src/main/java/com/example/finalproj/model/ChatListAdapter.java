@@ -83,6 +83,7 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ChatVi
 
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(context, ChatActivity.class);
+            Log.d("otherUserId: ", finalOtherUserId.toString());
             intent.putExtra("otherUserId", finalOtherUserId);
             context.startActivity(intent);
         });
