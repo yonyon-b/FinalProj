@@ -126,6 +126,7 @@ public class AddItem extends BaseActivity implements View.OnClickListener {
             valid = false;
         }
         else {
+            // change back to black after correcting
             boxItemName.setBoxStrokeColor(Color.parseColor("#000000"));
             boxItemName.setHintTextColor(ColorStateList.valueOf(Color.parseColor("#000000")));
             boxItemName.setHint("Item Name");

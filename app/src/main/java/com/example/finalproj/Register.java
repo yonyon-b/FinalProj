@@ -3,11 +3,15 @@ package com.example.finalproj;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -18,6 +22,8 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.finalproj.model.User;
 import com.example.finalproj.services.DatabaseService;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class Register extends AppCompatActivity implements View.OnClickListener {
@@ -25,9 +31,11 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
     private static final String TAG = "Register";
     public static final String MyPREFERENCES = "MyPrefs" ;
     SharedPreferences sharedpreferences;
-    EditText etFname, etLname, etMail, etPhone, etPassword;
+    TextInputEditText etFname, etLname, etMail, etPhone, etPassword;
+    TextInputLayout boxFname, boxLname, boxEmail, boxPhone, boxPassword;
     String fName, lName, email, phone, password;
-    Button btnSubmit, btnLogin;
+    Button btnSubmit;
+    TextView tvLogin;
     private DatabaseService databaseService;
     private FirebaseAuth mAuth;
 
@@ -50,11 +58,18 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
         etMail = findViewById(R.id.etEmail);
         etPhone = findViewById(R.id.etPhone);
         etPassword = findViewById(R.id.etPassword);
+
+        boxFname = findViewById(R.id.boxFname);
+        boxLname = findViewById(R.id.boxLname);
+        boxEmail = findViewById(R.id.boxEmail);
+        boxPhone = findViewById(R.id.boxPhone);
+        boxPassword = findViewById(R.id.boxPassword);
+
         btnSubmit = findViewById(R.id.btnSubmit);
-        btnLogin = findViewById(R.id.btnToLogin);
+        tvLogin = findViewById(R.id.tvLogin);
 
         btnSubmit.setOnClickListener(this);
-        btnLogin.setOnClickListener(this);
+        tvLogin.setOnClickListener(this);
 
         sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
     }
@@ -71,6 +86,9 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
             phone = etPhone.getText().toString();
             password = etPassword.getText().toString();
 
+            if (!validateInput(fName, lName, email, phone, password)){
+                return;
+            }
 
             /// Validate input
             Log.d(TAG, "onClick: Registering user...");
@@ -78,7 +96,7 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
             /// Register user
             registerUser(fName, lName, phone, email, password);
         }
-        else if (v.getId() == btnLogin.getId()){
+        else if (v.getId() == tvLogin.getId()){
             Intent i = new Intent(this, Login.class);
             startActivity(i);
         }
@@ -151,5 +169,70 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
 
             }
         });
+    }
+    private boolean validateInput(String fName, String lName, String email, String phone, String password) {
+        boolean valid = true;
+
+        // first name (3 - 20 char)
+        if (fName.length() < 3 || fName.length() > 20) {
+            boxFname.setBoxStrokeColor(Color.parseColor("#e1403d"));
+            boxFname.setHintTextColor(ColorStateList.valueOf(Color.parseColor("#e1403d")));
+            boxFname.setHint("Invalid First Name! (3-20 characters)");
+            valid = false;
+        } else {
+            boxFname.setBoxStrokeColor(Color.parseColor("#000000"));
+            boxFname.setHintTextColor(ColorStateList.valueOf(Color.parseColor("#000000")));
+            boxFname.setHint("First Name");
+        }
+
+        // last name (3 - 20 char)
+        if (lName.length() < 3 || lName.length() > 20) {
+            boxLname.setBoxStrokeColor(Color.parseColor("#e1403d"));
+            boxLname.setHintTextColor(ColorStateList.valueOf(Color.parseColor("#e1403d")));
+            boxLname.setHint("Invalid Last Name! (3-20 characters)");
+            valid = false;
+        } else {
+            boxLname.setBoxStrokeColor(Color.parseColor("#000000"));
+            boxLname.setHintTextColor(ColorStateList.valueOf(Color.parseColor("#000000")));
+            boxLname.setHint("Last Name");
+        }
+
+        // email check with patterns util
+        if (email.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            boxEmail.setBoxStrokeColor(Color.parseColor("#e1403d"));
+            boxEmail.setHintTextColor(ColorStateList.valueOf(Color.parseColor("#e1403d")));
+            boxEmail.setHint("Invalid email format!");
+            valid = false;
+        } else {
+            boxEmail.setBoxStrokeColor(Color.parseColor("#000000"));
+            boxEmail.setHintTextColor(ColorStateList.valueOf(Color.parseColor("#000000")));
+            boxEmail.setHint("Email");
+        }
+
+        // phone number check with patterns
+        if (phone.isEmpty() || !Patterns.PHONE.matcher(phone).matches() || phone.length() < 7) {
+            boxPhone.setBoxStrokeColor(Color.parseColor("#e1403d"));
+            boxPhone.setHintTextColor(ColorStateList.valueOf(Color.parseColor("#e1403d")));
+            boxPhone.setHint("Invalid phone number!");
+            valid = false;
+        } else {
+            boxPhone.setBoxStrokeColor(Color.parseColor("#000000"));
+            boxPhone.setHintTextColor(ColorStateList.valueOf(Color.parseColor("#000000")));
+            boxPhone.setHint("Phone");
+        }
+
+        // password (6 - 20 char)
+        if (password.length() < 6 || password.length() > 20) {
+            boxPassword.setBoxStrokeColor(Color.parseColor("#e1403d"));
+            boxPassword.setHintTextColor(ColorStateList.valueOf(Color.parseColor("#e1403d")));
+            boxPassword.setHint("Must be 6-20 characters!");
+            valid = false;
+        } else {
+            boxPassword.setBoxStrokeColor(Color.parseColor("#000000"));
+            boxPassword.setHintTextColor(ColorStateList.valueOf(Color.parseColor("#000000")));
+            boxPassword.setHint("Password");
+        }
+
+        return valid;
     }
 }
