@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+    <PreferenceCategory app:title="Appearance">
+        <ListPreference
+            app:defaultValue="Default"
+            app:entries="@array/theme_entries"
+            app:entryValues="@array/theme_values"
+            app:key="theme_preference"
+            app:title="App Theme"
+            app:useSimpleSummaryProvider="true"
+
+            />
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="Notifications">
+        <SwitchPreferenceCompat
+            app:defaultValue="true"
+            app:key="daily_reminder"
+            app:title="Daily Reminders"
+            app:summary="Receive a daily notification reminder" />
+
+        <SwitchPreferenceCompat
+            app:defaultValue="true"
+            app:key="chat_notifications"
+            app:title="Chat Notifications"
+            app:summary="Receive alerts for new messages" />
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="Account">
+        <Preference
+            app:key="edit_profile"
+            app:title="Edit Profile"
+            app:summary="Change your name, bio, and profile picture" />
+
+        <Preference
+            app:key="log_out"
+            app:title="Log Out" />
+    </PreferenceCategory>
+</androidx.preference.PreferenceScreen>

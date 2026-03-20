@@ -40,12 +40,12 @@ public class ReminderReceiver extends BroadcastReceiver {
 
         // Build the notification
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
-                .setSmallIcon(R.drawable.lostnfound) // Make sure to use an appropriate small icon here
+                .setSmallIcon(R.drawable.lostnfound)
                 .setContentTitle("New Items?")
                 .setContentText("Check out the app to see if there are any new lost or found items today!")
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setContentIntent(pendingIntent)
-                .setAutoCancel(true); // Removes the notification when tapped
+                .setAutoCancel(true);
 
         // Show the notification
         notificationManager.notify(100, builder.build());

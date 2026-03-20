@@ -58,6 +58,7 @@ dependencies {
     testImplementation libs.junit
     implementation 'com.google.ai.client.generativeai:generativeai:0.9.0'
     implementation 'com.google.guava:guava:31.1-android'
+    implementation 'androidx.preference:preference:1.2.1'
     androidTestImplementation libs.ext.junit
     androidTestImplementation libs.espresso.core
 }

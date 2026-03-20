@@ -44,7 +44,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
-        // Required for Android 8.0 (Oreo) and above
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel channel = new NotificationChannel(
                     CHANNEL_ID, "Chat Notifications", NotificationManager.IMPORTANCE_HIGH);
@@ -52,7 +51,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         }
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
-                .setSmallIcon(R.mipmap.ic_launcher) // Replace with a transparent icon if possible
+                .setSmallIcon(R.mipmap.ic_launcher)
                 .setContentTitle("New Message")
                 .setContentText(messageText)
                 .setAutoCancel(true)
