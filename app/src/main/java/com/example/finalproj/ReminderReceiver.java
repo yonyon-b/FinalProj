@@ -6,9 +6,12 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 
 import androidx.core.app.NotificationCompat;
+
+import com.google.firebase.auth.FirebaseAuth;
 
 public class ReminderReceiver extends BroadcastReceiver {
     private static final String CHANNEL_ID = "daily_reminder_channel";
@@ -16,6 +19,17 @@ public class ReminderReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+
+        if (FirebaseAuth.getInstance().getCurrentUser() == null)
+            return;
+
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        SharedPreferences sharedPreferences = context.getSharedPreferences("preferences_" + userId, context.MODE_PRIVATE);
+        boolean isReminderEnabled = sharedPreferences.getBoolean("daily_reminder", true);
+
+        if (!isReminderEnabled)
+            return;
 
         // Create the NotificationChannel (required for Android 8.0+)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {

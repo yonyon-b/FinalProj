@@ -4,12 +4,15 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
+import androidx.preference.PreferenceManager;
 
 import com.example.finalproj.ChatActivity;
 import com.example.finalproj.R;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
@@ -21,8 +24,14 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
 
-        // check if message contains a data payload & if was sent by AI
-        if (!remoteMessage.getData().get("senderId").contains("gemini_ai_bot") && remoteMessage.getData().size() > 0) {
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        SharedPreferences sharedPreferences = getSharedPreferences("preferences_" + userId, MODE_PRIVATE);
+
+        boolean notificationsEnabled = sharedPreferences.getBoolean("chat_notifications", true);
+
+        // check if message contains a data payload & if was sent by AI & if notifs aren't turned off
+        if (notificationsEnabled && !remoteMessage.getData().get("senderId").contains("gemini_ai_bot") && remoteMessage.getData().size() > 0) {
             String senderId = remoteMessage.getData().get("senderId");
             String messageText = remoteMessage.getData().get("message");
 
