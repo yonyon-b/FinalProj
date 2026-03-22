@@ -2,6 +2,7 @@ package com.example.finalproj;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.SpannableString;
@@ -20,6 +21,7 @@ import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.preference.PreferenceManager;
 
 import com.example.finalproj.model.Item;
 import com.example.finalproj.model.User;
@@ -103,7 +105,28 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        applySelectedTheme();
+
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
+    }
+
+    private void applySelectedTheme() {
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        SharedPreferences prefs = getSharedPreferences("preferences_" + userId, Context.MODE_PRIVATE);
+        String theme = prefs.getString("theme_preference", "default");
+
+        switch (theme) {
+            case "dark":
+                setTheme(R.style.Theme_FinalProj_Dark);
+                break;
+            case "light":
+                setTheme(R.style.Theme_FinalProj_Light);
+                break;
+            case "default":
+            default:
+                setTheme(R.style.Theme_FinalProj_Default);
+                break;
+        }
     }
 }

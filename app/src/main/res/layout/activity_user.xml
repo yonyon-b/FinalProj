@@ -5,14 +5,14 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F8F9FA"
+    android:background="?attr/colorSurfaceVariant"
     tools:context=".UserActivity">
 
     <View
         android:id="@+id/header_background"
         android:layout_width="match_parent"
         android:layout_height="220dp"
-        android:background="@drawable/gradient"
+        android:background="?android:attr/windowBackground"
         app:layout_constraintTop_toTopOf="parent" />
     <TextView
         android:layout_width="wrap_content"
@@ -20,7 +20,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginTop="5dp"
         android:text="LostLink"
-        android:textColor="#FFFFFF"
+        android:textColor="?android:attr/textColorPrimary"
         android:textSize="32sp"
         android:textStyle="bold"
 
@@ -35,7 +35,7 @@
         android:layout_marginStart="24dp"
         android:layout_marginTop="60dp"
         android:text="Latest Items"
-        android:textColor="#FFFFFF"
+        android:textColor="?android:attr/textColorPrimary"
         android:textSize="32sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
@@ -48,7 +48,7 @@
         android:layout_marginStart="24dp"
         android:layout_marginTop="4dp"
         android:text="Check out the latest items posted by users!"
-        android:textColor="#E0E0E0"
+        android:textColor="?attr/colorSecondary"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvGreeting" />
@@ -60,7 +60,7 @@
         android:layout_marginHorizontal="20dp"
         android:layout_marginTop="-60dp"
         android:layout_marginBottom="24dp"
-        app:cardBackgroundColor="@color/white"
+        app:cardBackgroundColor="?attr/colorSurface"
         app:cardCornerRadius="24dp"
         app:cardElevation="8dp"
         app:layout_constraintBottom_toBottomOf="parent"

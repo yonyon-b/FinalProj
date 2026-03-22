@@ -8,4 +8,29 @@
         <item name="android:fontFamily">@font/oswald_variable_font_wght</item> <item name="android:textSize">28sp</item> </style>
 
     <style name="Theme.FinalProj" parent="Base.Theme.FinalProj" />
+    <style name="Theme.FinalProj.Default" parent="Base.Theme.FinalProj">
+        <item name="colorPrimary">@color/lightGreen</item>
+        <item name="colorSecondary">@color/gray</item>
+        <item name="android:windowBackground">@drawable/gradient</item>
+        <item name="colorSurface">@color/white</item>
+        <item name="colorOnSurface">@color/white</item> <item name="android:textColorPrimary">@color/white</item>
+        <item name="colorSurfaceVariant">#F8F9FA</item>
+    </style>
+
+    <style name="Theme.FinalProj.Light" parent="Theme.Material3.Light.NoActionBar">
+        <item name="colorPrimary">@color/black</item>
+        <item name="colorSecondary">@color/gray</item>
+        <item name="android:windowBackground">@color/white</item>
+        <item name="colorSurface">@color/white</item>
+        <item name="colorOnSurface">@color/black</item>
+        <item name="android:textColorPrimary">@color/black</item>
+    </style>
+
+    <style name="Theme.FinalProj.Dark" parent="Theme.Material3.Dark.NoActionBar">
+        <item name="colorPrimary">@color/white</item>
+        <item name="colorSecondary">@color/gray</item>
+        <item name="android:windowBackground">@color/black</item>
+        <item name="colorSurface">#121212</item> <item name="colorOnSurface">@color/white</item>
+        <item name="android:textColorPrimary">@color/white</item>
+    </style>
 </resources>
