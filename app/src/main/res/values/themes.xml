@@ -13,8 +13,19 @@
         <item name="colorSecondary">@color/gray</item>
         <item name="android:windowBackground">@drawable/gradient</item>
         <item name="colorSurface">@color/white</item>
-        <item name="colorOnSurface">@color/white</item> <item name="android:textColorPrimary">@color/white</item>
+        <item name="colorOnSurface">@color/white</item>
+        <item name="android:textColorPrimary">@color/white</item>
         <item name="colorSurfaceVariant">#F8F9FA</item>
+        <item name="android:panelColorBackground">@drawable/gradient</item>
+
+        <item name="bottomNavBackground">@color/toolBarBg</item>
+        <item name="bottomNavItemTint">@color/toolBarItems</item>
+        <item name="bottomNavIndicator">@color/toolBarItemSelected</item>
+        <item name="cardBgColor">@color/white</item>
+        <item name="itemRowBackground">@color/bgCardGreen</item>
+        <item name="itemRowTextColorPrimary">@color/white</item>
+        <item name="itemRowTextColorSecondary">#BDBDBD</item>
+        <item name="expandedLayoutBackground">#1F3A2E</item>
     </style>
 
     <style name="Theme.FinalProj.Light" parent="Theme.Material3.Light.NoActionBar">
@@ -24,13 +35,36 @@
         <item name="colorSurface">@color/white</item>
         <item name="colorOnSurface">@color/black</item>
         <item name="android:textColorPrimary">@color/black</item>
+        <item name="colorSurfaceVariant">#E7E0EC</item>
+        <item name="android:panelColorBackground">@color/white</item>
+
+        <item name="bottomNavBackground">#F3F3F3</item>
+        <item name="bottomNavItemTint">@color/black</item>
+        <item name="bottomNavIndicator">#E0E0E0</item>
+        <item name="cardBgColor">@color/white</item>
+        <item name="itemRowBackground">@color/white</item>
+        <item name="itemRowTextColorPrimary">@color/black</item>
+        <item name="itemRowTextColorSecondary">#757575</item>
+        <item name="expandedLayoutBackground">#F9F9F9</item>
     </style>
 
     <style name="Theme.FinalProj.Dark" parent="Theme.Material3.Dark.NoActionBar">
         <item name="colorPrimary">@color/white</item>
         <item name="colorSecondary">@color/gray</item>
         <item name="android:windowBackground">@color/black</item>
-        <item name="colorSurface">#121212</item> <item name="colorOnSurface">@color/white</item>
+        <item name="colorSurface">#121212</item>
+        <item name="colorOnSurface">@color/white</item>
         <item name="android:textColorPrimary">@color/white</item>
+        <item name="colorSurfaceVariant">#49454F</item>
+        <item name="android:panelColorBackground">#121212</item>
+
+        <item name="bottomNavBackground">#1A1A1A</item>
+        <item name="bottomNavItemTint">@color/white</item>
+        <item name="bottomNavIndicator">#333333</item>
+        <item name="cardBgColor">#1E1E1E</item>
+        <item name="itemRowBackground">#2C2C2C</item>
+        <item name="itemRowTextColorPrimary">@color/white</item>
+        <item name="itemRowTextColorSecondary">#B0B0B0</item>
+        <item name="expandedLayoutBackground">#383838</item>
     </style>
 </resources>
