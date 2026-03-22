@@ -16,6 +16,8 @@ import com.example.finalproj.model.Item;
 import com.example.finalproj.model.ItemRecyclerAdapter;
 import com.example.finalproj.model.User;
 import com.example.finalproj.services.DatabaseService;
+import com.google.android.material.color.MaterialColors;
+import android.content.res.ColorStateList;
 
 import androidx.appcompat.widget.SearchView;
 import java.util.ArrayList;
@@ -134,20 +136,34 @@ public class ItemList extends BaseActivity {
     private void filterList(Boolean isLost) {
         currentFilterIsLost = isLost;
         // set color for filters
+        int selectedColor = MaterialColors.getColor(btnFilterAll, androidx.appcompat.R.attr.colorPrimary);
+        int notSelectedColor = MaterialColors.getColor(btnFilterAll, R.attr.itemRowBackground);
+        int textSelectedColor = MaterialColors.getColor(btnFilterAll, R.attr.itemRowTextColorSecondary);
+        int textNotSelectedColor = MaterialColors.getColor(btnFilterAll, R.attr.itemRowTextColorPrimary);
+
         if (isLost == null){
-            btnFilterAll.setBackgroundColor(getColor(R.color.toolBarItems));
-            btnFilterFound.setBackgroundColor(getColor(R.color.bgCardGreen));
-            btnFilterLost.setBackgroundColor(getColor(R.color.bgCardGreen));
+            btnFilterAll.setBackgroundTintList(ColorStateList.valueOf(selectedColor));
+            btnFilterAll.setTextColor(textSelectedColor);
+            btnFilterFound.setBackgroundTintList(ColorStateList.valueOf(notSelectedColor));
+            btnFilterFound.setTextColor(textNotSelectedColor);
+            btnFilterLost.setBackgroundTintList(ColorStateList.valueOf(notSelectedColor));
+            btnFilterLost.setTextColor(textNotSelectedColor);
         }
         else if (isLost){
-            btnFilterAll.setBackgroundColor(getColor(R.color.bgCardGreen));
-            btnFilterFound.setBackgroundColor(getColor(R.color.bgCardGreen));
-            btnFilterLost.setBackgroundColor(getColor(R.color.toolBarItems));
+            btnFilterAll.setBackgroundTintList(ColorStateList.valueOf(notSelectedColor));
+            btnFilterAll.setTextColor(textNotSelectedColor);
+            btnFilterFound.setBackgroundTintList(ColorStateList.valueOf(notSelectedColor));
+            btnFilterFound.setTextColor(textNotSelectedColor);
+            btnFilterLost.setBackgroundTintList(ColorStateList.valueOf(selectedColor));
+            btnFilterLost.setTextColor(textSelectedColor);
         }
         else{
-            btnFilterAll.setBackgroundColor(getColor(R.color.bgCardGreen));
-            btnFilterFound.setBackgroundColor(getColor(R.color.toolBarItems));
-            btnFilterLost.setBackgroundColor(getColor(R.color.bgCardGreen));
+            btnFilterAll.setBackgroundTintList(ColorStateList.valueOf(notSelectedColor));
+            btnFilterAll.setTextColor(textNotSelectedColor);
+            btnFilterFound.setBackgroundTintList(ColorStateList.valueOf(selectedColor));
+            btnFilterFound.setTextColor(textSelectedColor);
+            btnFilterLost.setBackgroundTintList(ColorStateList.valueOf(notSelectedColor));
+            btnFilterLost.setTextColor(textNotSelectedColor);
         }
         applyFilters();
     }

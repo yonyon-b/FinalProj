@@ -14,7 +14,7 @@
         <androidx.cardview.widget.CardView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:cardBackgroundColor="@color/white"
+            app:cardBackgroundColor="?attr/cardBgColor"
             app:cardCornerRadius="80dp"
             >
             <ImageView
@@ -38,12 +38,14 @@
                 android:id="@+id/chatOtherUserName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textColor="?android:attr/textColorPrimary"
                 android:textSize="18sp"
                 android:textStyle="bold" />
             <TextView
                 android:id="@+id/chatLastMessage"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textColor="?attr/colorSecondary"
                 android:textSize="14sp"
                 android:maxLines="1"
                 android:ellipsize="end" />

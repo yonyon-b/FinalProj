@@ -7,8 +7,7 @@
     android:layout_height="wrap_content"
     android:layout_marginHorizontal="16dp"
     android:layout_marginVertical="8dp"
-    app:cardBackgroundColor="@color/bgCardGreen"
-    android:backgroundTint="@color/white"
+    app:cardBackgroundColor="?attr/itemRowBackground"
     app:cardCornerRadius="16dp"
     app:cardElevation="4dp"
     app:strokeWidth="0dp">
@@ -51,21 +50,21 @@
                     android:layout_height="wrap_content"
                     android:textSize="20sp"
                     android:textStyle="bold"
-                    android:textColor="@color/black" />
+                    android:textColor="?attr/itemRowTextColorPrimary" />
 
                 <TextView
                     android:id="@+id/txtLost"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="14sp"
-                    android:textColor="#757575" />
+                    android:textColor="?attr/itemRowTextColorSecondary" />
 
                 <TextView
                     android:id="@+id/txtDate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="14sp"
-                    android:textColor="#757575" />
+                    android:textColor="?attr/itemRowTextColorSecondary" />
             </LinearLayout>
         </LinearLayout>
 
@@ -82,13 +81,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_marginBottom="12dp"
-                android:background="#EEEEEE" />
+                android:background="?attr/colorSurfaceVariant" />
 
             <TextView
                 android:id="@+id/txtPosition"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="4dp"
+                android:textColor="?attr/itemRowTextColorPrimary"
                 android:textSize="14sp" />
 
             <TextView
@@ -96,17 +96,19 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
+                android:textColor="?attr/itemRowTextColorPrimary"
                 android:textSize="14sp" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="#F9F9F9"
+                android:background="?attr/expandedLayoutBackground"
                 android:padding="8dp"
                 android:orientation="horizontal">
                 <androidx.cardview.widget.CardView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:cardBackgroundColor="@color/white"
+                    app:cardBackgroundColor="?attr/cardBgColor"
                     app:cardCornerRadius="80dp"
                     >
                 <ImageButton
@@ -130,6 +132,7 @@
                         android:id="@+id/txtUserName"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:textColor="?attr/itemRowTextColorPrimary"
                         android:textSize="13sp"
                         android:textStyle="bold" />
 
@@ -137,6 +140,7 @@
                         android:id="@+id/txtUserPhone"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:textColor="?attr/itemRowTextColorSecondary"
                         android:textSize="13sp" />
                 </LinearLayout>
                 <ImageButton
@@ -146,6 +150,7 @@
                     android:layout_gravity="end|center_vertical"
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:contentDescription="Message Owner"
+                    android:tint="?attr/itemRowTextColorPrimary"
                     android:src="@drawable/messages" />
             </LinearLayout>
         </LinearLayout>

@@ -6,6 +6,7 @@
     android:layout_height="wrap_content"
     android:layout_marginHorizontal="8dp"
     android:layout_marginVertical="4dp"
+    app:cardBackgroundColor="?attr/cardBgColor"
     app:cardCornerRadius="12dp"
     app:cardElevation="2dp"
     android:clickable="true"
@@ -54,7 +55,7 @@
                 android:text="John Doe"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                android:textColor="?attr/colorOnSurface"
+                android:textColor="?android:attr/textColorPrimary"
                 android:layout_marginBottom="4dp"
                 tools:text="@tools:sample/full_names" />
 
@@ -69,7 +70,7 @@
                     android:layout_width="14dp"
                     android:layout_height="14dp"
                     android:src="@android:drawable/ic_dialog_email"
-                    app:tint="#666666"
+                    app:tint="?attr/colorSecondary"
                     android:layout_marginEnd="6dp" />
 
                 <TextView
@@ -78,7 +79,7 @@
                     android:layout_height="wrap_content"
                     android:text="john.doe@example.com"
                     android:textSize="14sp"
-                    android:textColor="?attr/colorOnSurfaceVariant"
+                    android:textColor="?attr/colorSecondary"
                     tools:text="user@example.com" />
 
             </LinearLayout>
@@ -93,7 +94,7 @@
                     android:layout_width="14dp"
                     android:layout_height="14dp"
                     android:src="@android:drawable/sym_action_call"
-                    app:tint="#666666"
+                    app:tint="?attr/colorSecondary"
                     android:layout_marginEnd="6dp" />
 
                 <TextView
@@ -102,7 +103,7 @@
                     android:layout_height="wrap_content"
                     android:text="+1 234 567 8900"
                     android:textSize="14sp"
-                    android:textColor="?attr/colorOnSurfaceVariant"
+                    android:textColor="?attr/colorSecondary"
                     tools:text="@tools:sample/us_phones" />
 
             </LinearLayout>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="bottomNavBackground" format="color|reference" />
+    <attr name="bottomNavItemTint" format="color|reference" />
+    <attr name="bottomNavIndicator" format="color|reference" />
+    <attr name="cardBgColor" format="color|reference" />
+    <attr name="itemRowBackground" format="color|reference" />
+    <attr name="itemRowTextColorPrimary" format="color|reference" />
+    <attr name="itemRowTextColorSecondary" format="color|reference" />
+    <attr name="expandedLayoutBackground" format="color|reference" />
+</resources>

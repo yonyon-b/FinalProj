@@ -5,6 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="?android:attr/windowBackground"
     tools:context=".MainAdmin">
     <LinearLayout
         android:layout_width="match_parent"
@@ -17,6 +18,8 @@
             android:layout_gravity="center"
             android:layout_marginTop="50dp"
             android:id="@+id/btnUserList"
+            android:backgroundTint="?attr/colorPrimary"
+            android:textColor="?attr/colorOnSurface"
             />
 
     </LinearLayout>
