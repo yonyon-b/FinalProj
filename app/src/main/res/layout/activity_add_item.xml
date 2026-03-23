@@ -33,8 +33,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:cardCornerRadius="16dp"
-                app:cardElevation="2dp"
                 app:cardBackgroundColor="?attr/cardBgColor"
+                app:strokeColor="?attr/cardStrokeColor"
                 android:layout_marginBottom="16dp">
 
                 <LinearLayout
@@ -157,6 +157,7 @@
                 app:cardCornerRadius="16dp"
                 app:cardElevation="2dp"
                 app:cardBackgroundColor="?attr/cardBgColor"
+                app:strokeColor="?attr/cardStrokeColor"
                 android:layout_marginBottom="16dp">
 
                 <LinearLayout
@@ -209,6 +210,7 @@
                 app:cardCornerRadius="16dp"
                 app:cardElevation="2dp"
                 app:cardBackgroundColor="?attr/cardBgColor"
+                app:strokeColor="?attr/cardStrokeColor"
                 android:layout_marginBottom="24dp">
 
                 <LinearLayout
@@ -232,9 +234,10 @@
                         android:layout_width="150dp"
                         android:layout_height="150dp"
                         app:cardCornerRadius="12dp"
-                        app:cardBackgroundColor="?attr/colorSurface"
+                        app:cardBackgroundColor="?attr/imageBg"
+                        app:strokeColor="?attr/cardStrokeColor"
                         android:layout_marginBottom="16dp"
-                        app:cardElevation="0dp">
+                        app:cardElevation="2dp">
 
                         <ImageView
                             android:id="@+id/imgItem"
@@ -256,6 +259,8 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="Gallery"
+                            android:backgroundTint="?attr/colorPrimary"
+                            android:textColor="?android:attr/textColorSecondary"
                             app:icon="@android:drawable/ic_menu_gallery"
                             android:layout_marginEnd="8dp" />
 
@@ -265,6 +270,8 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="Camera"
+                            android:backgroundTint="?attr/colorPrimary"
+                            android:textColor="?android:attr/textColorSecondary"
                             app:icon="@android:drawable/ic_menu_camera"
                             android:layout_marginStart="8dp" />
                     </LinearLayout>
@@ -278,7 +285,7 @@
                 android:layout_height="60dp"
                 android:text="Upload Item"
                 android:backgroundTint="?attr/colorPrimary"
-                android:textColor="?attr/colorOnSurface"
+                android:textColor="?android:attr/textColorSecondary"
                 android:textSize="18sp"
                 android:layout_marginBottom="24dp"
                 app:cornerRadius="12dp" />

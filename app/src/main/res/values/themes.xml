@@ -22,11 +22,16 @@
         <item name="bottomNavBackground">@color/toolBarBg</item>
         <item name="bottomNavItemTint">@color/toolBarItems</item>
         <item name="bottomNavIndicator">@color/toolBarItemSelected</item>
-        <item name="cardBgColor">@color/white</item>
+        <item name="cardBgColor">@color/bgCardGreen</item>
         <item name="itemRowBackground">@color/bgCardGreen</item>
         <item name="itemRowTextColorPrimary">@color/white</item>
         <item name="itemRowTextColorSecondary">#BDBDBD</item>
         <item name="expandedLayoutBackground">#1F3A2E</item>
+        <item name="filterSelected">@color/lightGreen</item>
+        <item name="cardStrokeColor">@color/white</item>
+        <item name="imageBg">@color/white</item>
+        <item name="imageColor">@color/black</item>
+        <item name="userActivityBg">@drawable/gradient_long</item>
     </style>
 
     <style name="Theme.FinalProj.Light" parent="Theme.Material3.Light.NoActionBar">
@@ -48,6 +53,11 @@
         <item name="itemRowTextColorPrimary">@color/black</item>
         <item name="itemRowTextColorSecondary">#757575</item>
         <item name="expandedLayoutBackground">#F9F9F9</item>
+        <item name="filterSelected">@color/black</item>
+        <item name="cardStrokeColor">@color/black</item>
+        <item name="imageBg">@color/white</item>
+        <item name="imageColor">@color/black</item>
+        <item name="userActivityBg">@color/white</item>
     </style>
 
     <style name="Theme.FinalProj.Dark" parent="Theme.Material3.Dark.NoActionBar">
@@ -69,6 +79,11 @@
         <item name="itemRowTextColorPrimary">@color/white</item>
         <item name="itemRowTextColorSecondary">#B0B0B0</item>
         <item name="expandedLayoutBackground">#383838</item>
+        <item name="filterSelected">@color/white</item>
+        <item name="cardStrokeColor">@color/white</item>
+        <item name="imageBg">@color/black</item>
+        <item name="imageColor">@color/white</item>
+        <item name="userActivityBg">@color/black</item>
     </style>
 
     <style name="numberPickerTheme" parent="Theme.Material3.DayNight.NoActionBar">

@@ -8,7 +8,6 @@
             app:key="theme_preference"
             app:title="App Theme"
             app:useSimpleSummaryProvider="true"
-
             />
     </PreferenceCategory>
 

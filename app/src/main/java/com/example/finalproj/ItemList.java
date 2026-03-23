@@ -136,7 +136,7 @@ public class ItemList extends BaseActivity {
     private void filterList(Boolean isLost) {
         currentFilterIsLost = isLost;
         // set color for filters
-        int selectedColor = MaterialColors.getColor(btnFilterAll, androidx.appcompat.R.attr.colorPrimary);
+        int selectedColor = MaterialColors.getColor(btnFilterAll, R.attr.filterSelected);
         int notSelectedColor = MaterialColors.getColor(btnFilterAll, R.attr.itemRowBackground);
         int textSelectedColor = MaterialColors.getColor(btnFilterAll, R.attr.itemRowTextColorSecondary);
         int textNotSelectedColor = MaterialColors.getColor(btnFilterAll, R.attr.itemRowTextColorPrimary);

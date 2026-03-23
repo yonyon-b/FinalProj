@@ -98,7 +98,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="All Items"
-            android:textColor="?attr/colorOnSurface"
+            android:textColor="?android:attr/textColorSecondary"
             android:textStyle="bold"
             android:backgroundTint="?attr/colorPrimary"
             android:layout_marginEnd="20dp"
