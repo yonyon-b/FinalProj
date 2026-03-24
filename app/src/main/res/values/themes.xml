@@ -15,7 +15,7 @@
         <item name="colorSurface">@color/white</item>
         <item name="colorOnSurface">@color/white</item>
         <item name="android:textColorPrimary">@color/white</item>
-        <item name="android:textColorSecondary">@color/white</item>"
+        <item name="android:textColorSecondary">@color/white</item>
         <item name="colorSurfaceVariant">#F8F9FA</item>
         <item name="android:panelColorBackground">@drawable/gradient</item>
 
@@ -41,7 +41,7 @@
         <item name="colorSurface">@color/white</item>
         <item name="colorOnSurface">@color/black</item>
         <item name="android:textColorPrimary">@color/black</item>
-        <item name="android:textColorSecondary">@color/white</item>"
+        <item name="android:textColorSecondary">@color/white</item>
         <item name="colorSurfaceVariant">#E7E0EC</item>
         <item name="android:panelColorBackground">@color/white</item>
 
@@ -67,7 +67,7 @@
         <item name="colorSurface">#121212</item>
         <item name="colorOnSurface">@color/white</item>
         <item name="android:textColorPrimary">@color/white</item>
-        <item name="android:textColorSecondary">@color/black</item>"
+        <item name="android:textColorSecondary">@color/black</item>
         <item name="colorSurfaceVariant">#49454F</item>
         <item name="android:panelColorBackground">#121212</item>
 
@@ -88,5 +88,10 @@
 
     <style name="numberPickerTheme" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="android:textColorPrimary">?android:attr/textColorPrimary</item>
+    </style>
+
+    <style name="SearchViewTheme" parent="ThemeOverlay.Material3.DynamicColors.DayNight">
+        <item name="colorControlNormal">?attr/colorOnSurface</item>
+        <item name="colorControlActivated">?attr/colorOnSurface</item>
     </style>
 </resources>

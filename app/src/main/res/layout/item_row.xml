@@ -42,6 +42,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:layout_marginStart="16dp"
+                android:layout_marginEnd="48dp"
                 android:orientation="vertical">
 
                 <TextView
@@ -66,6 +67,17 @@
                     android:textSize="14sp"
                     android:textColor="?attr/itemRowTextColorSecondary" />
             </LinearLayout>
+            <ImageButton
+                android:id="@+id/imgBtnDeleteItem"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/delete_image"
+                android:scaleType="centerCrop"
+                android:adjustViewBounds="true"
+                android:background="@android:color/transparent"
+                android:layout_gravity="top|end"
+                android:layout_margin="5dp"
+                android:visibility="gone"/>
         </LinearLayout>
 
         <LinearLayout
@@ -151,7 +163,8 @@
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:contentDescription="Message Owner"
                     android:tint="?attr/itemRowTextColorPrimary"
-                    android:src="@drawable/messages" />
+                    android:src="@drawable/messages"
+                    tools:ignore="UseAppTint" />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

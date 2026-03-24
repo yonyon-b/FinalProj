@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.text.Html;
+import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -95,7 +96,35 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter<ItemRecyclerAdapte
             intent.putExtra("USER_UID", ownerId);
             context.startActivity(intent);
         });
+        if (item.getUserId().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())){
+            holder.btnDeleteItem.setVisibility(View.VISIBLE);
+            holder.btnDeleteItem.setOnClickListener(v -> {
+                new android.app.AlertDialog.Builder(context) // Make sure 'context' is available in your adapter
+                        .setTitle("Delete Item")
+                        .setMessage("Are you sure you want to delete this item? This action cannot be undone.")
+                        .setPositiveButton("Delete", (dialog, which) -> {
 
+                            databaseService.deleteItem(item.getId(), new DatabaseService.DatabaseCallback<Void>() {
+                                @Override
+                                public void onCompleted(Void object) {
+                                    Toast.makeText(context, "Item Deleted Successfully!", Toast.LENGTH_SHORT).show();
+                                    items.remove(position);
+                                    notifyItemRemoved(position);
+                                }
+
+                                @Override
+                                public void onFailed(Exception e) {
+                                    Toast.makeText(context, "An error occurred while removing the item!", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+
+                        })
+                        .setNegativeButton("Cancel", (dialog, which) -> {
+                            dialog.dismiss();
+                        })
+                        .show();
+            });
+        }
         // load profile picture into imageButton
         databaseService.getUser(item.getUserId(), new DatabaseService.DatabaseCallback<User>() {
             @Override
@@ -185,7 +214,7 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter<ItemRecyclerAdapte
         TextView txtName, txtDate, txtLost;
         TextView txtPosition, txtDetails, txtUserName, txtUserPhone;
         LinearLayout layoutExpanded;
-        ImageButton btnChat, btnProfile;
+        ImageButton btnChat, btnProfile, btnDeleteItem;
 
         ItemViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -201,6 +230,7 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter<ItemRecyclerAdapte
             txtUserPhone = itemView.findViewById(R.id.txtUserPhone);
             btnChat = itemView.findViewById(R.id.imgBtnChat);
             btnProfile = itemView.findViewById(R.id.imgBtnProfile);
+            btnDeleteItem = itemView.findViewById(R.id.imgBtnDeleteItem);
 
             layoutExpanded = itemView.findViewById(R.id.layoutExpanded);
         }

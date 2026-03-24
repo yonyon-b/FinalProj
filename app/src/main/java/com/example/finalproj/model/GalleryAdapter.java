@@ -1,6 +1,7 @@
 package com.example.finalproj.model;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.finalproj.ItemList;
 import com.example.finalproj.R;
 
 import java.util.List;
@@ -38,6 +40,12 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.GalleryV
         Item item = items.get(position);
         holder.txtName.setText(item.getName());
 
+        holder.cardMain.setOnClickListener(v -> {
+            Intent i = new Intent(context, ItemList.class);
+            i.putExtra("SEARCH_QUERY", item.getName());
+            context.startActivity(i);
+        });
+
         if (item.isLost()) {
             holder.txtType.setText("Lost Item");
             holder.cardType.setCardBackgroundColor(Color.parseColor("#e1403d"));
@@ -61,7 +69,7 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.GalleryV
     static class GalleryViewHolder extends RecyclerView.ViewHolder {
         ImageView imgItem;
         TextView txtName, txtType;
-        CardView cardType;
+        CardView cardType, cardMain;
 
         GalleryViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -69,6 +77,7 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.GalleryV
             txtName = itemView.findViewById(R.id.txtGalleryItemName);
             txtType = itemView.findViewById(R.id.txtGalleryItemType);
             cardType = itemView.findViewById(R.id.cardGalleryItemType);
+            cardMain = itemView.findViewById(R.id.cvGallery);
         }
     }
 }

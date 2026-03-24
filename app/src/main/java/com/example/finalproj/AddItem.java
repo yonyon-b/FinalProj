@@ -92,7 +92,10 @@ public class AddItem extends BaseActivity implements View.OnClickListener {
             item.setPosition(itemLocation.getText().toString());
             item.setDate(day.getValue() + "/" + month.getValue() + "/" + year.getValue());
             item.setPic(ImageUtil.convertTo64Base(img));
-            item.setDetails(itemDesc.getText().toString());
+            if (!itemDesc.getText().toString().isEmpty())
+                item.setDetails(itemDesc.getText().toString());
+            else
+                item.setDetails("No Details Provided.");
             item.setUserId(mAuth.getCurrentUser().getUid());
             databaseService.createNewItem(item, new DatabaseService.DatabaseCallback<Void>() {
                 @Override

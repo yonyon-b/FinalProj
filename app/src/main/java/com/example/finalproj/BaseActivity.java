@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.SystemBarStyle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
@@ -105,22 +106,15 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        applySelectedTheme();
-
-        super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
-    }
-
-    private void applySelectedTheme() {
         String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         SharedPreferences prefs = getSharedPreferences("preferences_" + userId, Context.MODE_PRIVATE);
         String theme = prefs.getString("theme_preference", "default");
-
         switch (theme) {
             case "dark":
                 setTheme(R.style.Theme_FinalProj_Dark);
                 break;
             case "light":
+                EdgeToEdge.enable(this, SystemBarStyle.light(Color.TRANSPARENT, Color.TRANSPARENT));
                 setTheme(R.style.Theme_FinalProj_Light);
                 break;
             case "default":
@@ -128,5 +122,9 @@ public abstract class BaseActivity extends AppCompatActivity {
                 setTheme(R.style.Theme_FinalProj_Default);
                 break;
         }
+        super.onCreate(savedInstanceState);
+        // enable edgeToEdge after creating view if not in light mode
+        if (!theme.equals("light"))
+            EdgeToEdge.enable(this);
     }
 }
