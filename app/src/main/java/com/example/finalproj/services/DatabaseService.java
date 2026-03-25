@@ -138,6 +138,42 @@ public class DatabaseService {
         });
     }
 
+    public void getNodeCount(@NotNull final String path, @NotNull final DatabaseCallback<Long> callback) {
+        readData(path).get().addOnCompleteListener(task -> {
+            if (!task.isSuccessful()) {
+                Log.e(TAG, "Error counting data at " + path, task.getException());
+                callback.onFailed(task.getException());
+                return;
+            }
+            long count = task.getResult().getChildrenCount();
+            callback.onCompleted(count);
+        });
+    }
+
+    public void getNodeCountWithFilter(@NotNull final String path, @NotNull final String filterKey, @NotNull final String filterValue, @NotNull final DatabaseCallback<Long> callback) {
+        readData(path).orderByChild(filterKey).equalTo(filterValue).get().addOnCompleteListener(task -> {
+            if (!task.isSuccessful()) {
+                Log.e(TAG, "Error counting filtered data at " + path, task.getException());
+                callback.onFailed(task.getException());
+                return;
+            }
+            long count = task.getResult().getChildrenCount();
+            callback.onCompleted(count);
+        });
+    }
+    // uses boolean instead of string for filterValue (used to check lost/found item)
+    public void getNodeCountWithFilter(@NotNull final String path, @NotNull final String filterKey, final boolean filterValue, @NotNull final DatabaseCallback<Long> callback) {
+        readData(path).orderByChild(filterKey).equalTo(filterValue).get().addOnCompleteListener(task -> {
+            if (!task.isSuccessful()) {
+                Log.e(TAG, "Error counting boolean filtered data at " + path, task.getException());
+                callback.onFailed(task.getException());
+                return;
+            }
+            long count = task.getResult().getChildrenCount();
+            callback.onCompleted(count);
+        });
+    }
+
     // endregion
 
     // region Callback Interface
