@@ -37,13 +37,12 @@ public class Splash extends AppCompatActivity {
                     }
                 } catch (InterruptedException ex) {
                 }
+                DatabaseService.getInstance().setupPresenceSystem(); // set user online / check when disconnects
                 FirebaseAuth mAuth = FirebaseAuth.getInstance();
                 if (mAuth.getCurrentUser() != null) {
-                    // Firebase remembers the session! The user is already logged in.
                     Intent intent = new Intent(Splash.this, UserActivity.class);
                     startActivity(intent);
                 } else {
-                    // No user is logged in
                     Intent intent = new Intent(Splash.this, Login.class);
                     startActivity(intent);
                 }

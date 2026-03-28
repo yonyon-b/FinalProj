@@ -97,11 +97,9 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
             @Override
             public void onCompleted(String  uid) {
                 Log.d(TAG, "onCompleted: User logged in: " + uid.toString());
-                /// save the user data to shared preferences
-                // SharedPreferencesUtil.saveUser(LoginActivity.this, user);
-                /// Redirect to main activity and clear back stack to prevent user from going back to login screen
+                databaseService.setupPresenceSystem();
                 Intent mainIntent = new Intent(Login.this, UserActivity.class);
-                /// Clear the back stack (clear history) and start the MainActivity
+                mainIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(mainIntent);
             }
 
@@ -111,9 +109,6 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                 /// Show error message to user
                 etPassword.setError("Invalid email or password");
                 etPassword.requestFocus();
-                /// Sign out the user if failed to retrieve user data
-                /// This is to prevent the user from being logged in again
-                //SharedPreferencesUtil.signOutUser(LoginActivity.this);
             }
         });
     }

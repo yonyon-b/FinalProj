@@ -188,16 +188,22 @@ public class UserProfile extends BaseActivity implements View.OnClickListener {
                     DatabaseReference userTokenRef = FirebaseDatabase.getInstance()
                             .getReference("users")
                             .child(currentUserId)
-                            .child("fcmToken"); // Or whatever key you used to save the token
+                            .child("fcmToken");
 
                     userTokenRef.removeValue().addOnCompleteListener(task -> {
+                        // after removing the token, set user offline and sign out the user
+                        FirebaseDatabase.getInstance().getReference("users")
+                                .child(currentUserId)
+                                .child("isOnline")
+                                .setValue(false)
+                                .addOnCompleteListener(t -> {
+                                    FirebaseAuth.getInstance().signOut();
 
-                        FirebaseAuth.getInstance().signOut();
-
-                        Intent intent = new Intent(UserProfile.this, Login.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        startActivity(intent);
-                        finish();
+                                    Intent intent = new Intent(UserProfile.this, Login.class);
+                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                    startActivity(intent);
+                                    finish();
+                                });
                     });
                     return true;
                 }

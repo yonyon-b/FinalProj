@@ -54,6 +54,7 @@ dependencies {
     implementation libs.credentials.play.services.auth
     implementation libs.googleid
     implementation 'com.github.yalantis:ucrop:2.2.8'
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
     implementation libs.glide
     implementation libs.firebase.firestore
     testImplementation libs.junit

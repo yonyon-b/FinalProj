@@ -299,6 +299,22 @@ public class DatabaseService {
                 });
     }
 
+    public void setupPresenceSystem() {
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        if (mAuth.getCurrentUser() == null) {
+            return; // User isn't logged in, do nothing
+        }
+
+        String currentUserId = mAuth.getCurrentUser().getUid();
+        DatabaseReference userRef = databaseReference.child(USERS_PATH).child(currentUserId);
+
+        // 1. Set the user to 'Online' right now
+        userRef.child("isOnline").setValue(true);
+
+        // 2. Tell the Firebase Server to set it to false when the connection drops
+        userRef.child("isOnline").onDisconnect().setValue(false);
+    }
+
     // endregion
 
 

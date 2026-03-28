@@ -9,6 +9,7 @@ public class User {
     String password;
     String profilePicture;
     Boolean isAdmin;
+    Boolean isOnline;
     ItemCart cart;
 
     public User() {
@@ -23,6 +24,7 @@ public class User {
         this.password = password;
         this.profilePicture = null;
         this.isAdmin = isAdmin;
+        this.isOnline = false;
         this.cart = cart;
     }
 
@@ -84,6 +86,7 @@ public class User {
     public ItemCart getCart(){
         return cart;
     }
+
     public void setCart(ItemCart cart){
         this.cart = cart;
     }
@@ -94,6 +97,14 @@ public class User {
 
     public void setAdmin(Boolean admin) {
         isAdmin = admin;
+    }
+
+    public Boolean getOnline() {
+        return isOnline;
+    }
+
+    public void setOnline(Boolean online) {
+        isOnline = online;
     }
 
     @Override
