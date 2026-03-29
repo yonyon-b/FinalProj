@@ -2,6 +2,7 @@ package com.example.finalproj;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -20,6 +21,7 @@ import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.ValueFormatter;
+import com.google.android.material.color.MaterialColors;
 
 import java.util.ArrayList;
 
@@ -28,6 +30,7 @@ public class MainAdmin extends BaseActivity implements View.OnClickListener {
     private DatabaseService databaseService;
     private PieChart itemPieChart, userPieChart;
     private long lostCount = -1, foundCount = -1, onlineCount = -1, offlineCount = -1;
+    private TextView tvTotalItems, tvTotalUsers, tvOnlineUsers, tvOfflineUsers, tvFoundItems, tvLostItems;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +47,12 @@ public class MainAdmin extends BaseActivity implements View.OnClickListener {
         btnUserList.setOnClickListener(this);
         itemPieChart = findViewById(R.id.itemPieChart);
         userPieChart = findViewById(R.id.userPieChart);
+        tvTotalItems = findViewById(R.id.tvTotalItems);
+        tvTotalUsers = findViewById(R.id.tvTotalUsers);
+        tvOnlineUsers = findViewById(R.id.tvOnlineUsers);
+        tvOfflineUsers = findViewById(R.id.tvOfflineUsers);
+        tvFoundItems = findViewById(R.id.tvFoundItems);
+        tvLostItems = findViewById(R.id.tvLostItems);
 
         setupPieChartStyle(itemPieChart, "Items");
         setupPieChartStyle(userPieChart, "Users");
@@ -86,9 +95,11 @@ public class MainAdmin extends BaseActivity implements View.OnClickListener {
         chart.setDrawHoleEnabled(true);
         chart.setHoleColor(Color.TRANSPARENT);
         chart.setCenterText(centerText);
-        chart.setCenterTextSize(18f);
-        chart.setEntryLabelColor(Color.BLACK);
-        chart.setEntryLabelTextSize(12f);
+        chart.setCenterTextSize(20f);
+        chart.setCenterTextTypeface(Typeface.DEFAULT_BOLD);
+        chart.setCenterTextColor(MaterialColors.getColor(this, android.R.attr.textColorPrimary, Color.BLACK));
+        chart.getLegend().setEnabled(false);
+        chart.setUsePercentValues(true);
     }
     private void checkAndDrawItemChart() {
         if (lostCount != -1 && foundCount != -1) {
@@ -96,13 +107,17 @@ public class MainAdmin extends BaseActivity implements View.OnClickListener {
             ArrayList<PieEntry> entries = new ArrayList<>();
 
             if (lostCount > 0) {
-                entries.add(new PieEntry(lostCount, "Lost"));
+                entries.add(new PieEntry(lostCount));
             }
             if (foundCount > 0) {
-                entries.add(new PieEntry(foundCount, "Found"));
+                entries.add(new PieEntry(foundCount));
             }
 
             PieDataSet dataSet = new PieDataSet(entries, "");
+            dataSet.setValueFormatter(new ValueFormatter() {
+                @Override public String getFormattedValue(float value) {
+                    return (int) value + "%"; }
+            });
             dataSet.setColors(new int[]{ Color.parseColor("#FF6B6B"), Color.parseColor("#4ECDC4") });
             dataSet.setValueTextSize(16f);
             dataSet.setValueTextColor(Color.WHITE);
@@ -111,6 +126,10 @@ public class MainAdmin extends BaseActivity implements View.OnClickListener {
             itemPieChart.setData(data);
             itemPieChart.invalidate();
             itemPieChart.animateY(1000);
+
+            tvTotalItems.setText(String.valueOf(lostCount + foundCount));
+            tvFoundItems.setText("Found: " + foundCount);
+            tvLostItems.setText("Lost: " + lostCount);
         }
     }
     private void checkAndDrawUserChart() {
@@ -118,13 +137,13 @@ public class MainAdmin extends BaseActivity implements View.OnClickListener {
 
             ArrayList<PieEntry> entries = new ArrayList<>();
 
-            if (onlineCount > 0) entries.add(new PieEntry(onlineCount, "Online"));
-            if (offlineCount > 0) entries.add(new PieEntry(offlineCount, "Offline"));
+            if (onlineCount > 0) entries.add(new PieEntry(onlineCount));
+            if (offlineCount > 0) entries.add(new PieEntry(offlineCount));
 
             PieDataSet dataSet = new PieDataSet(entries, "");
             dataSet.setValueFormatter(new ValueFormatter() {
                 @Override public String getFormattedValue(float value) {
-                    return String.valueOf((int) value); }
+                    return (int) value + "%"; }
             });
             dataSet.setColors(new int[]{ Color.parseColor("#4CAF50"), Color.parseColor("#9E9E9E") });
             dataSet.setValueTextSize(16f);
@@ -134,6 +153,10 @@ public class MainAdmin extends BaseActivity implements View.OnClickListener {
             userPieChart.setData(data);
             userPieChart.invalidate();
             userPieChart.animateY(1000);
+
+            tvTotalUsers.setText(String.valueOf(onlineCount + offlineCount));
+            tvOnlineUsers.setText("Online: " + onlineCount);
+            tvOfflineUsers.setText("Offline: " + offlineCount);
         }
     }
 
