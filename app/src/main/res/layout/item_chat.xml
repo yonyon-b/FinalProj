@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:cardBackgroundColor="@android:color/transparent"
+    app:strokeColor="@android:color/transparent"
     android:layout_marginBottom="5dp"
     >
     <LinearLayout
@@ -11,10 +13,10 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:padding="8dp">
-        <androidx.cardview.widget.CardView
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:cardBackgroundColor="?attr/cardBgColor"
+            app:cardBackgroundColor="?attr/userPfpBg"
             app:cardCornerRadius="80dp"
             >
             <ImageView
@@ -27,7 +29,7 @@
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:contentDescription="Message Owner"
                 android:src="@drawable/user_pfp_for_item" />
-        </androidx.cardview.widget.CardView>
+        </com.google.android.material.card.MaterialCardView>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -52,4 +54,4 @@
         </LinearLayout>
     </LinearLayout>
 
-</androidx.cardview.widget.CardView>
+</com.google.android.material.card.MaterialCardView>

@@ -32,6 +32,7 @@
         <item name="imageBg">@color/white</item>
         <item name="imageColor">@color/black</item>
         <item name="userActivityBg">@drawable/gradient_long</item>
+        <item name="userPfpBg">@color/black</item>
     </style>
 
     <style name="Theme.FinalProj.Light" parent="Theme.Material3.Light.NoActionBar">
@@ -58,6 +59,7 @@
         <item name="imageBg">@color/white</item>
         <item name="imageColor">@color/black</item>
         <item name="userActivityBg">@color/white</item>
+        <item name="userPfpBg">@color/white</item>
     </style>
 
     <style name="Theme.FinalProj.Dark" parent="Theme.Material3.Dark.NoActionBar">
@@ -84,6 +86,7 @@
         <item name="imageBg">@color/black</item>
         <item name="imageColor">@color/white</item>
         <item name="userActivityBg">@color/black</item>
+        <item name="userPfpBg">@color/black</item>
     </style>
 
     <style name="numberPickerTheme" parent="Theme.Material3.DayNight.NoActionBar">

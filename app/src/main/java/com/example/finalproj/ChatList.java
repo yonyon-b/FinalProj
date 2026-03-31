@@ -31,7 +31,6 @@ public class ChatList extends BaseActivity {
     private List<Chat> chatList = new ArrayList<>();
     private DatabaseReference chatsRef;
     private String currentUserId;
-    private Button btnChatAi;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,10 +45,6 @@ public class ChatList extends BaseActivity {
 
         currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         chatsRef = FirebaseDatabase.getInstance().getReference("chats");
-        btnChatAi = findViewById(R.id.btn_chat_ai);
-        btnChatAi.setOnClickListener(view -> {
-            startActivity(new Intent(this, ChatActivity.class));
-        });
 
         recyclerView = findViewById(R.id.chatListRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -64,16 +59,32 @@ public class ChatList extends BaseActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 chatList.clear();
+                Chat aiChat = new Chat();
+                aiChat.setChatId(currentUserId + "_gemini_ai_bot");
+                java.util.HashMap<String, Boolean> aiMembers = new java.util.HashMap<>();
+                aiMembers.put(currentUserId, true);
+                aiMembers.put("gemini_ai_bot", true);
+                aiChat.setMembers(aiMembers);
+                aiChat.setLastMessage("Tap to chat with Gemini AI");
+                boolean aiChatExists = false;
                 for (DataSnapshot chatSnapshot : snapshot.getChildren()) {
                     if (chatSnapshot.getKey() != null && !chatSnapshot.getKey().contains("gemini_ai_bot")) {
                         if (chatSnapshot.child("members").hasChild(currentUserId)) {
                             Chat chat = chatSnapshot.getValue(Chat.class);
                             if (chat != null) {
                                 chat.setChatId(chatSnapshot.getKey());
-                                chatList.add(chat);
+                                if (chatSnapshot.getKey().contains("gemini_ai_bot")) {
+                                    aiChatExists = true;
+                                    chatList.add(0, aiChat);
+                                } else {
+                                    chatList.add(chat);
+                                }
                             }
                         }
                     }
+                }
+                if (!aiChatExists) {
+                    chatList.add(0, aiChat);
                 }
                 adapter.notifyDataSetChanged();
             }
@@ -83,6 +94,6 @@ public class ChatList extends BaseActivity {
         });
     }
     protected int getNavigationMenuItemId() {
-        return 0;
+        return R.id.nav_chat;
     }
 }

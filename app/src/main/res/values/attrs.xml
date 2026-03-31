@@ -12,5 +12,6 @@
     <attr name="cardStrokeColor" format="color|reference" />
     <attr name="imageBg" format="color|reference" />
     <attr name="imageColor" format="color|reference" />
-    <attr name="userActivityBg" format="color|reference" />"
+    <attr name="userActivityBg" format="color|reference" />
+    <attr name="userPfpBg" format="color|reference" />
 </resources>

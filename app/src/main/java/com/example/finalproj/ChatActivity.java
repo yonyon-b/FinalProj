@@ -76,9 +76,10 @@ public class ChatActivity extends AppCompatActivity {
         });
         chatToolBar = findViewById(R.id.chat_toolbar);
         currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        DatabaseService.getInstance().setupPresenceSystem(); // set user online when opening the app from chat notification
         otherUserId = getIntent().getStringExtra("otherUserId");
 
-        if (otherUserId != null) {
+        if (otherUserId != null && !otherUserId.equals("gemini_ai_bot")) {
             // normal chat
             chatId = currentUserId.compareTo(otherUserId) < 0
                     ? currentUserId + "_" + otherUserId

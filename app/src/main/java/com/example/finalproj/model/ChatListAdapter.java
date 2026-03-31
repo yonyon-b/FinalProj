@@ -53,40 +53,52 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ChatVi
         }
         final String finalOtherUserId = otherUserId;
 
-        DatabaseService.getInstance().getUser(finalOtherUserId, new DatabaseService.DatabaseCallback<User>() {
-            @Override
-            public void onCompleted(User otherUser) {
-                String otherUserFullName = otherUser.getfName() + " " + otherUser.getlName();
-                holder.otherUserName.setText("Chat with " + otherUserFullName);
+        if (finalOtherUserId.equals("gemini_ai_bot")) {
+            holder.otherUserName.setText("Chat with Gemini AI");
+            holder.otherUserPfp.setImageResource(R.drawable.ai_chat_image);
 
-                String base64String = otherUser.getProfilePicture();
-                if (base64String != null && !base64String.isEmpty()) {
-                    byte[] imageByteArray = Base64.decode(base64String, Base64.DEFAULT);
-                    // Use Glide to load the byte array into the single ImageView
-                    Glide.with(context)
-                            .asBitmap()
-                            .load(imageByteArray)
-                            .placeholder(R.drawable.user_pfp_for_item) // placeholder while loading
-                            .error(R.drawable.user_pfp_for_item)       // fallback on error
-                            .diskCacheStrategy(DiskCacheStrategy.NONE)      // don't cache raw byte arrays to disk
-                            .into(holder.otherUserPfp);
-                } else {
-                    holder.otherUserPfp.setImageResource(R.drawable.user_pfp_for_item);
+            holder.itemView.setOnClickListener(v -> {
+                Intent intent = new Intent(context, ChatActivity.class);
+                intent.putExtra("otherUserId", "gemini_ai_bot");
+                context.startActivity(intent);
+            });
+        }
+        else {
+            DatabaseService.getInstance().getUser(finalOtherUserId, new DatabaseService.DatabaseCallback<User>() {
+                @Override
+                public void onCompleted(User otherUser) {
+                    String otherUserFullName = otherUser.getfName() + " " + otherUser.getlName();
+                    holder.otherUserName.setText("Chat with " + otherUserFullName);
+
+                    String base64String = otherUser.getProfilePicture();
+                    if (base64String != null && !base64String.isEmpty()) {
+                        byte[] imageByteArray = Base64.decode(base64String, Base64.DEFAULT);
+                        // Use Glide to load the byte array into the single ImageView
+                        Glide.with(context)
+                                .asBitmap()
+                                .load(imageByteArray)
+                                .placeholder(R.drawable.user_pfp_for_item) // placeholder while loading
+                                .error(R.drawable.user_pfp_for_item)       // fallback on error
+                                .diskCacheStrategy(DiskCacheStrategy.NONE)      // don't cache raw byte arrays to disk
+                                .into(holder.otherUserPfp);
+                    } else {
+                        holder.otherUserPfp.setImageResource(R.drawable.user_pfp_for_item);
+                    }
                 }
-            }
 
-            @Override
-            public void onFailed(Exception e) {
-                holder.otherUserName.setText("Unknown User");
-            }
-        });
+                @Override
+                public void onFailed(Exception e) {
+                    holder.otherUserName.setText("Unknown User");
+                }
+            });
 
-        holder.itemView.setOnClickListener(v -> {
-            Intent intent = new Intent(context, ChatActivity.class);
-            Log.d("otherUserId: ", finalOtherUserId.toString());
-            intent.putExtra("otherUserId", finalOtherUserId);
-            context.startActivity(intent);
-        });
+            holder.itemView.setOnClickListener(v -> {
+                Intent intent = new Intent(context, ChatActivity.class);
+                Log.d("otherUserId: ", finalOtherUserId.toString());
+                intent.putExtra("otherUserId", finalOtherUserId);
+                context.startActivity(intent);
+            });
+        }
     }
 
     @Override
