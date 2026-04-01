@@ -39,7 +39,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserProfile extends BaseActivity implements View.OnClickListener {
-    private TextView userName, phoneNumber, mail;
+    private TextView userName, phoneNumber, mail, emptyList;
     private String uid, fullName, phoneNum, email;
     private ImageView pfp;
     private Button editProfile, allItems;
@@ -70,6 +70,7 @@ public class UserProfile extends BaseActivity implements View.OnClickListener {
         editProfile = findViewById(R.id.btnEditProfile);
         userItemList = findViewById(R.id.rvUserProfile);
         ivProfileMenu = findViewById(R.id.ivProfileMenu);
+        emptyList = findViewById(R.id.tvEmptyList);
         allItems = findViewById(R.id.btnAllPostedItems);
         allItems.setOnClickListener(this);
         editProfile.setOnClickListener(this);
@@ -102,7 +103,6 @@ public class UserProfile extends BaseActivity implements View.OnClickListener {
                     pfp.setImageBitmap(ImageUtil.convertFrom64base(user.getProfilePicture()));
                 }
             }
-
             @Override
             public void onFailed(Exception e) {
 
@@ -151,7 +151,12 @@ public class UserProfile extends BaseActivity implements View.OnClickListener {
                 int size = userItems.size();
                 if (size > 2) {
                     dataList.addAll(userItems.subList(size - 2, size));
-                } else {
+                }
+                else if (size == 0){
+                    userItemList.setVisibility(View.GONE);
+                    emptyList.setVisibility(View.VISIBLE);
+                }
+                else {
                     dataList.addAll(userItems);
                 }
 

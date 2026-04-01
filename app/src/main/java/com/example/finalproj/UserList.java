@@ -7,6 +7,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.core.graphics.Insets;
@@ -98,13 +99,16 @@ public class UserList extends BaseActivity {
                             }
                         });
                         return true;
-
-                    } else if (id == R.id.action_delete) {
-
-                        Log.d(TAG, "Delete user: " + user.getId());
+                    } else if (id == R.id.action_message_user) {
+                        if (!user.getId().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
+                            Intent intent = new Intent(UserList.this, ChatActivity.class);
+                            intent.putExtra("otherUserId", user.getId());
+                            startActivity(intent);
+                        } else{
+                            Toast.makeText(UserList.this, "This is your profile!", Toast.LENGTH_SHORT).show();
+                        }
                         return true;
                     }
-
                     return false;
                 });
 

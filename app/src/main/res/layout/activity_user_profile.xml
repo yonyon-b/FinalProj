@@ -129,4 +129,19 @@
             android:layout_margin="10dp"
             android:padding="5dp"
             tools:listitem="@layout/item_row"/>
+        <TextView
+            android:id="@+id/tvEmptyList"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Item list seems to be empty!"
+            android:textSize="25sp"
+            android:textColor="?android:attr/textColorPrimary"
+            android:textStyle="bold"
+            android:drawableBottom="@drawable/empty_list_image"
+            app:layout_constraintTop_toBottomOf="@id/txtMyItems"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:visibility="gone"
+            />
 </androidx.constraintlayout.widget.ConstraintLayout>

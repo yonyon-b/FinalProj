@@ -3,12 +3,10 @@
     <item
         android:id="@+id/action_view_profile"
         android:title="View Profile" />
-
+    <item
+        android:id="@+id/action_message_user"
+        android:title="Message User" />
     <item
         android:id="@+id/action_admin"
         android:title="Make Admin" />
-
-    <item
-        android:id="@+id/action_delete"
-        android:title="Delete User" />
 </menu>

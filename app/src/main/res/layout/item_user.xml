@@ -25,19 +25,16 @@
             android:layout_height="56dp"
             app:cardCornerRadius="28dp"
             app:cardElevation="0dp"
-            app:cardBackgroundColor="?attr/colorSurfaceVariant">
-
-            <TextView
-                android:id="@+id/tv_user_initials"
+            app:cardBackgroundColor="?attr/userPfpBg">
+            <ImageView
+                android:id="@+id/iv_item_user_pfp"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="JD"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:textColor="?attr/colorPrimary"
+                android:layout_gravity="center"
+                android:scaleType="centerCrop"
+                android:adjustViewBounds="true"
+                android:src="@drawable/user_pfp"
                 />
-
         </com.google.android.material.card.MaterialCardView>
 
         <LinearLayout

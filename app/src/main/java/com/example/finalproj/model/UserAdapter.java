@@ -1,5 +1,6 @@
 package com.example.finalproj.model;
 
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.finalproj.R;
 import com.example.finalproj.model.User;
 import com.example.finalproj.services.DatabaseService;
@@ -50,15 +53,24 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
         holder.tvEmail.setText(user.getEmail());
         holder.tvPhone.setText(user.getPhone());
 
-        // Set initials
-        String initials = "";
-        if (user.getfName() != null && !user.getfName().isEmpty()) {
-            initials += user.getfName().charAt(0);
+        if (user.getProfilePicture() != null) {
+            String base64String = user.getProfilePicture();
+            if (base64String != null && !base64String.isEmpty()) {
+                // Decode the Base64 string to a byte array
+                byte[] imageByteArray = Base64.decode(base64String, Base64.DEFAULT);
+
+                // Use Glide to load the byte array into the single ImageView
+                Glide.with(holder.itemView.getContext())
+                        .asBitmap()
+                        .load(imageByteArray)
+                        .placeholder(R.drawable.user_pfp) // placeholder while loading
+                        .error(R.drawable.user_pfp)       // fallback on error
+                        .diskCacheStrategy(DiskCacheStrategy.NONE)      // don't cache raw byte arrays to disk
+                        .into(holder.ivPfp);
+            } else {
+                holder.ivPfp.setImageResource(R.drawable.user_pfp);
+            }
         }
-        if (user.getlName() != null && !user.getlName().isEmpty()) {
-            initials += user.getlName().charAt(0);
-        }
-        holder.tvInitials.setText(initials.toUpperCase());
 
         // Show admin chip if user is admin
         if (user.getAdmin()) {
@@ -114,7 +126,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView tvName, tvEmail, tvPhone, tvInitials;
-        ImageView imgRemove;
+        ImageView ivPfp;
         Chip chipRole;
 
         public ViewHolder(@NonNull View itemView) {
@@ -122,7 +134,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
             tvName = itemView.findViewById(R.id.tv_item_user_name);
             tvEmail = itemView.findViewById(R.id.tv_item_user_email);
             tvPhone = itemView.findViewById(R.id.tv_item_user_phone);
-            tvInitials = itemView.findViewById(R.id.tv_user_initials);
+            ivPfp = itemView.findViewById(R.id.iv_item_user_pfp);
             chipRole = itemView.findViewById(R.id.chip_user_role);
         }
     }
