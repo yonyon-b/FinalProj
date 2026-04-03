@@ -123,6 +123,9 @@ public class EditProfile extends BaseActivity implements View.OnClickListener {
                         @Override
                         public void onCompleted(Void object) {
                             Log.d(TAG, "User updated.");
+                            Intent i = new Intent(EditProfile.this, UserProfile.class);
+                            startActivity(i);
+                            finish();
                         }
 
                         @Override
@@ -130,8 +133,6 @@ public class EditProfile extends BaseActivity implements View.OnClickListener {
                             Log.e(TAG, "User failed to update", e);
                         }
                     });
-                    Intent i = new Intent(EditProfile.this, UserProfile.class);
-                    startActivity(i);
                 }
 
                 @Override

@@ -50,7 +50,7 @@ public class ProfilePicSetUp extends AppCompatActivity implements View.OnClickLi
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        btnSubmit = findViewById(R.id.btnSumbitPfp);
+        btnSubmit = findViewById(R.id.btnSubmitPfp);
         btnSkip = findViewById(R.id.btnSkipPfp);
         imagePfp = findViewById(R.id.imgChangePfp);
         imageCamera = findViewById(R.id.imgCameraPfp);
@@ -97,6 +97,9 @@ public class ProfilePicSetUp extends AppCompatActivity implements View.OnClickLi
                         @Override
                         public void onCompleted(Void object) {
                             Log.d(TAG, "User updated.");
+                            Intent i = new Intent(ProfilePicSetUp.this, UserActivity.class);
+                            startActivity(i);
+                            finish();
                         }
 
                         @Override
@@ -104,8 +107,7 @@ public class ProfilePicSetUp extends AppCompatActivity implements View.OnClickLi
                             Log.e(TAG, "User failed to update", e);
                         }
                     });
-                    Intent i = new Intent(ProfilePicSetUp.this, UserActivity.class);
-                    startActivity(i);
+
                 }
 
                 @Override

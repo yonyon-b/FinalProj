@@ -21,6 +21,7 @@ import android.content.res.ColorStateList;
 
 import androidx.appcompat.widget.SearchView;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -111,7 +112,7 @@ public class ItemList extends BaseActivity {
             public void onCompleted(List<Item> items) {
                 allItems.clear();
                 allItems.addAll(items);
-
+                Collections.reverse(allItems);
                 applyFilters();
             }
 

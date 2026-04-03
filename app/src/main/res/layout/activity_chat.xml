@@ -13,11 +13,24 @@
         android:orientation="horizontal"
         android:padding="3dp"
         android:elevation="4dp">
+        <ImageButton
+            android:id="@+id/ib_back_chat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxWidth="32dp"
+            android:maxHeight="40dp"
+            android:scaleType="centerCrop"
+            android:adjustViewBounds="true"
+            android:background="@android:color/transparent"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/back_arrow"
+            />
         <androidx.cardview.widget.CardView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:cardCornerRadius="48dp"
-            app:cardBackgroundColor="@android:color/transparent">
+            app:cardBackgroundColor="@android:color/transparent"
+            android:layout_marginStart="10dp">
             <ImageView
                 android:id="@+id/imgOtherUserPfp"
                 android:layout_width="wrap_content"

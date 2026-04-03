@@ -50,7 +50,7 @@ import java.util.concurrent.Executors;
 public class ChatActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private EditText chatBox;
-    private ImageButton sendBtn;
+    private ImageButton sendBtn, backBtn;
     private TextView otherUserName;
     private ImageView otherUserPfp;
     private LinearLayout chatToolBar;
@@ -99,6 +99,7 @@ public class ChatActivity extends AppCompatActivity {
         sendBtn = findViewById(R.id.button_chatbox_send);
         otherUserName = findViewById(R.id.tvOtherUserName);
         otherUserPfp = findViewById(R.id.imgOtherUserPfp);
+        backBtn = findViewById(R.id.ib_back_chat);
 
         if (!otherUserId.equals("gemini_ai_bot")) {
             otherUserName.setOnClickListener(v -> {
@@ -156,6 +157,11 @@ public class ChatActivity extends AppCompatActivity {
 
                 chatBox.setText("");
             }
+        });
+        backBtn.setOnClickListener(v -> {
+            Intent i = new Intent(this, ChatList.class);
+            startActivity(i);
+            finish();
         });
     }
 

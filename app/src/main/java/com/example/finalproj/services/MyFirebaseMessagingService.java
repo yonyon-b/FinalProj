@@ -12,6 +12,7 @@ import androidx.preference.PreferenceManager;
 
 import com.example.finalproj.ChatActivity;
 import com.example.finalproj.R;
+import com.example.finalproj.model.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
@@ -19,6 +20,8 @@ import com.google.firebase.messaging.RemoteMessage;
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     private static final String CHANNEL_ID = "chat_notifications";
+    private String senderName;
+
 
     @Override
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
@@ -59,14 +62,26 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             notificationManager.createNotificationChannel(channel);
         }
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
-                .setSmallIcon(R.mipmap.ic_launcher)
-                .setContentTitle("New Message")
-                .setContentText(messageText)
-                .setAutoCancel(true)
-                .setPriority(NotificationCompat.PRIORITY_HIGH)
-                .setContentIntent(pendingIntent);
+        DatabaseService.getInstance().getUser(senderId, new DatabaseService.DatabaseCallback<User>() {
+            @Override
+            public void onCompleted(User sender) {
+                senderName = sender.getfName() + " " + sender.getlName();
+                NotificationCompat.Builder builder = new NotificationCompat.Builder(MyFirebaseMessagingService.this, CHANNEL_ID)
+                        .setSmallIcon(R.mipmap.ic_launcher)
+                        .setContentTitle(senderName + " sent you a message!")
+                        .setContentText(messageText)
+                        .setAutoCancel(true)
+                        .setPriority(NotificationCompat.PRIORITY_HIGH)
+                        .setContentIntent(pendingIntent);
 
-        notificationManager.notify((int) System.currentTimeMillis(), builder.build());
+                notificationManager.notify((int) System.currentTimeMillis(), builder.build());
+            }
+
+            @Override
+            public void onFailed(Exception e) {
+
+            }
+        });
+
     }
 }

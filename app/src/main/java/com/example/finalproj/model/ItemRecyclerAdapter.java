@@ -94,41 +94,54 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter<ItemRecyclerAdapte
             intent.putExtra("USER_UID", ownerId);
             context.startActivity(intent);
         });
-        if (item.getUserId().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())){
-            holder.btnDeleteItem.setVisibility(View.VISIBLE);
+        String currentUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-            holder.btnDeleteItem.setOnClickListener(v -> {
-                int currentPosition = holder.getAdapterPosition();
-                if (currentPosition == RecyclerView.NO_POSITION) return;
+        // if item belongs to current user or current user is admin, show delete button
+        databaseService.getUser(currentUid, new DatabaseService.DatabaseCallback<User>() {
+            @Override
+            public void onCompleted(User currentUser) {
 
-                new android.app.AlertDialog.Builder(context)
-                        .setTitle("Delete Item")
-                        .setMessage("Are you sure you want to delete this item? This action cannot be undone.")
-                        .setPositiveButton("Delete", (dialog, which) -> {
-                            databaseService.deleteItem(item.getId(), new DatabaseService.DatabaseCallback<Void>() {
-                                @Override
-                                public void onCompleted(Void object) {
-                                    Toast.makeText(context, "Item Deleted Successfully!", Toast.LENGTH_SHORT).show();
-                                    items.remove(currentPosition);
-                                    notifyItemRemoved(currentPosition);
-                                }
+                if (item.getUserId().equals(currentUid) || currentUser.getAdmin()){
 
-                                @Override
-                                public void onFailed(Exception e) {
-                                    Toast.makeText(context, "An error occurred while removing the item!", Toast.LENGTH_SHORT).show();
-                                }
-                            });
+                    holder.btnDeleteItem.setVisibility(View.VISIBLE);
 
-                        })
-                        .setNegativeButton("Cancel", (dialog, which) -> {
-                            dialog.dismiss();
-                        })
-                        .show();
-            });
-        } else {
-            holder.btnDeleteItem.setVisibility(View.GONE);
-            holder.btnDeleteItem.setOnClickListener(null);
-        }
+                    holder.btnDeleteItem.setOnClickListener(v -> {
+                        int currentPosition = holder.getAdapterPosition();
+                        if (currentPosition == RecyclerView.NO_POSITION) return;
+
+                        new android.app.AlertDialog.Builder(context)
+                                .setTitle("Delete Item")
+                                .setMessage("Are you sure you want to delete this item? This action cannot be undone.")
+                                .setPositiveButton("Delete", (dialog, which) -> {
+                                    databaseService.deleteItem(item.getId(), new DatabaseService.DatabaseCallback<Void>() {
+                                        @Override
+                                        public void onCompleted(Void object) {
+                                            Toast.makeText(context, "Item Deleted Successfully!", Toast.LENGTH_SHORT).show();
+                                            items.remove(currentPosition);
+                                            notifyItemRemoved(currentPosition);
+                                        }
+
+                                        @Override
+                                        public void onFailed(Exception e) {
+                                            Toast.makeText(context, "An error occurred while removing the item!", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+
+                                })
+                                .setNegativeButton("Cancel", (dialog, which) -> {
+                                    dialog.dismiss();
+                                })
+                                .show();
+                    });
+                } else {
+                    holder.btnDeleteItem.setVisibility(View.GONE);
+                    holder.btnDeleteItem.setOnClickListener(null);
+                }
+            }
+
+            @Override public void onFailed(Exception e) {}
+        });
+
         // load profile picture into imageButton
         databaseService.getUser(item.getUserId(), new DatabaseService.DatabaseCallback<User>() {
             @Override

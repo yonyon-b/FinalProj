@@ -23,6 +23,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class ChatList extends BaseActivity {
@@ -66,26 +67,23 @@ public class ChatList extends BaseActivity {
                 aiMembers.put("gemini_ai_bot", true);
                 aiChat.setMembers(aiMembers);
                 aiChat.setLastMessage("Tap to chat with Gemini AI");
-                boolean aiChatExists = false;
+
                 for (DataSnapshot chatSnapshot : snapshot.getChildren()) {
                     if (chatSnapshot.getKey() != null && !chatSnapshot.getKey().contains("gemini_ai_bot")) {
+
                         if (chatSnapshot.child("members").hasChild(currentUserId)) {
                             Chat chat = chatSnapshot.getValue(Chat.class);
+
                             if (chat != null) {
                                 chat.setChatId(chatSnapshot.getKey());
-                                if (chatSnapshot.getKey().contains("gemini_ai_bot")) {
-                                    aiChatExists = true;
-                                    chatList.add(0, aiChat);
-                                } else {
-                                    chatList.add(chat);
-                                }
+                                chatList.add(chat);
                             }
                         }
                     }
                 }
-                if (!aiChatExists) {
-                    chatList.add(0, aiChat);
-                }
+                Collections.reverse(chatList);
+                chatList.add(0, aiChat);
+
                 adapter.notifyDataSetChanged();
             }
 

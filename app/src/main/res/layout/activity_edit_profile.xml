@@ -39,15 +39,15 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical">
                 <androidx.cardview.widget.CardView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="20dp"
                     app:cardBackgroundColor="?attr/colorSurface"
                     app:cardCornerRadius="100dp">
                     <ImageView
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         android:src="@drawable/user_pfp"
                         android:scaleType="centerCrop"
                         android:adjustViewBounds="true"
@@ -215,7 +215,7 @@
                     android:layout_gravity="center"
                     android:layout_margin="20dp"
                     android:backgroundTint="?attr/colorPrimary"
-                    android:textColor="?attr/colorOnSurface"
+                    android:textColor="?android:attr/textColorSecondary"
                     android:text="Submit"
                     android:id="@+id/btnSubmitEdit"/>
             </LinearLayout>
