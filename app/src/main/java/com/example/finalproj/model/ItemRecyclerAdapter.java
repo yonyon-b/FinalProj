@@ -69,8 +69,6 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter<ItemRecyclerAdapte
         holder.txtDetails.setText(Html.fromHtml("<b>Details:</b> " + item.getDetails()));
 
         holder.btnChat.setOnClickListener(v -> {
-            // IMPORTANT: Replace 'getUserId()' with whatever method your Item.java
-            // uses to return the ID of the person who uploaded the item.
             String ownerId = item.getUserId();
             String currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
@@ -98,18 +96,21 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter<ItemRecyclerAdapte
         });
         if (item.getUserId().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())){
             holder.btnDeleteItem.setVisibility(View.VISIBLE);
+
             holder.btnDeleteItem.setOnClickListener(v -> {
-                new android.app.AlertDialog.Builder(context) // Make sure 'context' is available in your adapter
+                int currentPosition = holder.getAdapterPosition();
+                if (currentPosition == RecyclerView.NO_POSITION) return;
+
+                new android.app.AlertDialog.Builder(context)
                         .setTitle("Delete Item")
                         .setMessage("Are you sure you want to delete this item? This action cannot be undone.")
                         .setPositiveButton("Delete", (dialog, which) -> {
-
                             databaseService.deleteItem(item.getId(), new DatabaseService.DatabaseCallback<Void>() {
                                 @Override
                                 public void onCompleted(Void object) {
                                     Toast.makeText(context, "Item Deleted Successfully!", Toast.LENGTH_SHORT).show();
-                                    items.remove(position);
-                                    notifyItemRemoved(position);
+                                    items.remove(currentPosition);
+                                    notifyItemRemoved(currentPosition);
                                 }
 
                                 @Override
@@ -124,6 +125,9 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter<ItemRecyclerAdapte
                         })
                         .show();
             });
+        } else {
+            holder.btnDeleteItem.setVisibility(View.GONE);
+            holder.btnDeleteItem.setOnClickListener(null);
         }
         // load profile picture into imageButton
         databaseService.getUser(item.getUserId(), new DatabaseService.DatabaseCallback<User>() {

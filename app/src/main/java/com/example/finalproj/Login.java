@@ -74,16 +74,6 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
 
             editor.commit();
 
-            /// log the email and password
-            Log.d(TAG, "onClick: Email: " + email);
-            Log.d(TAG, "onClick: Password: " + password);
-
-            Log.d(TAG, "onClick: Validating input...");
-            /// Validate input
-
-            Log.d(TAG, "onClick: Logging in user...");
-
-            /// Login user
             loginUser(email, password);
         }
         if (v.getId() == tvSignUp.getId()){

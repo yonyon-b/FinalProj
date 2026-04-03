@@ -81,6 +81,9 @@ public class EditProfile extends BaseActivity implements View.OnClickListener {
                 fName.setText(user.getfName());
                 lName.setText(user.getlName());
                 phoneNum.setText(user.getPhone());
+                if (user.getProfilePicture() != null){
+                    pfp.setImageBitmap(ImageUtil.convertFrom64base(user.getProfilePicture()));
+                }
             }
 
             @Override

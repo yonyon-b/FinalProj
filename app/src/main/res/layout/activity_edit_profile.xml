@@ -61,24 +61,25 @@
                     android:layout_marginTop="10dp"
                     android:layout_gravity="center_horizontal"
                     android:backgroundTint="?attr/colorPrimary"
-                    android:textColor="?attr/colorOnSurface"
+                    android:textColor="?android:attr/textColorSecondary"
                     android:id="@+id/btnChangePfp"/>
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:visibility="invisible"
+                    android:visibility="gone"
                     android:id="@+id/picturesLayout">
                     <View
                         android:layout_width="0dp"
                         android:layout_height="1dp"
                         android:layout_weight="1"/>
 
-                    <androidx.cardview.widget.CardView
+                    <com.google.android.material.card.MaterialCardView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        app:cardBackgroundColor="?attr/colorSurface"
+                        app:cardBackgroundColor="@android:color/transparent"
+                        app:strokeColor="@android:color/transparent"
                         app:contentPadding="10dp"
                         app:cardCornerRadius="100dp">
                         <ImageView
@@ -86,20 +87,20 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:src="@drawable/camera_image"
-                            app:tint="?android:attr/textColorPrimary"
                             />
-                    </androidx.cardview.widget.CardView>
+                    </com.google.android.material.card.MaterialCardView>
 
                     <View
                         android:layout_width="0dp"
                         android:layout_height="1dp"
                         android:layout_weight="1"/>
 
-                    <androidx.cardview.widget.CardView
+                    <com.google.android.material.card.MaterialCardView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        app:cardBackgroundColor="?attr/colorSurface"
+                        app:cardBackgroundColor="@android:color/transparent"
+                        app:strokeColor="@android:color/transparent"
                         app:contentPadding="10dp"
                         app:cardCornerRadius="100dp">
                         <ImageView
@@ -107,9 +108,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:src="@drawable/gallery_image"
-                            app:tint="?android:attr/textColorPrimary"
                             />
-                    </androidx.cardview.widget.CardView>
+                    </com.google.android.material.card.MaterialCardView>
                     <View
                         android:layout_width="0dp"
                         android:layout_height="1dp"

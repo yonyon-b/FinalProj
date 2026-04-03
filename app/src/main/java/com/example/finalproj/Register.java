@@ -25,6 +25,7 @@ import com.example.finalproj.services.DatabaseService;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 
 public class Register extends AppCompatActivity implements View.OnClickListener {
 
@@ -101,61 +102,43 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
             startActivity(i);
         }
     }
-    /// Register the user
     private void registerUser(String fname, String lname, String phone, String email, String password) {
         Log.d(TAG, "registerUser: Registering user...");
 
-        databaseService.checkIfEmailExists(email, new DatabaseService.DatabaseCallback<>() {
-            @Override
-            public void onCompleted(Boolean exists) {
-                if (exists) {
-                    Log.e(TAG, "onCompleted: Email already exists");
-                    /// show error message to user
-                    Toast.makeText(Register.this, "Email already exists", Toast.LENGTH_SHORT).show();
-                } else {
-                    mAuth.createUserWithEmailAndPassword(email, password)
-                            .addOnCompleteListener(authTask -> {
+        mAuth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(authTask -> {
+                    if (authTask.isSuccessful()) {
+                        // Registration successful, add user to database
+                        String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                        User user = new User(uid, fname, lname, email, phone, password, false);
 
-                                if (!authTask.isSuccessful()) {
-                                    Toast.makeText(Register.this, "Authentication failed", Toast.LENGTH_SHORT).show();
-                                    return;
-                                }
+                        createUserInDatabase(user);
 
-                                String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-
-                                User user = new User(uid, fname, lname, email, phone, password, false);
-
-                                createUserInDatabase(user);
-                            });
-
-                    SharedPreferences.Editor editor = sharedpreferences.edit();
-
-                    editor.putString("email", email);
-                    editor.putString("password", password);
-
-                    editor.commit();
-                }
-            }
-            @Override
-            public void onFailed(Exception e) {
-                Log.e(TAG, "onFailed: Failed to check if email exists", e);
-                /// show error message to user
-                Toast.makeText(Register.this, "Failed to register user", Toast.LENGTH_SHORT).show();
-            }
-        });
+                        // Save to SharedPreferences
+                        SharedPreferences.Editor editor = sharedpreferences.edit();
+                        editor.putString("email", email);
+                        editor.putString("password", password);
+                        editor.apply(); // use apply() instead of commit() for background saving
+                    } else {
+                        // Check if the error is because the email already exists
+                        if (authTask.getException() instanceof FirebaseAuthUserCollisionException) {
+                            Log.e(TAG, "onCompleted: Email already exists");
+                            Toast.makeText(Register.this, "Email already exists", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Log.e(TAG, "Registration Failed", authTask.getException());
+                            Toast.makeText(Register.this, "Authentication failed: " + authTask.getException().getMessage(), Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
     }
 
     private void createUserInDatabase(User user) {
         databaseService.createNewUser(user, new DatabaseService.DatabaseCallback<Void>() {
             @Override
             public void onCompleted(Void object) {
-                Log.d(TAG, "createUserInDatabase: User created successfully");
-                /// save the user to shared preferences
-
                 Log.d(TAG, "createUserInDatabase: Redirecting to MainActivity");
-                /// Redirect to MainActivity and clear back stack to prevent user from going back to register screen
+                databaseService.setupPresenceSystem();
                 Intent intent = new Intent(Register.this, ProfilePicSetUp.class);
-                /// clear the back stack (clear history) and start the MainActivity
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
             }
@@ -163,10 +146,7 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
             @Override
             public void onFailed(Exception e) {
                 Log.e(TAG, "createUserInDatabase: Failed to create user", e);
-                /// show error message to user
                 Toast.makeText(Register.this, "Failed to register user", Toast.LENGTH_SHORT).show();
-                /// sign out the user if failed to register
-
             }
         });
     }
