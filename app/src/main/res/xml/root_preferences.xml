@@ -7,7 +7,9 @@
             app:entryValues="@array/theme_values"
             app:key="theme_preference"
             app:title="App Theme"
-            app:useSimpleSummaryProvider="true"
+            app:icon="@drawable/home"
+            app:summary="Choose your app theme"
+            app:layout="@layout/preference_layout"
             />
     </PreferenceCategory>
 
@@ -16,23 +18,27 @@
             app:defaultValue="true"
             app:key="daily_reminder"
             app:title="Daily Reminders"
-            app:summary="Receive a daily notification reminder" />
+            app:summary="Receive a daily notification reminder"
+            app:icon="@drawable/notification_image"
+            app:layout="@layout/preference_layout"
+            />
 
         <SwitchPreferenceCompat
             app:defaultValue="true"
             app:key="chat_notifications"
             app:title="Chat Notifications"
-            app:summary="Receive alerts for new messages" />
+            app:summary="Receive alerts for new messages"
+            app:icon="@drawable/notification_image"
+            app:layout="@layout/preference_layout"
+            />
     </PreferenceCategory>
 
     <PreferenceCategory app:title="Account">
         <Preference
-            app:key="edit_profile"
-            app:title="Edit Profile"
-            app:summary="Change your name, bio, and profile picture" />
-
-        <Preference
             app:key="log_out"
-            app:title="Log Out" />
+            app:title="Log Out"
+            app:summary="Sign out and return to login screen"
+            app:icon="@drawable/logout_image"
+            app:layout="@layout/preference_layout"/>
     </PreferenceCategory>
 </androidx.preference.PreferenceScreen>

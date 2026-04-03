@@ -43,7 +43,7 @@ public class UserProfile extends BaseActivity implements View.OnClickListener {
     private String uid, fullName, phoneNum, email;
     private ImageView pfp;
     private Button editProfile, allItems;
-    private ImageButton ivProfileMenu;
+    private ImageButton ibSettings;
     private RecyclerView userItemList;
     private ItemRecyclerAdapter adapter;
     private ArrayList<Item> dataList = new ArrayList<>();
@@ -69,12 +69,12 @@ public class UserProfile extends BaseActivity implements View.OnClickListener {
         pfp = findViewById(R.id.userProfilePfp);
         editProfile = findViewById(R.id.btnEditProfile);
         userItemList = findViewById(R.id.rvUserProfile);
-        ivProfileMenu = findViewById(R.id.ivProfileMenu);
+        ibSettings = findViewById(R.id.ibSettings);
         emptyList = findViewById(R.id.tvEmptyList);
         allItems = findViewById(R.id.btnAllPostedItems);
         allItems.setOnClickListener(this);
         editProfile.setOnClickListener(this);
-        ivProfileMenu.setOnClickListener(this);
+        ibSettings.setOnClickListener(this);
 
         userItemList.setLayoutManager(new LinearLayoutManager(this));
         userItemList.setHasFixedSize(true);
@@ -87,7 +87,7 @@ public class UserProfile extends BaseActivity implements View.OnClickListener {
             uid = mAuth.getCurrentUser().getUid();
         else{
             editProfile.setText("Message User");
-            ivProfileMenu.setVisibility(View.GONE);
+            ibSettings.setVisibility(View.GONE);
         }
         databaseService.getUser(uid, new DatabaseService.DatabaseCallback<User>() {
             @Override
@@ -131,8 +131,8 @@ public class UserProfile extends BaseActivity implements View.OnClickListener {
             }
             startActivity(intent);
         }
-        else if (v.getId() == ivProfileMenu.getId()){
-            showPopUpMenu(v);
+        else if (v.getId() == ibSettings.getId()){
+            startActivity(new Intent(this, Settings.class));
         }
     }
     private void loadUserItems(String profileUid) {
@@ -168,55 +168,6 @@ public class UserProfile extends BaseActivity implements View.OnClickListener {
                 Log.e("UserProfile", "Failed to load items for user", e);
             }
         });
-    }
-    private void showPopUpMenu(View view){
-        PopupMenu popupMenu = new PopupMenu(this, view);
-        popupMenu.getMenuInflater().inflate(R.menu.profile_popup_menu, popupMenu.getMenu());
-
-        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                if (item.getItemId() == R.id.action_settings) {
-                    Intent i = new Intent(UserProfile.this, Settings.class);
-                    startActivity(i);
-                    return true;
-                }
-                else if (item.getItemId() == R.id.action_admin){
-                    Intent i = new Intent(UserProfile.this, MainAdmin.class);
-                    startActivity(i);
-                    return true;
-                }
-                else if (item.getItemId() == R.id.action_sign_out) {
-                    String currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-
-                    // remove FCM token from database
-                    DatabaseReference userTokenRef = FirebaseDatabase.getInstance()
-                            .getReference("users")
-                            .child(currentUserId)
-                            .child("fcmToken");
-
-                    userTokenRef.removeValue().addOnCompleteListener(task -> {
-                        // after removing the token, set user offline and sign out the user
-                        FirebaseDatabase.getInstance().getReference("users")
-                                .child(currentUserId)
-                                .child("isOnline")
-                                .setValue(false)
-                                .addOnCompleteListener(t -> {
-                                    FirebaseAuth.getInstance().signOut();
-
-                                    Intent intent = new Intent(UserProfile.this, Login.class);
-                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                    startActivity(intent);
-                                    finish();
-                                });
-                    });
-                    return true;
-                }
-                return false;
-            }
-        });
-
-        popupMenu.show();
     }
     protected int getNavigationMenuItemId() {
         return R.id.nav_profile;

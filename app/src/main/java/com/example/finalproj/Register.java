@@ -123,7 +123,7 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
 
                                 String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-                                User user = new User(uid, fname, lname, email, phone, password, false, null);
+                                User user = new User(uid, fname, lname, email, phone, password, false);
 
                                 createUserInDatabase(user);
                             });

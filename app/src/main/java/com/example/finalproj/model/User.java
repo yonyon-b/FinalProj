@@ -10,12 +10,11 @@ public class User {
     String profilePicture;
     Boolean isAdmin;
     Boolean isOnline;
-    ItemCart cart;
 
     public User() {
     }
 
-    public User(String id, String fName, String lName, String email, String phone, String password, Boolean isAdmin, ItemCart cart) {
+    public User(String id, String fName, String lName, String email, String phone, String password, Boolean isAdmin) {
         this.id = id;
         this.fName = fName;
         this.lName = lName;
@@ -25,7 +24,6 @@ public class User {
         this.profilePicture = null;
         this.isAdmin = isAdmin;
         this.isOnline = false;
-        this.cart = cart;
     }
 
     public String getId() {
@@ -81,14 +79,6 @@ public class User {
 
     public void setProfilePicture(String profilePicture) {
         this.profilePicture = profilePicture;
-    }
-
-    public ItemCart getCart(){
-        return cart;
-    }
-
-    public void setCart(ItemCart cart){
-        this.cart = cart;
     }
 
     public Boolean getAdmin() {

@@ -5,8 +5,6 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:paddingVertical="16dp"
-    android:paddingEnd="16dp"
     android:id="@+id/main"
     android:background="?android:attr/windowBackground"
     tools:context=".ChatList">
@@ -15,14 +13,24 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="My Conversations"
-        android:textSize="24sp"
+        android:textSize="32sp"
         android:textStyle="bold"
         android:textColor="?android:attr/textColorPrimary"
+        android:layout_marginTop="30dp"
         android:layout_marginBottom="24dp"
         android:layout_gravity="center"/>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/chatListRecyclerView"
+    <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="2dp"
+        app:cardBackgroundColor="?attr/cardBgColor"
+        app:strokeColor="?attr/cardStrokeColor"
+        android:layout_margin="16dp">
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/chatListRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="8dp"/>
+    </com.google.android.material.card.MaterialCardView>
 </LinearLayout>

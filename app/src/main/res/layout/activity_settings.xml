@@ -7,9 +7,24 @@
     android:layout_height="match_parent"
     tools:context=".Settings"
     android:background="?android:attr/windowBackground">
+    <TextView
+        android:id="@+id/SettingsTitleText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="30dp"
+        android:text="Settings &amp; Preferences"
+        android:textSize="32sp"
+        android:textStyle="bold"
+        android:textColor="?android:attr/textColorPrimary"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/settings_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/SettingsTitleText"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

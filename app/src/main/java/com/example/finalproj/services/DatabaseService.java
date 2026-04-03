@@ -7,7 +7,6 @@ import androidx.annotation.Nullable;
 
 import com.example.finalproj.model.ChatMessage;
 import com.example.finalproj.model.Item;
-import com.example.finalproj.model.ItemCart;
 import com.example.finalproj.model.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -378,29 +377,4 @@ public class DatabaseService {
 
     // endregion
 
-
-    // region Cart Section
-
-    public String generateCartId() {
-        return generateNewId(CARTS_PATH);
-    }
-
-    public void createNewCart(@NotNull final ItemCart cart, @Nullable final DatabaseCallback<Void> callback) {
-        writeData(CARTS_PATH + "/" + cart.getId(), cart, callback);
-    }
-
-    public void getCart(@NotNull final String cartId, @NotNull final DatabaseCallback<ItemCart> callback) {
-        getData(CARTS_PATH + "/" + cartId, ItemCart.class, callback);
-    }
-
-    public void getCartList(@NotNull final DatabaseCallback<List<ItemCart>> callback) {
-        getDataList(CARTS_PATH, ItemCart.class, callback);
-    }
-
-    public void deleteCart(@NotNull final String cartId, @Nullable final DatabaseCallback<Void> callback) {
-        deleteData(CARTS_PATH + "/" + cartId, callback);
-    }
-
-
-    // endregion
 }
