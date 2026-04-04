@@ -2,9 +2,12 @@ package com.example.finalproj;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -25,6 +28,7 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.finalproj.model.ImageUtil;
 import com.example.finalproj.model.User;
 import com.example.finalproj.services.DatabaseService;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.Firebase;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -35,11 +39,12 @@ import java.io.File;
 public class EditProfile extends BaseActivity implements View.OnClickListener {
     private static final String TAG = "EditProfile";
     private EditText fName, lName, phoneNum;
+    private TextInputLayout boxFname, boxLname, boxPhone;
     private String uid;
-    private Boolean imageChanged;
-    private Button changePfp, submit;
+    private Boolean imageChanged, imageRemoved;
+    private Button changePfp, removePfp, submit;
     private ImageView camera, gallery, pfp;
-    private LinearLayout picturesLayout;
+    private LinearLayout picturesLayout, buttonsLayout;
     private DatabaseService databaseService;
     private FirebaseAuth mAuth;
     private ActivityResultLauncher<String> pickImageLauncher;
@@ -60,20 +65,27 @@ public class EditProfile extends BaseActivity implements View.OnClickListener {
         fName = findViewById(R.id.etFnameEdit);
         lName = findViewById(R.id.etLnameEdit);
         phoneNum = findViewById(R.id.etNumEdit);
+        boxFname = findViewById(R.id.boxFnameEdit);
+        boxLname = findViewById(R.id.boxLnameEdit);
+        boxPhone = findViewById(R.id.boxPhoneEdit);
         submit = findViewById(R.id.btnSubmitEdit);
         submit.setOnClickListener(this);
         changePfp = findViewById(R.id.btnChangePfp);
         changePfp.setOnClickListener(this);
+        removePfp = findViewById(R.id.btnRemovePfp);
+        removePfp.setOnClickListener(this);
         camera = findViewById(R.id.imgCameraChangePfp);
         camera.setOnClickListener(this);
         gallery = findViewById(R.id.imgGalleryChangePfp);
         gallery.setOnClickListener(this);
         pfp = findViewById(R.id.changePfpImg);
         picturesLayout = findViewById(R.id.picturesLayout);
+        buttonsLayout = findViewById(R.id.buttons_layout);
         databaseService = DatabaseService.getInstance();
         mAuth = FirebaseAuth.getInstance();
         uid = mAuth.getCurrentUser().getUid();
         imageChanged = false;
+        imageRemoved = false;
 
         databaseService.getUser(uid, new DatabaseService.DatabaseCallback<User>() {
             @Override
@@ -109,6 +121,8 @@ public class EditProfile extends BaseActivity implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
+        if (!validateInput())
+            return;
         if (v.getId() == submit.getId()) {
             databaseService.getUser(uid, new DatabaseService.DatabaseCallback<User>() {
                 @Override
@@ -118,6 +132,8 @@ public class EditProfile extends BaseActivity implements View.OnClickListener {
                     user.setPhone(phoneNum.getText().toString());
                     if (imageChanged)
                         user.setProfilePicture(ImageUtil.convertTo64Base(pfp));
+                    else if (imageRemoved)
+                        user.setProfilePicture(null);
 
                     databaseService.updateUser(user, new DatabaseService.DatabaseCallback<Void>() {
                         @Override
@@ -142,8 +158,13 @@ public class EditProfile extends BaseActivity implements View.OnClickListener {
             });
         }
         else if (v.getId() == changePfp.getId()){
-            changePfp.setVisibility(View.GONE);
+            buttonsLayout.setVisibility(View.GONE);
             picturesLayout.setVisibility(View.VISIBLE);
+        }
+        else if (v.getId() == removePfp.getId()){
+            pfp.setImageResource(R.drawable.user_pfp);
+            imageRemoved = true;
+            imageChanged = false;
         }
         else if (v.getId() == camera.getId()){
             openCamera();
@@ -198,6 +219,7 @@ public class EditProfile extends BaseActivity implements View.OnClickListener {
             if (resultUri != null) {
                 pfp.setImageURI(resultUri);
                 imageChanged = true;
+                imageRemoved = false;
             }
         } else if (resultCode == UCrop.RESULT_ERROR) {
             Throwable cropError = UCrop.getError(data);
@@ -205,6 +227,47 @@ public class EditProfile extends BaseActivity implements View.OnClickListener {
                 cropError.printStackTrace();
             }
         }
+    }
+    private boolean validateInput(){
+        boolean valid = true;
+        String fnameStr = fName.getText().toString();
+        String lnameStr = lName.getText().toString();
+        String phoneStr = phoneNum.getText().toString();
+
+        // first name (3 - 20 char)
+        if (fnameStr.length() < 3 || fnameStr.length() > 20) {
+            boxFname.setBoxStrokeColor(Color.parseColor("#e1403d"));
+            boxFname.setHintTextColor(ColorStateList.valueOf(Color.parseColor("#e1403d")));
+            boxFname.setHint("Invalid First Name! (3-20 characters)");
+            valid = false;
+        } else {
+            boxFname.setBoxStrokeColor(Color.parseColor("#000000"));
+            boxFname.setHintTextColor(ColorStateList.valueOf(Color.parseColor("#000000")));
+            boxFname.setHint("First Name");
+        }
+        // last name (3 - 20 char)
+        if (lnameStr.length() < 3 || lnameStr.length() > 20) {
+            boxLname.setBoxStrokeColor(Color.parseColor("#e1403d"));
+            boxLname.setHintTextColor(ColorStateList.valueOf(Color.parseColor("#e1403d")));
+            boxLname.setHint("Invalid Last Name! (3-20 characters)");
+            valid = false;
+        } else {
+            boxLname.setBoxStrokeColor(Color.parseColor("#000000"));
+            boxLname.setHintTextColor(ColorStateList.valueOf(Color.parseColor("#000000")));
+            boxLname.setHint("Last Name");
+        }
+        // phone number check with patterns
+        if (phoneStr.isEmpty() || !Patterns.PHONE.matcher(phoneStr).matches() || phoneStr.length() < 7) {
+            boxPhone.setBoxStrokeColor(Color.parseColor("#e1403d"));
+            boxPhone.setHintTextColor(ColorStateList.valueOf(Color.parseColor("#e1403d")));
+            boxPhone.setHint("Invalid phone number!");
+            valid = false;
+        } else {
+            boxPhone.setBoxStrokeColor(Color.parseColor("#000000"));
+            boxPhone.setHintTextColor(ColorStateList.valueOf(Color.parseColor("#000000")));
+            boxPhone.setHint("Phone");
+        }
+        return valid;
     }
     protected int getNavigationMenuItemId() {
         return 0;

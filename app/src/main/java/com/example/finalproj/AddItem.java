@@ -136,7 +136,7 @@ public class AddItem extends BaseActivity implements View.OnClickListener {
         }
 
         String location = itemLocation.getText().toString().trim();
-        if (location.length() < 3 || location.length() > 20) {
+        if (location.length() > 20) {
             boxItemLocation.setBoxStrokeColor(Color.parseColor("#e1403d"));
             boxItemLocation.setHintTextColor(ColorStateList.valueOf(Color.parseColor("#e1403d")));
             boxItemLocation.setHint("Location must be between 3 and 20 characters!");
@@ -145,7 +145,7 @@ public class AddItem extends BaseActivity implements View.OnClickListener {
         else {
             boxItemLocation.setBoxStrokeColor(Color.parseColor("#000000"));
             boxItemLocation.setHintTextColor(ColorStateList.valueOf(Color.parseColor("#000000")));
-            boxItemLocation.setHint("Item Location");
+            boxItemLocation.setHint("Item Location (optional)");
         }
 
         String desc = itemDesc.getText().toString().trim();
@@ -160,7 +160,7 @@ public class AddItem extends BaseActivity implements View.OnClickListener {
             else {
                 boxItemDesc.setBoxStrokeColor(Color.parseColor("#000000"));
                 boxItemDesc.setHintTextColor(ColorStateList.valueOf(Color.parseColor("#000000")));
-                itemDesc.setHint("Item Description");
+                itemDesc.setHint("Item Description (optional)");
             }
         }
 

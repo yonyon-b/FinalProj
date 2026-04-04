@@ -129,7 +129,7 @@
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Item Description"
+                        android:hint="Item Description (optional)"
                         app:hintTextColor="?android:attr/textColorPrimary"
                         app:cursorColor="?android:attr/textColorPrimary"
                         android:textColorHint="?attr/colorSecondary"
