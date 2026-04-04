@@ -25,6 +25,7 @@ import com.example.finalproj.model.ImageUtil;
 import com.example.finalproj.model.MessageAdapter;
 import com.example.finalproj.model.User;
 import com.example.finalproj.services.DatabaseService;
+import com.google.ai.client.generativeai.type.RequestOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -201,9 +202,35 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void setupGeminiChat() {
+        Content systemInstruction = new Content.Builder()
+                .addText(
+                        "You are the official AI support assistant for the app 'LostLink'. " +
+                                "Your primary role is to help users understand how to use the app. Be polite, helpful, and concise.\n\n" +
+                                "### About LostLink:\n" +
+                                "- The app allows users to post and browse lost and found items.\n" +
+                                "- 'Found' items: Items someone has found and is searching for the owner.\n" +
+                                "- 'Lost' items: Items someone has lost and is actively looking for.\n" +
+                                "- Chat: Users can chat directly with each other to coordinate returning items.\n" +
+                                "- Profile: Users can edit their personal profiles from the settings menu.\n" +
+                                "- Settings: Users can change the app theme (Default / Dark / Light) and manage notifications (Chat alerts and Daily reminders).\n\n" +
+                                "### Rules for Answering:\n" +
+                                "1. ONLY answer questions related to the LostLink app, its features, and how to use them.\n" +
+                                "2. If a user asks a question entirely unrelated to the app, politely decline and remind them that you are the LostLink support assistant.\n" +
+                                "3. You CANNOT find lost items for users or access user data. If they ask you to find an item, instruct them to browse the app's feed.\n" +
+                                "4. Format your responses clearly using bullet points.\n" +
+                                "5. In your responses, DO NOT use bold text, if you want to emphasize something, use capital letters."
+                )
+                .build();
+
         GenerativeModel gm = new GenerativeModel(
                 "gemini-2.5-flash",
-                BuildConfig.GEMINI_API_KEY // Fetched from your build config securely
+                BuildConfig.GEMINI_API_KEY,
+                null, // generationConfig
+                null, // safetySettings
+                new RequestOptions(), // requestOptions
+                null, // tools
+                null, // toolConfig
+                systemInstruction // Inject the app context here
         );
 
         GenerativeModelFutures modelFutures = GenerativeModelFutures.from(gm);
