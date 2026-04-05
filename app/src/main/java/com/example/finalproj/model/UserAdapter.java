@@ -53,23 +53,23 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
         holder.tvEmail.setText(user.getEmail());
         holder.tvPhone.setText(user.getPhone());
 
-        if (user.getProfilePicture() != null) {
-            String base64String = user.getProfilePicture();
-            if (base64String != null && !base64String.isEmpty()) {
-                // Decode the Base64 string to a byte array
-                byte[] imageByteArray = Base64.decode(base64String, Base64.DEFAULT);
+        String base64String = user.getProfilePicture();
 
-                // Use Glide to load the byte array into the single ImageView
-                Glide.with(holder.itemView.getContext())
-                        .asBitmap()
-                        .load(imageByteArray)
-                        .placeholder(R.drawable.user_pfp) // placeholder while loading
-                        .error(R.drawable.user_pfp)       // fallback on error
-                        .diskCacheStrategy(DiskCacheStrategy.NONE)      // don't cache raw byte arrays to disk
-                        .into(holder.ivPfp);
-            } else {
-                holder.ivPfp.setImageResource(R.drawable.user_pfp);
-            }
+        if (base64String != null && !base64String.trim().isEmpty()) {
+            byte[] imageByteArray = Base64.decode(base64String, Base64.DEFAULT);
+
+            Glide.with(holder.itemView.getContext())
+                    .asBitmap()
+                    .load(imageByteArray)
+                    .placeholder(R.drawable.user_pfp)
+                    .error(R.drawable.user_pfp)
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .skipMemoryCache(true)
+                    .into(holder.ivPfp);
+        } else {
+            Glide.with(holder.itemView.getContext())
+                    .load(R.drawable.user_pfp)
+                    .into(holder.ivPfp);
         }
 
         // Show admin chip if user is admin
