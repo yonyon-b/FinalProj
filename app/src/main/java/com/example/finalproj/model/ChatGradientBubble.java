@@ -36,14 +36,11 @@ public class ChatGradientBubble extends FrameLayout {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        // 1. Get the view's Y position on the screen
         getLocationInWindow(location);
         int windowY = location[1];
 
-        // 2. Get screen height to define the full span of the gradient
         int screenHeight = getResources().getDisplayMetrics().heightPixels;
 
-        // 3. Initialize the gradient once
         if (gradient == null) {
 
             int colorStart = Color.parseColor("#A334FA");
@@ -56,14 +53,11 @@ public class ChatGradientBubble extends FrameLayout {
             paint.setShader(gradient);
         }
 
-        // 4. Shift the gradient inversely to the view's Y position to fix it to the screen
         matrix.setTranslate(0, -windowY);
         gradient.setLocalMatrix(matrix);
 
-        // 5. Draw the rounded background
         canvas.drawRoundRect(rectF, cornerRadius, cornerRadius, paint);
 
-        // Draw the child views (your transparent TextView) on top
         super.onDraw(canvas);
     }
 }

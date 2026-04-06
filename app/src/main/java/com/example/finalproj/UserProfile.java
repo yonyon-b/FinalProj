@@ -132,7 +132,9 @@ public class UserProfile extends BaseActivity implements View.OnClickListener {
             startActivity(intent);
         }
         else if (v.getId() == ibSettings.getId()){
-            startActivity(new Intent(this, Settings.class));
+            Intent i = new Intent(this, Settings.class);
+            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(i);
         }
     }
     private void loadUserItems(String profileUid) {
