@@ -67,6 +67,18 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
             String email = etEmail.getText().toString();
             String password = etPassword.getText().toString();
 
+            if (email.isEmpty()) {
+                etEmail.setError("Email cannot be empty");
+                etEmail.requestFocus();
+                return;
+            }
+
+            if (password.isEmpty()) {
+                etPassword.setError("Password cannot be empty");
+                etPassword.requestFocus();
+                return;
+            }
+
             SharedPreferences.Editor editor = sharedpreferences.edit();
 
             editor.putString("email", email);

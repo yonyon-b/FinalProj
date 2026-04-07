@@ -1,5 +1,7 @@
 package com.example.finalproj.model;
 
+import com.google.firebase.database.PropertyName;
+
 public class User {
     String id;
     String fName;
@@ -10,6 +12,7 @@ public class User {
     String profilePicture;
     Boolean isAdmin;
     Boolean isOnline;
+    String fcmToken;
 
     public User() {
     }
@@ -95,6 +98,14 @@ public class User {
 
     public void setOnline(Boolean online) {
         isOnline = online;
+    }
+
+    public String getFcmToken() {
+        return fcmToken;
+    }
+
+    public void setFcmToken(String fcmToken) {
+        this.fcmToken = fcmToken;
     }
 
     @Override

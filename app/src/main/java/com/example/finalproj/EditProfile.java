@@ -139,6 +139,7 @@ public class EditProfile extends BaseActivity implements View.OnClickListener {
                         @Override
                         public void onCompleted(Void object) {
                             Log.d(TAG, "User updated.");
+                            databaseService.setupPresenceSystem();
                             Intent i = new Intent(EditProfile.this, UserProfile.class);
                             startActivity(i);
                             finish();
