@@ -133,7 +133,6 @@ public class UserProfile extends BaseActivity implements View.OnClickListener {
         }
         else if (v.getId() == ibSettings.getId()){
             Intent i = new Intent(this, Settings.class);
-            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(i);
         }
     }

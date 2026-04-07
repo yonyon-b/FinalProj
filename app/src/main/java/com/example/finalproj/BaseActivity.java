@@ -37,6 +37,7 @@ import java.util.Objects;
 
 public abstract class BaseActivity extends AppCompatActivity {
     private static final String TAG = "BaseActivity";
+    private String currentTheme;
 
     @Override
     public void setContentView(int layoutResID) {
@@ -108,8 +109,9 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         SharedPreferences prefs = getSharedPreferences("preferences_" + userId, Context.MODE_PRIVATE);
-        String theme = prefs.getString("theme_preference", "default");
-        switch (theme) {
+
+        currentTheme = prefs.getString("theme_preference", "default");
+        switch (currentTheme) {
             case "dark":
                 setTheme(R.style.Theme_FinalProj_Dark);
                 break;
@@ -123,8 +125,24 @@ public abstract class BaseActivity extends AppCompatActivity {
                 break;
         }
         super.onCreate(savedInstanceState);
+
         // enable edgeToEdge after creating view if not in light mode
-        if (!theme.equals("light"))
+        if (!currentTheme.equals("light"))
             EdgeToEdge.enable(this);
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // fetch the current preference
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        SharedPreferences prefs = getSharedPreferences("preferences_" + userId, Context.MODE_PRIVATE);
+        String selectedTheme = prefs.getString("theme_preference", "default");
+
+        // if the theme in SharedPreferences doesn't match the theme this
+        // activity was created with, recreate the activity to apply the new theme
+        if (!currentTheme.equals(selectedTheme)) {
+            recreate();
+        }
+        DatabaseService.getInstance().setupPresenceSystem();
     }
 }
