@@ -3,10 +3,13 @@ package com.example.finalproj;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -144,5 +147,17 @@ public abstract class BaseActivity extends AppCompatActivity {
             recreate();
         }
         DatabaseService.getInstance().setupPresenceSystem();
+    }
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        Configuration configuration = newBase.getResources().getConfiguration();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            configuration.densityDpi = DisplayMetrics.DENSITY_DEVICE_STABLE;
+        }
+        configuration.fontScale = 1.0f;
+
+        Context context = newBase.createConfigurationContext(configuration);
+        super.attachBaseContext(context);
     }
 }
